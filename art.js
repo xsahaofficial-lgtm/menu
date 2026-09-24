@@ -393,15 +393,21 @@ function cupTop(c, o){
   const cg = c.rad([[0, lighten(color, .38)], [.55, color], [1, darken(color, .28)]], .36, .3, .78);
   if(saucer){
     s += shadow(c, x + 8, y + 10, sR + 8, sR + 8, .6);
-    s += `<circle cx="${x}" cy="${y}" r="${n1(sR)}" fill="${c.rad([[0, lighten(sColor, .3)], [.7, sColor], [1, darken(sColor, .25)]], .4, .35, .75)}"/>`;
-    s += `<circle cx="${x}" cy="${y}" r="${n1(sR * .76)}" fill="none" stroke="${darken(sColor, .3)}" stroke-opacity=".35" stroke-width="1.5"/>`;
-    if(gold) s += `<circle cx="${x}" cy="${y}" r="${n1(sR - 2.5)}" fill="none" stroke="${GOLD}" stroke-width="1.4"/>`;
+    if(o.square){
+      const q = sR * .92;
+      s += `<rect x="${n1(x - q)}" y="${n1(y - q)}" width="${n1(q * 2)}" height="${n1(q * 2)}" rx="${n1(q * .28)}" fill="${c.rad([[0, lighten(sColor, .3)], [.7, sColor], [1, darken(sColor, .25)]], .4, .35, .8)}"/>`;
+      s += `<rect x="${n1(x - q + 7)}" y="${n1(y - q + 7)}" width="${n1(q * 2 - 14)}" height="${n1(q * 2 - 14)}" rx="${n1(q * .22)}" fill="none" stroke="${darken(sColor, .3)}" stroke-opacity=".3" stroke-width="1.5"/>`;
+    } else {
+      s += `<circle cx="${x}" cy="${y}" r="${n1(sR)}" fill="${c.rad([[0, lighten(sColor, .3)], [.7, sColor], [1, darken(sColor, .25)]], .4, .35, .75)}"/>`;
+      s += `<circle cx="${x}" cy="${y}" r="${n1(sR * .76)}" fill="none" stroke="${darken(sColor, .3)}" stroke-opacity=".35" stroke-width="1.5"/>`;
+      if(gold) s += `<circle cx="${x}" cy="${y}" r="${n1(sR - 2.5)}" fill="none" stroke="${GOLD}" stroke-width="1.4"/>`;
+    }
     if(c.chance(.35)) s += `<circle cx="${x}" cy="${y}" r="${n1(sR * .88)}" fill="none" stroke="${c.pick([GOLD, '#2d5f9a', darken(sColor, .35)])}" stroke-opacity=".7" stroke-width="2.2" stroke-dasharray="1.5 5" stroke-linecap="round"/>`;
     if(o.onSaucer) s += o.onSaucer;
   } else {
     s += shadow(c, x + 6, y + 8, R + 12, R + 12, .6);
   }
-  s += `<g transform="translate(${x} ${y}) rotate(${n1(ha)})"><rect x="${n1(R - 10)}" y="${n1(-R * .15)}" width="${n1(R * .5 + 10)}" height="${n1(R * .3)}" rx="${n1(R * .15)}" fill="${cg}"/>${R > 30 ? `<rect x="${n1(R + 3)}" y="-3.5" width="${n1(R * .5 - 10)}" height="7" rx="3.5" fill="${darken(color, .35)}" opacity=".4"/>` : ''}</g>`;
+  if(o.handle !== false) s += `<g transform="translate(${x} ${y}) rotate(${n1(ha)})"><rect x="${n1(R - 10)}" y="${n1(-R * .15)}" width="${n1(R * .5 + 10)}" height="${n1(R * .3)}" rx="${n1(R * .15)}" fill="${cg}"/>${R > 30 ? `<rect x="${n1(R + 3)}" y="-3.5" width="${n1(R * .5 - 10)}" height="7" rx="3.5" fill="${darken(color, .35)}" opacity=".4"/>` : ''}</g>`;
   s += `<circle cx="${x + 3}" cy="${y + 5}" r="${R}" fill="#000" opacity=".22"/>`;
   s += `<circle cx="${x}" cy="${y}" r="${R}" fill="${cg}"/>`;
   s += `<circle cx="${x}" cy="${y}" r="${n1(R * .9)}" fill="${c.rad([[0, darken(color, .35)], [.82, darken(color, .1)], [1, lighten(color, .15)]])}"/>`;
@@ -439,71 +445,28 @@ function glassTop(c, o){
 }
 
 
-function cup34(c, o){
-  const col = o.color || c.pick(PORCELAIN);
-  const sc = c.chance(.6) ? col : c.pick(PORCELAIN);
-  const rx = o.rx || 50, top = o.top || 118, ry = n1(rx * .3), bot = o.bot || 190;
-  const shape = o.shape || c.pick(['round', 'tulip', 'straight']);
-  let s = shadow(c, CX + 4, 204, 86, 14, .6);
-  s += `<ellipse cx="${CX}" cy="196" rx="80" ry="18" fill="${c.hcyl(sc, .8)}"/><ellipse cx="${CX}" cy="193" rx="62" ry="12" fill="${darken(sc, .12)}"/>`;
-  if(c.chance(.45)) s += `<ellipse cx="${CX}" cy="196" rx="77" ry="16" fill="none" stroke="${GOLD}" stroke-width="1.3"/>`;
-  if(o.onSaucer) s += o.onSaucer;
-  s += `<path d="M${CX + rx - 5} ${top + 16}c28-6 32 36 2 42" stroke="${c.hcyl(col)}" stroke-width="9" fill="none" stroke-linecap="round"/>`;
-  let body;
-  if(shape === 'tulip') body = `M${CX - rx} ${top}C${CX - rx} ${top + 20} ${CX - rx * .62} ${top + 30} ${CX - rx * .62} ${bot - 22}Q${CX - rx * .6} ${bot} ${CX} ${bot}Q${CX + rx * .6} ${bot} ${CX + rx * .62} ${bot - 22}C${CX + rx * .62} ${top + 30} ${CX + rx} ${top + 20} ${CX + rx} ${top}Z`;
-  else if(shape === 'straight') body = `M${CX - rx} ${top}L${CX - rx * .78} ${bot - 8}Q${CX - rx * .76} ${bot} ${CX - rx * .6} ${bot}H${CX + rx * .6}Q${CX + rx * .76} ${bot} ${CX + rx * .78} ${bot - 8}L${CX + rx} ${top}Z`;
-  else body = `M${CX - rx} ${top}C${CX - rx} ${bot - 26} ${CX - rx * .55} ${bot} ${CX} ${bot}S${CX + rx} ${bot - 26} ${CX + rx} ${top}Z`;
-  s += `<path d="${body}" fill="${c.hcyl(col)}"/>`;
-  const deco = c.int(0, 4);
-  const bc = c.clip(`<path d="${body}"/>`);
-  if(deco === 1) s += `<g clip-path="${bc}"><rect x="0" y="${top + 14}" width="200" height="3" fill="${GOLD}"/></g>`;
-  if(deco === 2) s += `<g clip-path="${bc}"><rect x="0" y="${top + 18}" width="200" height="9" fill="${c.pick(['#2d5f9a', '#b8613b', '#1f6f78', '#7a2e3a'])}" opacity=".85"/></g>`;
-  if(deco === 3){ let d = ''; for(let i = 0; i < 9; i++) d += `<circle cx="${n1(CX - rx + 10 + i * (rx * 2 - 20) / 8)}" cy="${top + 22}" r="2.2"/>`; s += `<g clip-path="${bc}" fill="${c.pick(['#2d5f9a', GOLD, '#b8613b'])}">${d}</g>`; }
-  s += `<path d="M${CX - rx + 8} ${top + 14}C${CX - rx + 8} ${top + 40} ${CX - rx + 16} ${bot - 30} ${CX - rx * .4} ${bot - 12}" stroke="#fff" stroke-opacity=".35" stroke-width="4" fill="none" stroke-linecap="round"/>`;
-  s += `<ellipse cx="${CX}" cy="${top}" rx="${rx}" ry="${ry}" fill="${lighten(col, .3)}"/>`;
-  s += `<ellipse cx="${CX}" cy="${top + .6}" rx="${rx - 3.5}" ry="${n1(ry - 1.4)}" fill="${darken(col, .3)}"/>`;
-  const lr = rx - 6, lry = n1(ry - 2.6);
-  s += `<ellipse cx="${CX}" cy="${top + 1.6}" rx="${lr}" ry="${lry}" fill="${o.liquid}"/>`;
-  if(o.art){
-    const cl = c.id();
-    c.defs.push(`<clipPath id="${cl}"><circle r="${lr}"/></clipPath>`);
-    s += `<g transform="translate(${CX} ${top + 1.6}) scale(1 ${n1(lry / lr * 100) / 100})"><g clip-path="url(#${cl})"><g class="az-spin"><circle r="${lr}" fill="none"/>${o.art}</g></g></g>`;
-  }
-  if(o.steam !== false) s += steam(c, CX, top - 8, 3, 14);
-  return `<g transform="translate(${CX} 204) scale(1.16) translate(${-CX} -204)">${s}</g>`;
-}
 
-function glass34(c, o){
-  const top = o.top || 88, rx = o.rx || 40, ry = n1(rx * .28), bot = 198, brx = rx - 6;
-  const body = `M${CX - rx} ${top}L${CX - brx} ${bot - 8}Q${CX - brx} ${bot} ${CX - brx + 8} ${bot}H${CX + brx - 8}Q${CX + brx} ${bot} ${CX + brx} ${bot - 8}L${CX + rx} ${top}Z`;
-  let s = shadow(c, CX + 4, bot + 4, rx + 30, 10, .6);
-  if(o.handle) s += `<path d="M${CX + rx - 3} ${top + 22}c30-2 32 58 0 62" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="9"/><path d="M${CX + rx - 3} ${top + 22}c30-2 32 58 0 62" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="3" transform="translate(2 0)"/>`;
-  const lt = top + (o.gap || 10);
-  const clip = c.clip(`<path d="${body}"/>`);
-  const stops = [];
-  let acc = 0;
-  const layers = o.layers;
-  const tot = layers.reduce((a, l) => a + l[1], 0);
-  layers.forEach((l, i) => {
-    const f0 = acc / tot, f1 = (acc + l[1]) / tot;
-    stops.push([n1(Math.min(1, f0 + .03) * 100) / 100, l[0]], [n1(Math.max(0, f1 - .03) * 100) / 100, l[0]]);
-    acc += l[1];
-  });
-  const lw = rx - (lt - top) * (6 / (bot - top));
-  s += `<g clip-path="${clip}"><rect x="0" y="${lt}" width="200" height="${bot - lt + 2}" fill="${c.lin(stops)}"/>${o.inside || ''}</g>`;
-  s += `<ellipse cx="${CX}" cy="${lt}" rx="${n1(lw - 1)}" ry="${n1(ry * .9)}" fill="${layers[0][0]}"/>`;
-  if(o.art){
-    const lr = lw - 2, lry = n1(ry * .9 - .6);
-    const cl = c.id();
-    c.defs.push(`<clipPath id="${cl}"><circle r="${n1(lr)}"/></clipPath>`);
-    s += `<g transform="translate(${CX} ${lt}) scale(1 ${n1(lry / lr * 100) / 100})"><g clip-path="url(#${cl})"><g class="az-spin"><circle r="${n1(lr)}" fill="none"/>${o.art}</g></g></g>`;
+function biscotti(c, x, y, rot){
+  let g = shadow(c, 3, 5, 22, 10, .4) + `<path d="M-20-7Q-20-10-14-10H16Q21-10 21-4V5Q21 9 16 9H-14Q-20 9-20 5Z" fill="${c.rad([[0, '#f0c47e'], [1, '#c98a3e']], .4, .35, .8)}"/>`;
+  for(let i = 0; i < 4; i++) g += `<ellipse cx="${n1(c.rand(-14, 14))}" cy="${n1(c.rand(-5, 4))}" rx="3" ry="2" fill="#f6e2b8" stroke="#b8823e" stroke-width=".6"/>`;
+  return `<g transform="translate(${n1(x)} ${n1(y)}) rotate(${n1(rot)})">${g}</g>`;
+}
+function whiskTop(c, x, y, rot){
+  let g = `<rect x="0" y="-5" width="54" height="10" rx="5" fill="${c.lin([[0, '#e9d8a6'], [1, '#b89a5a']])}"/>`;
+  g += `<circle r="20" fill="#e9d8a6" opacity=".35"/>`;
+  for(let i = 0; i < 40; i++){ const a = i / 40 * Math.PI * 2; g += `<path d="M${n1(Math.cos(a) * 6)} ${n1(Math.sin(a) * 6)}L${n1(Math.cos(a) * 19)} ${n1(Math.sin(a) * 19)}" stroke="#d9c38a" stroke-width=".9"/>`; }
+  g += `<circle r="6" fill="#c7ad6a"/>`;
+  return `<g transform="translate(${n1(x)} ${n1(y)}) rotate(${n1(rot)})">${shadow(c, 3, 4, 30, 24, .35)}${g}</g>`;
+}
+function spiceRing(c, n, r0, r1){
+  let s = '';
+  for(let i = 0; i < n; i++){
+    const a = c.rand(0, Math.PI * 2), d = c.rand(r0, r1), x = CX + Math.cos(a) * d, y = CY + Math.sin(a) * d;
+    if(x < 12 || x > 188 || y < 24 || y > 228) continue;
+    const k = c.int(0, 2);
+    s += k === 0 ? starAnise(c, x, y, c.rand(0, 90), .8) : k === 1 ? cardamom(c, x, y, c.rand(0, 360)) : cinnamonStick(c, x, y, c.rand(0, 180), 40);
   }
-  s += `<path d="${body}" fill="${c.glass()}" stroke="rgba(255,255,255,.55)" stroke-width="2"/>`;
-  s += `<path d="M${CX - rx + 8} ${top + 12}L${CX - brx + 7} ${bot - 16}" stroke="#fff" stroke-opacity=".4" stroke-width="3" stroke-linecap="round"/>`;
-  s += `<path d="M${CX - brx + 4} ${bot - 3}H${CX + brx - 4}" stroke="rgba(255,255,255,.4)" stroke-width="5" stroke-linecap="round"/>`;
-  s += `<ellipse cx="${CX}" cy="${top}" rx="${rx}" ry="${ry}" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.8"/>`;
-  if(o.steam !== false) s += steam(c, CX, top - 8, 2, 16);
-  return `<g transform="translate(${CX} 204) scale(1.08) translate(${-CX} -204)">${s}</g>`;
+  return s;
 }
 
 function latteStyle(kind, tone, extra){
@@ -580,30 +543,34 @@ def('americano', 'قهوه گرم', 'آمریکانو (ماگ بزرگ)', c => {
 });
 
 def('latte-rosetta', 'قهوه گرم', 'لاته آرت روزتا', latteStyle('rosetta', 'coffee'));
-def('latte-tulip', 'قهوه گرم', 'لاته لایه‌ای در لیوان شیشه‌ای', c => {
-  let s = backdrop(c) + floor(c);
+def('latte-tulip', 'قهوه گرم', 'لاته در لیوان شیشه‌ای', c => {
+  let s = backdrop(c);
   const t = TONES.coffee2;
-  s += glass34(c, { handle: c.chance(.5), top: c.rand(84, 96), rx: c.rand(38, 42), layers: [['#fbf1e0', 1.2], ['#c9905a', 1], ['#e9d3b4', 1.6], ['#f6ecdb', 2.2]], art: latteArt(c, c.pick(['tulip', 'rosetta', 'heart']), 38, t[1], t[0][1]) });
-  if(c.chance(.6)) s += spoon(c, CX + c.pick([-62, 62]), 214, c.pick([0, 180]), .7);
-  s += beansAround(c, c.int(0, 2), 70, 92, CX, 214);
+  s += glassTop(c, { R: 58, liquid: toneFill(c, t), inner: `<circle r="50" fill="none" stroke="#f7ecd9" stroke-opacity=".35" stroke-width="6"/>` + latteArt(c, c.pick(['tulip', 'rosetta']), 44, t[1], t[0][1]) });
+  const side = c.pick([-1, 1]);
+  s += spoon(c, CX + side * 70, CY + 88, side > 0 ? 200 : -20, .75) + sugarCube(c, CX - side * 72, CY - 84, c.rand(0, 40), .8);
   return s;
 });
-def('latte-heart', 'قهوه گرم', 'لاته قلب در فنجان (نمای کنار)', c => {
-  let s = backdrop(c) + floor(c);
+def('latte-heart', 'قهوه گرم', 'لاته قلب با بیسکوتی', c => {
+  let s = backdrop(c);
   const t = TONES[c.pick(['coffee', 'coffee2'])];
-  s += cup34(c, { liquid: toneFill(c, t), art: latteArt(c, c.pick(['heart', 'nested']), 44, t[1], t[0][1]), rx: c.rand(48, 54), top: c.rand(114, 122) });
-  s += beansAround(c, c.int(1, 3), 70, 92, CX, 214);
+  const ha = c.rand(-40, 40);
+  const sa = (ha + 180 + c.rand(-35, 35)) * Math.PI / 180;
+  const onS = biscotti(c, CX + Math.cos(sa) * 66, CY + Math.sin(sa) * 66, sa * 180 / Math.PI + 90);
+  s += cupTop(c, { R: 56, sR: 84, ha, liquid: toneFill(c, t), inner: latteArt(c, c.pick(['heart', 'nested']), 45, t[1], t[0][1]), onSaucer: onS });
   return s;
 });
 def('latte-swan', 'قهوه گرم', 'لاته آرت قو', latteStyle('swan', 'coffee2'));
 def('latte-web', 'قهوه گرم', 'لاته آرت حلقه‌ای', latteStyle('web', 'coffee'));
 def('latte-wing', 'قهوه گرم', 'لاته آرت پَر', latteStyle('wing', 'coffee2'));
 
-def('flatwhite', 'قهوه گرم', 'فلت وایت (فنجان کوچک از کنار)', c => {
-  let s = backdrop(c) + floor(c);
+def('flatwhite', 'قهوه گرم', 'فلت وایت (فنجان کوچک، بشقاب مربعی)', c => {
+  let s = backdrop(c);
   const t = TONES.dark;
-  const sa = c.chance(.5) ? sugarCube(c, CX - 58, 194, c.rand(0, 40), .6) : bean(c, CX - 60, 196, c.rand(0, 360), .8) + bean(c, CX - 50, 200, c.rand(0, 360), .7);
-  s += cup34(c, { rx: c.rand(40, 44), top: c.rand(130, 136), bot: 188, shape: c.pick(['tulip', 'round']), liquid: toneFill(c, t), art: latteArt(c, c.pick(['tulip', 'rosetta', 'heart']), 38, t[1], t[0][1]), onSaucer: sa });
+  const ha = c.pick([-35, 35, 145, 215]) + c.rand(-8, 8);
+  const sa = (ha + 180) * Math.PI / 180;
+  const onS = sugarCube(c, CX + Math.cos(sa + .5) * 58, CY + Math.sin(sa + .5) * 58, c.rand(0, 40), .65) + spoon(c, CX + Math.cos(sa - .5) * 62, CY + Math.sin(sa - .5) * 62, (sa - .5) * 180 / Math.PI + 90, .6);
+  s += cupTop(c, { R: 46, sR: 82, square: true, ha, fill: .78, liquid: toneFill(c, t), inner: latteArt(c, c.pick(['rosetta', 'tulip', 'wing']), 36, t[1], t[0][1]), onSaucer: onS });
   return s;
 });
 def('cappuccino', 'قهوه گرم', 'کاپوچینو با پودر کاکائو', c => {
@@ -675,23 +642,22 @@ def('cortado', 'قهوه گرم', 'کورتادو (لیوان کوتاه)', c =>
 
 def('caramel', 'قهوه گرم', 'کارامل ماکیاتو', c => {
   let s = backdrop(c);
-  const cc = c.pick(['#c97a2b', '#b5651d', '#d88c32']);
-  let inner = '';
-  if(c.chance(.6)){
-    const rot = c.int(0, 90), gap = c.rand(9, 13);
-    let lines = '';
-    for(let i = -4; i <= 4; i++) lines += `<path d="M${n1(i * gap)} -60V60"/><path d="M-60 ${n1(i * gap)}H60"/>`;
-    inner += `<g transform="rotate(${rot})" stroke="${cc}" stroke-width="2.4" stroke-linecap="round" opacity=".9">${lines}</g>`;
-  } else {
-    inner += `<path d="${spiral(c.rand(3, 4.5), 3, 44)}" fill="none" stroke="${cc}" stroke-width="2.6" stroke-linecap="round"/>`;
-    const k = c.int(6, 10); for(let i = 0; i < k; i++){ const a = i / k * 360; inner += `<path transform="rotate(${a})" d="M4 0Q20 ${c.int(-8, 8)} 46 0" stroke="#fbf3e4" stroke-width="1.3" fill="none"/>`; }
+  const cc = c.pick(['#c97a2b', '#b8661f', '#d88c32']);
+  let inner = latteArt(c, c.pick(['rosetta', 'tulip', 'heart']), 46, '#fffaf0', '#d9a86a');
+  const rot = c.int(0, 180), n = c.int(3, 4);
+  let dr = '';
+  for(let k = 0; k < n; k++){
+    const y = -36 + k * (72 / (n - 1)) + c.rand(-4, 4), a = c.rand(6, 11);
+    const d = `M-62 ${n1(y)}C-40 ${n1(y - a)} -20 ${n1(y + a)} 0 ${n1(y)}S40 ${n1(y - a)} 62 ${n1(y)}`;
+    dr += `<path d="${d}" stroke="${darken(cc, .2)}" stroke-width="3.6" fill="none" stroke-linecap="round" opacity=".35" transform="translate(1 1.5)"/><path d="${d}" stroke="${cc}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="${d}" stroke="#ffd9a0" stroke-width=".9" fill="none" stroke-linecap="round" opacity=".8" transform="translate(-.6 -.8)"/>`;
   }
-  inner += `<circle r="${c.int(4, 8)}" fill="${cc}"/>`;
-  s += cupTop(c, { R: 60, liquid: c.rad([[0, '#fdf6ea'], [.7, '#f1e2c8'], [1, '#c9955c']], .45, .42, .6), inner });
-  s += beansAround(c, c.int(0, 3), 92, 106);
+  inner += `<g transform="rotate(${rot})">${dr}</g>`;
+  const ha = c.rand(-40, 40);
+  const sa = (ha + 180 + c.rand(-30, 30)) * Math.PI / 180;
+  const onS = `<g transform="translate(${n1(CX + Math.cos(sa) * 64)} ${n1(CY + Math.sin(sa) * 64)})"><circle r="11" fill="#fbf6ef"/><circle r="8" fill="${c.rad([[0, lighten(cc, .3)], [1, darken(cc, .2)]])}"/></g>`;
+  s += cupTop(c, { R: 58, ha, liquid: c.rad([[0, '#fdf7ec'], [.7, '#f1e2c8'], [1, '#c9955c']], .45, .42, .6), inner, onSaucer: onS });
   return s;
 });
-
 def('mocha', 'قهوه گرم', 'موکا (ماگ شیشه‌ای)', c => {
   let s = backdrop(c) + floor(c);
   const shape = c.pick(['mug', 'tumbler']);
@@ -759,30 +725,35 @@ def('hot-chocolate', 'نوشیدنی گرم', 'هات چاکلت با مارشم
 });
 
 def('pink-chocolate', 'نوشیدنی گرم', 'پینک چاکلت', c => {
-  let s = backdrop(c, c.pick(['#4b1628', '#3a1d2e', '#1c3a5e', '#1f4e8c'])) + floor(c);
+  let s = backdrop(c, c.pick(['#4b1628', '#3a1d2e', '#1c3a5e', '#1f4e8c']));
   const t = TONES.pink;
-  const art = latteArt(c, c.pick(['heart', 'nested']), 40, t[1], t[0][1]) + sprinkles(c, 22, -40, 40, -40, 40);
-  if(c.chance(.5)) s += glass34(c, { handle: true, layers: [['#fff3f6', .8], ['#f6b3c6', 2], ['#e88aa6', 1.4]], art });
-  else s += cup34(c, { color: c.pick(['#f3ece1', '#f7d7de', '#fbf6ef']), liquid: toneFill(c, t), art });
-  for(let i = 0; i < 4; i++){ const x = c.pick([30, 44, 156, 170]) + c.rand(-6, 6), y = 214 + c.rand(-6, 6); s += `<rect x="${n1(x)}" y="${n1(y)}" width="10" height="4" rx="2" fill="#fbf2e4" transform="rotate(${c.int(0, 180)} ${n1(x)} ${n1(y)})"/>`; }
+  const ha = c.rand(-40, 40);
+  const sa = (ha + 180 + c.rand(-30, 30)) * Math.PI / 180;
+  const onS = `<g transform="translate(${n1(CX + Math.cos(sa) * 64)} ${n1(CY + Math.sin(sa) * 64)}) rotate(${c.int(0, 90)})"><rect x="-8" y="-8" width="16" height="16" rx="5" fill="#fff"/><rect x="-5" y="-5" width="10" height="10" rx="3" fill="#f7c6d4"/></g>`;
+  s += cupTop(c, { R: 56, ha, color: c.pick(['#f3ece1', '#f7d7de', '#fbf6ef', '#2d5f9a']), liquid: toneFill(c, t), inner: latteArt(c, c.pick(['heart', 'nested']), 45, t[1], t[0][1]) + sprinkles(c, 26, -40, 40, -40, 40), onSaucer: onS });
   return s;
 });
-def('matcha', 'نوشیدنی گرم', 'ماچا لاته', c => {
-  let s = backdrop(c, c.pick(['#243b2f', '#27361c', '#0e3b3b', '#1b4470', '#5a6b3a'])) + floor(c);
+def('matcha', 'نوشیدنی گرم', 'ماچا لاته در کاسه', c => {
+  let s = backdrop(c, c.pick(['#243b2f', '#27361c', '#0e3b3b', '#1b4470', '#5a6b3a']));
   const t = TONES.matcha;
-  const glass = c.chance(.6);
-  if(glass) s += glass34(c, { handle: c.chance(.5), top: c.rand(86, 96), layers: [['#f7f5e4', .6], ['#a3c872', 1.4], ['#7fa84a', 1], ['#f4f1e2', 2]], art: latteArt(c, c.pick(['rosetta', 'tulip', 'heart']), 38, t[1], t[0][1]) });
-  else s += cup34(c, { color: c.pick(['#232120', '#efe0c2', '#8ea888', '#f3ece1']), shape: 'straight', liquid: toneFill(c, t), art: latteArt(c, c.pick(['rosetta', 'swan', 'wing']), 44, t[1], t[0][1]) });
-  const wx = c.pick([34, 166]), wy = 218;
-  s += `<g transform="translate(${wx} ${wy})">${shadow(c, 0, 4, 22, 6, .45)}<path d="M-18 2Q-12-12 0-13 12-12 18 2Z" fill="${c.rad([[0, '#b7d67a'], [1, '#6e9a3f']], .45, .3, .8)}"/><path d="M-26 -2L10 -16" stroke="#d9c38a" stroke-width="3" stroke-linecap="round"/></g>` + dust(c, 16, wx, wy - 2, 20, '#7aa640', .9, 1.3);
+  let mat = '';
+  const mc = c.pick(['#c9b27a', '#b89a5a', '#d9c48f']);
+  mat += `<rect x="18" y="30" width="164" height="190" rx="6" fill="${mc}"/>`;
+  for(let y = 36; y < 220; y += 6) mat += `<path d="M18 ${y}H182" stroke="${darken(mc, .25)}" stroke-width="1"/>`;
+  mat += `<path d="M18 30V220M182 30V220" stroke="${darken(mc, .4)}" stroke-width="3"/>`;
+  s += `<g transform="rotate(${c.int(-8, 8)} 100 124)">${shadow(c, 104, 130, 90, 100, .4)}${mat}</g>`;
+  s += cupTop(c, { R: 62, saucer: false, handle: false, color: c.pick(['#5a4a3a', '#2b2b2b', '#d9cdb4', '#6b7a5a', '#3a4a6a']), gold: false, fill: .84, liquid: toneFill(c, t), inner: latteArt(c, c.pick(['rosetta', 'heart', 'swan', 'tulip']), 50, t[1], t[0][1]) });
+  const wa = c.pick([35, 145]);
+  s += whiskTop(c, CX + Math.cos(wa * Math.PI / 180) * 70, CY + Math.sin(wa * Math.PI / 180) * 80, wa + 20);
+  s += `<g transform="translate(${CX - Math.cos(wa * Math.PI / 180) * 64} ${CY - Math.sin(wa * Math.PI / 180) * 78})"><ellipse rx="14" ry="10" fill="${c.rad([[0, '#b7d67a'], [1, '#6e9a3f']])}"/></g>`;
   return s;
 });
 def('masala', 'نوشیدنی گرم', 'ماسالا (چای ادویه‌ای)', c => {
-  let s = backdrop(c, c.pick(['#5a3a12', '#3e1f15', '#402b1e', '#a4552f', '#1f4e8c'])) + floor(c);
+  let s = backdrop(c, c.pick(['#5a3a12', '#3e1f15', '#402b1e', '#a4552f', '#1f4e8c']));
   const t = TONES.chai;
-  const onS = starAnise(c, CX - 62, 196, c.rand(0, 90), .7) + cardamom(c, CX + 64, 198, c.rand(0, 360));
-  s += cup34(c, { color: c.pick(['#b8613b', '#f3ece1', '#2d5f9a', '#efe0c2', '#232120']), liquid: toneFill(c, t), art: latteArt(c, c.pick(['heart', 'web', 'rosetta']), 44, t[1], t[0][1]) + dust(c, 40, 0, 0, 40, '#7a3c14', .7), onSaucer: onS });
-  s += cinnamonStick(c, c.pick([30, 170]), 222, c.rand(-20, 20), 50);
+  const inner = latteArt(c, c.pick(['heart', 'web']), 46, t[1], t[0][1]) + dust(c, 50, 0, 0, 44, '#7a3c14', .7) + starAnise(c, c.rand(-14, 14), c.rand(-14, 14), c.rand(0, 90), 1.1);
+  s += cupTop(c, { R: 56, color: c.pick(['#b8613b', '#f3ece1', '#2d5f9a', '#efe0c2']), liquid: toneFill(c, t), inner });
+  s += spiceRing(c, 6, 92, 106);
   return s;
 });
 def('sesame-date', 'نوشیدنی گرم', 'کنجد و خرما', c => {
@@ -800,12 +771,14 @@ def('sesame-date', 'نوشیدنی گرم', 'کنجد و خرما', c => {
 });
 
 def('hazelnut-milk', 'نوشیدنی گرم', 'شیر شکلات فندق', c => {
-  let s = backdrop(c) + floor(c);
+  let s = backdrop(c);
   const t = TONES.choco;
-  s += glass34(c, { handle: c.chance(.7), top: c.rand(86, 94), layers: [['#f3e5d3', .9], ['#8e5638', 1.6], ['#5c3120', 1.2], ['#3a1a0a', .6]], art: latteArt(c, c.pick(['heart', 'rosetta', 'tulip']), 38, t[1], t[0][1]), inside: `<path d="M50 150q10 -10 20 0t20 0 20 0 20 0 20 0" stroke="#2e160c" stroke-opacity=".35" stroke-width="3" fill="none"/>` });
-  for(let i = 0; i < c.int(3, 5); i++){
-    const x = c.pick([28, 40, 52, 148, 160, 172]) + c.rand(-4, 4), y = 214 + c.rand(-6, 8);
-    s += `<g transform="translate(${n1(x)} ${n1(y)}) rotate(${c.int(0, 360)})"><circle r="7" fill="${c.ball('#9a5a2a')}"/><path d="M-6-3Q0-9 6-3" fill="#c79a66" stroke="#7a4a1a" stroke-width=".8"/></g>`;
+  const inner = latteArt(c, c.pick(['rosetta', 'tulip', 'heart']), 46, t[1], t[0][1]) + dust(c, 18, 0, 0, 36, '#c79a66', .9, 1.8);
+  s += cupTop(c, { R: 58, color: c.pick(['#6a3a22', '#f3ece1', '#232120', '#d8a53a']), liquid: toneFill(c, t), inner });
+  for(let i = 0; i < c.int(4, 6); i++){
+    const a = c.rand(0, 6.28), x = CX + Math.cos(a) * 96, y = CY + Math.sin(a) * 102;
+    if(x < 10 || x > 190 || y < 20 || y > 230) continue;
+    s += `<g transform="translate(${n1(x)} ${n1(y)}) rotate(${c.int(0, 360)})"><circle r="8" fill="${c.ball('#9a5a2a')}"/><path d="M-7-3Q0-10 7-3" fill="#c79a66" stroke="#7a4a1a" stroke-width=".8"/></g>`;
   }
   return s;
 });
@@ -1143,28 +1116,46 @@ function board(c, x = CX, y = 186, w = 150){
 }
 function servingBase(c, y = 186){ return c.chance(.35) ? board(c, CX, y) : plate(c, CX, y); }
 
+function croissantShape(c, base){
+  const cy0 = 22, Rm = 46, A0 = 188, A1 = 352, n = 7;
+  const pt = (a, r) => [Math.cos(a * Math.PI / 180) * r, cy0 + Math.sin(a * Math.PI / 180) * r];
+  const thick = u => 6 + 36 * Math.pow(Math.sin(u * Math.PI), .85);
+  const f = p => n1(p[0]) + ' ' + n1(p[1]);
+  let order = [];
+  for(let i = 0; i < n; i++) order.push(i);
+  order.sort((a, b) => Math.abs(b - (n - 1) / 2) - Math.abs(a - (n - 1) / 2));
+  let g = '';
+  const grad = c.rad([[0, lighten(base, .42)], [.55, base], [1, darken(base, .42)]], .5, .45, .6);
+  order.forEach(i => {
+    const u0 = i / n, u1 = (i + 1) / n, um = (u0 + u1) / 2;
+    const a0 = A0 + u0 * (A1 - A0), a1 = A0 + u1 * (A1 - A0), am = (a0 + a1) / 2;
+    const t0 = thick(u0), t1 = thick(u1), tm = thick(um);
+    const o0 = pt(a0, Rm + t0 / 2), o1 = pt(a1, Rm + t1 / 2), i1 = pt(a1, Rm - t1 / 2), i0 = pt(a0, Rm - t0 / 2);
+    const om = pt(am, Rm + tm / 2 + 6), im = pt(am, Rm - tm / 2 - 1);
+    const e1 = pt(a1 + 3, Rm), e0 = pt(a0 - 3, Rm);
+    g += `<path d="M${f(o0)}Q${f(om)} ${f(o1)}Q${f(e1)} ${f(i1)}Q${f(im)} ${f(i0)}Q${f(e0)} ${f(o0)}Z" fill="${grad}" stroke="${darken(base, .45)}" stroke-width="1.1"/>`;
+    const h0 = pt(a0 + 4, Rm + t0 / 2 - 3), h1 = pt(a1 - 4, Rm + t1 / 2 - 3), hm = pt(am, Rm + tm / 2 + 1);
+    g += `<path d="M${f(h0)}Q${f(hm)} ${f(h1)}" stroke="#fff" stroke-opacity=".35" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+    const l0 = pt(am - 3, Rm + tm * .2), l1 = pt(am + 3, Rm - tm * .2);
+    g += `<path d="M${f(l0)}L${f(l1)}" stroke="${darken(base, .3)}" stroke-width=".8" opacity=".5"/>`;
+  });
+  const tip = (a, dir) => { const p = pt(a, Rm); const q = pt(a - dir * 10, Rm - 4); return `<path d="M${f(pt(a, Rm + 4))}Q${n1(q[0] - dir * 2)} ${n1(q[1] + 10)} ${n1(q[0] - dir * 4)} ${n1(q[1] + 14)}Q${f(p)} ${f(pt(a, Rm - 4))}Z" fill="${darken(base, .15)}" stroke="${darken(base, .45)}" stroke-width="1"/>`; };
+  return tip(A0 + 2, -1) + tip(A1 - 2, 1) + g;
+}
 function croissant(variant){
   return c => {
-    let s = backdrop(c) + floor(c);
-    s += servingBase(c, 188);
-    const base = c.pick(['#e7a64f', '#d9923c', '#eab060']);
-    const cx = CX + c.rand(-4, 4), cy = 150;
-    const top = x => -40 + Math.pow(x / 64, 2) * 58;
-    const bot = x => 6 + Math.pow(x / 64, 2) * 12;
-    let g = shadow(c, 4, 14, 70, 16, .5);
-    g += `<path d="M-64 18C-58-12-30-40 0-40S58-12 64 18C50 10 30 6 0 6S-50 10-64 18Z" fill="${c.lin([[0, lighten(base, .4)], [.5, base], [1, darken(base, .45)]])}"/>`;
-    const k = c.int(5, 7);
-    for(let i = 1; i < k; i++){
-      const x = -64 + i * (128 / k), bend = x * .12;
-      g += `<path d="M${n1(x)} ${n1(top(x) + 1)}Q${n1(x + bend + 6)} ${n1((top(x) + bot(x)) / 2)} ${n1(x + bend)} ${n1(bot(x) - 1)}" stroke="${darken(base, .45)}" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".7"/>`;
-      g += `<path d="M${n1(x + 4)} ${n1(top(x + 4) + 4)}Q${n1(x + bend + 9)} ${n1((top(x) + bot(x)) / 2 - 2)} ${n1(x + bend + 4)} ${n1(bot(x) - 5)}" stroke="#fff" stroke-opacity=".22" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    let s = backdrop(c) + plateTop(c, CX, CY + 6, 90);
+    const base = c.pick(['#e7a64f', '#dc9442', '#eab262', '#d98c3a']);
+    const rot = c.int(-18, 18);
+    let g = shadow(c, 3, 14, 66, 34, .22) + croissantShape(c, base);
+    if(variant === 'chocolate'){ let z = 'M-52 -8'; for(let i = 0; i < 10; i++) z += `L${-46 + i * 10} ${i % 2 ? -34 : 4}`; g += `<path d="${z}" stroke="#3a1a0a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".92"/>`; }
+    if(variant === 'almond'){ for(let i = 0; i < 18; i++){ const a = c.rand(200, 340) * Math.PI / 180, d = c.rand(34, 62); const x = Math.cos(a) * d, y = 22 + Math.sin(a) * d; g += `<ellipse cx="${n1(x)}" cy="${n1(y)}" rx="4" ry="2" fill="#f6e2b8" stroke="#c9a060" stroke-width=".6" transform="rotate(${c.int(0, 180)} ${n1(x)} ${n1(y)})"/>`; } g += dust(c, 70, 0, -6, 50, '#fff', .95, 1.1); }
+    s += `<g transform="translate(${CX} ${CY + 4}) rotate(${rot}) scale(1.14)">${g}</g>`;
+    const side = c.pick([-1, 1]);
+    if(variant === 'plain'){
+      s += `<g transform="translate(${CX + side * 58} ${CY + 60})">${shadow(c, 2, 3, 16, 12, .4)}<circle r="13" fill="#fbf6ef"/><circle r="10" fill="${c.pick(['#b8233a', '#e0752a', '#6a1f5a'])}"/><circle cx="-3" cy="-3" r="2.5" fill="#fff" opacity=".5"/></g>`;
+      s += `<g transform="translate(${CX - side * 56} ${CY + 64}) rotate(${c.int(-20, 20)})"><rect x="-11" y="-8" width="22" height="16" rx="3" fill="#f7e7a8"/><rect x="-11" y="-8" width="22" height="5" rx="2" fill="#fff6d0"/></g>`;
     }
-    g += `<path d="M-40-20Q0-44 40-20" stroke="#fff" stroke-opacity=".28" stroke-width="4" fill="none" stroke-linecap="round"/>`;
-    s += `<g transform="translate(${n1(cx)} ${cy + 8}) rotate(${c.int(-8, 8)}) scale(${n1(c.rand(1.0, 1.12) * 100) / 100})">${g}`;
-    if(variant === 'chocolate'){ let z = 'M-40 4'; for(let i = 0; i < 8; i++) z += `L${-34 + i * 10} ${i % 2 ? -10 : 12}`; s += `<path d="${z}" stroke="#3a1a0a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`; }
-    if(variant === 'almond'){ for(let i = 0; i < 14; i++) s += `<ellipse cx="${n1(c.rand(-36, 36))}" cy="${n1(c.rand(-14, 14))}" rx="4" ry="2" fill="#f6e2b8" stroke="#c9a060" stroke-width=".6" transform="rotate(${c.int(0, 180)} ${n1(c.rand(-30, 30))} 0)"/>`; s += dust(c, 50, 0, 0, 36, '#fff', .9, 1); }
-    if(variant === 'plain') s += `<path d="M-30-6Q0-18 30-6" stroke="#fff" stroke-opacity=".35" stroke-width="3" fill="none" stroke-linecap="round"/>`;
-    s += `</g>`;
     return s;
   };
 }
@@ -1379,24 +1370,50 @@ def('dessert-cup', 'کیک و شیرینی', 'دسر لیوانی کاراملی
   return s;
 });
 
-def('toast', 'میان وعده', 'تست و ساندویچ', c => {
-  let s = backdrop(c) + floor(c) + servingBase(c, 190);
-  const tri = (x, y, rot, sc) => {
-    let g = `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${sc})">`;
-    g += `<path d="M-50 30L50 30L0-40Z" fill="${c.lin([[0, '#e9b86a'], [1, '#b8782a']])}"/>`;
-    g += `<path d="M-44 22L44 22L0-32Z" fill="#fbf0d8"/>`;
-    const layers = [['#6fbf4a', 'wave'], ['#f7a6a0', 'flat'], ['#f6d04a', 'flat'], ['#e8453c', 'flat'], ['#f7a6a0', 'flat']];
-    let yy = 18;
-    layers.slice(0, c.int(3, 5)).forEach(([col, t]) => { g += t === 'wave' ? `<path d="M-46 ${yy}q6-6 12 0t12 0 12 0 12 0 12 0 12 0 12 0 12 0" stroke="${col}" stroke-width="5" fill="none"/>` : `<rect x="-44" y="${yy - 3}" width="88" height="5" fill="${col}"/>`; yy -= 5.5; });
-    g += `<path d="M-50 ${yy - 4}L50 ${yy - 4}L0 -60Z" fill="${c.lin([[0, '#f0c47a'], [1, '#c98a3a']])}"/>`;
-    g += `<path d="M-40 ${yy - 8}L40 ${yy - 8}" stroke="#a8601e" stroke-width="2" stroke-dasharray="6 5" opacity=".6"/>`;
-    return g + '</g>';
+def('toast', 'میان وعده', 'تست ساندویچ', c => {
+  let s = backdrop(c) + floor(c) + servingBase(c, 194);
+  const wav = (x0, x1, y, amp, per, rev) => {
+    const pts = [];
+    for(let x = x0; x <= x1 + .01; x += per / 4) pts.push([x, y + Math.sin((x - x0) / per * Math.PI * 2) * amp]);
+    if(rev) pts.reverse();
+    return pts.map(p => `L${n1(p[0])} ${n1(p[1])}`).join('');
   };
-  s += tri(CX - 26, 170, -8, .8) + tri(CX + 30, 176, 10, .72);
-  s += `<path d="M${CX + 30} 108V160" stroke="#d9c4a0" stroke-width="2"/><circle cx="${CX + 30}" cy="106" r="5" fill="${c.pick(['#3a4a1a', '#1a1a1a', '#b8233a'])}"/>`;
+  const piece = (x, y, w, H, depth, flip) => {
+    const x1 = x + w, y0 = y - H;
+    let g = '';
+    const face = `M${x} ${y0}H${x1}V${y}H${x}Z`;
+    const cl = c.clip(`<path d="${face}"/>`);
+    let f = `<rect x="${x}" y="${y0}" width="${w}" height="${H}" fill="#f6e2b8"/>`;
+    const b = (t, h, col, amp) => `<path d="M${x} ${n1(y0 + t)}${wav(x, x1, y0 + t, amp, 14)}${wav(x, x1, y0 + t + h, amp, 14, true)}Z" fill="${col}"/>`;
+    f += b(H * .25, H * .1, '#e2453a', 1);
+    f += b(H * .34, H * .1, '#f6c742', .6);
+    for(let k = 0; k < 5; k++){ const dx = x + 8 + k * (w - 16) / 4; f += `<path d="M${n1(dx - 3)} ${n1(y0 + H * .44)}L${n1(dx)} ${n1(y0 + H * .54)}L${n1(dx + 3)} ${n1(y0 + H * .44)}Z" fill="#f6c742"/>`; }
+    f += b(H * .43, H * .18, '#f3a9a2', 1.6);
+    f += `<path d="M${x} ${n1(y0 + H * .52)}${wav(x, x1, y0 + H * .52, 1.4, 10)}" stroke="#f9cbc4" stroke-width="1.2" fill="none"/>`;
+    f += b(H * .6, H * .1, '#6cbf4a', 2.4);
+    f += dust(c, 26, x + w / 2, y0 + H * .12, w * .45, '#d9b27a', .9, 1.3) + dust(c, 20, x + w / 2, y0 + H * .85, w * .45, '#d9b27a', .9, 1.3);
+    g += `<g clip-path="${cl}">${f}</g>`;
+    g += `<path d="${face}" fill="none" stroke="#b8732a" stroke-width="3"/>`;
+    const apex = [x + w * .5 + flip * w * .18, y0 - depth];
+    const top = `M${x} ${y0}L${x1} ${y0}L${n1(apex[0])} ${n1(apex[1])}Z`;
+    const tcl = c.clip(`<path d="${top}"/>`);
+    g += `<path d="${top}" fill="${c.lin([[0, '#e2a352'], [1, '#c8802c']])}" stroke="#a8601e" stroke-width="3" stroke-linejoin="round"/>`;
+    let marks = '';
+    for(let k = -2; k <= 3; k++) marks += `<path d="M${n1(x + k * 22)} ${y0}L${n1(x + k * 22 + 36)} ${n1(y0 - depth)}" stroke="#7a3a10" stroke-width="3" opacity=".45"/>`;
+    g += `<g clip-path="${tcl}">${marks}</g>`;
+    return g;
+  };
+  const back = c.chance(.5) ? 1 : -1;
+  let sw = shadow(c, CX + 4, 192, 80, 12, .5);
+  sw += piece(CX - 44 + back * 8, 166, 96, 34, 30, back);
+  sw += piece(CX - 60 - back * 6, 192, 112, 40, 34, -back);
+  const tx = CX - 4 + c.rand(-10, 10);
+  sw += `<path d="M${n1(tx)} 150V96" stroke="#e8d4a8" stroke-width="2.2"/><circle cx="${n1(tx)}" cy="93" r="6" fill="${c.ball(c.pick(['#3a4a1a', '#1a1a1a', '#6a7a2a']))}"/><circle cx="${n1(tx)}" cy="93" r="2" fill="#b8233a"/>`;
+  s += `<g transform="translate(${CX} 194) scale(1.14) translate(${-CX} -194)">${sw}</g>`;
+  const gx = CX + c.pick([-62, 62]);
+  for(let k = 0; k < 3; k++) s += `<g transform="translate(${n1(gx + k * 9 - 9)} ${n1(200 + (k % 2) * 4)})"><ellipse rx="8" ry="5" fill="#6f9a3a" stroke="#4a6a20"/><circle r="1" cx="-2" fill="#e8f0c0"/><circle r="1" cx="2" fill="#e8f0c0"/></g>`;
   return s;
 });
-
 def('egg-skillet', 'میان وعده', 'تابه تخم‌مرغ و پپرونی', c => {
   let s = backdrop(c);
   const hx = c.rand(-40, 40) * Math.PI / 180 - Math.PI / 4;
@@ -1536,20 +1553,33 @@ def('icecream', 'افزودنی', 'بستنی', c => {
 });
 
 def('nabat', 'افزودنی', 'نبات زعفرانی', c => {
-  let s = backdrop(c, c.pick(['#5a3a12', '#402b1e', '#3e1f15', '#1c3a5e'])) + floor(c);
-  const n = c.int(2, 4);
+  let s = backdrop(c, c.pick(['#5a3a12', '#402b1e', '#3e1f15', '#1c3a5e', '#1f4e8c'])) + floor(c);
+  const crystal = (x, y, r, rot) => {
+    let d = '';
+    for(let i = 0; i < 6; i++){ const a = (i / 6 * 360 + rot) * Math.PI / 180, rr = r * c.rand(.75, 1.15); d += (i ? 'L' : 'M') + n1(x + Math.cos(a) * rr) + ' ' + n1(y + Math.sin(a) * rr); }
+    const col = c.pick(['#f7c040', '#f2a20a', '#ffd06a', '#e8900a', '#f8b830']);
+    return `<path d="${d}Z" fill="${c.lin([[0, lighten(col, .35)], [1, darken(col, .2)]], 0, 0, 1, 1)}" fill-opacity=".92" stroke="#fff3c0" stroke-opacity=".6" stroke-width=".6"/><path d="M${n1(x - r * .4)} ${n1(y - r * .3)}l${n1(r * .5)} ${n1(-r * .2)}" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/>`;
+  };
+  const n = c.int(3, 4);
+  let sticks = '';
   for(let i = 0; i < n; i++){
-    const x = CX - 30 + i * (60 / Math.max(1, n - 1)) + c.rand(-4, 4), rot = c.rand(-14, 14);
-    let g = `<rect x="-2" y="-90" width="4" height="110" rx="2" fill="#a8743f"/>`;
-    for(let j = 0; j < 22; j++){ const yy = c.rand(-66, 0), sz = c.rand(5, 11); g += `<path transform="translate(${n1(c.rand(-8, 8))} ${n1(yy)}) rotate(${c.int(0, 90)})" d="M0 ${-sz}L${sz * .8} 0 0 ${sz} ${-sz * .8} 0Z" fill="${c.pick(['#f7c040', '#f2a20a', '#ffd870', '#e8900a'])}" fill-opacity=".85" stroke="#fff3c0" stroke-opacity=".5" stroke-width=".6"/>`; }
-    s += `<g transform="translate(${n1(x)} 188) rotate(${n1(rot)})">${g}</g>`;
+    const off = i - (n - 1) / 2, x = CX + off * 15 + c.rand(-3, 3), rot = off * 9 + c.rand(-3, 3);
+    let g = `<rect x="-1.8" y="-128" width="3.6" height="130" rx="1.8" fill="#9a6a3a"/>`;
+    const y0 = -118 + c.rand(-6, 6), y1 = -52 + c.rand(-6, 6);
+    for(let y = y0; y < y1; y += 5.5){
+      const t = (y - y0) / (y1 - y0), w = 4 + 11 * Math.sin(t * Math.PI);
+      const k = w > 10 ? 3 : 2;
+      for(let j = 0; j < k; j++) g += crystal(-w + (j + .5) * (2 * w / k) + c.rand(-2, 2), y + c.rand(-2, 2), c.rand(4, 6.5), c.rand(0, 60));
+    }
+    sticks += `<g transform="translate(${n1(x)} 198) rotate(${n1(rot)})">${g}</g>`;
   }
-  s += shadow(c, CX + 2, 202, 44, 7, .5);
-  s += `<path d="M${CX - 34} 160H${CX + 34}L${CX + 28} 200H${CX - 28}Z" fill="${c.glass()}" stroke="rgba(255,255,255,.55)" stroke-width="1.6"/>`;
-  s += dust(c, 20, CX, 214, 30, '#f7c040', .9, 2);
+  s += shadow(c, CX + 4, 202, 50, 8, .55);
+  s += sticks;
+  const p = `M${CX - 36} 150H${CX + 36}L${CX + 30} 200H${CX - 30}Z`;
+  s += `<path d="${p}" fill="${c.glass()}" stroke="rgba(255,255,255,.6)" stroke-width="1.8"/><ellipse cx="${CX}" cy="150" rx="36" ry="4" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.4"/><path d="M${CX - 28} 158L${CX - 24} 194" stroke="#fff" stroke-opacity=".4" stroke-width="3" stroke-linecap="round"/>`;
+  for(let i = 0; i < 6; i++){ const x = c.pick([30, 42, 158, 170]) + c.rand(-8, 8), y = 212 + c.rand(-6, 10); s += crystal(x, y, c.rand(4, 7), c.rand(0, 60)); }
   return s;
 });
-
 def('medallion', 'نقش کلی', 'نقش کاشی ایرانی', c => {
   const pal = c.pick([['#1f5680', '#0a1f33', '#48b5c4'], ['#135a5a', '#062424', '#e0b25e'], ['#6a1f33', '#240910', '#48b5c4'], ['#233d78', '#0b1430', '#e39a6d']]);
   const G2 = '#d9b36e', k = c.pick([6, 8, 8, 10, 12, 16]);

@@ -61,7 +61,7 @@
   }
   .marble::after{
     content:"";position:absolute;inset:0;opacity:.22;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .012' numOctaves='5' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .6 0 0 0 0 .7 0 0 0 -9 4.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .012' numOctaves='5' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .6 0 0 0 0 .7 0 0 0 -9 4.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
     background-size:600px 600px;
     mix-blend-mode:multiply;
   }
@@ -75,29 +75,23 @@
   }
   .stage{display:flex;align-items:flex-end;justify-content:center;gap:4px;}
   .column{
-    width:34px;height:auto;align-self:stretch;flex:0 0 auto;
+    flex:0 0 auto;display:block;
     color:var(--azzurro);
-    opacity:0;transform:translateY(24px);
-    transition:opacity 1s ease, transform 1.2s var(--ease);
+    opacity:0;transform:translateY(16px);
+    transition:opacity .8s ease, transform 1s var(--ease);
   }
   .ready .column{opacity:1;transform:none;}
-  .ready .column.r{transition-delay:.12s;}
-  @media (max-width:350px){.column{display:none;}}
+  .column[hidden]{display:none;}
   .arch{
     position:relative;
-    width:clamp(220px, min(76vw, calc((100vh - 210px) * .757)), 340px);
-    width:clamp(220px, min(76vw, calc((100svh - 210px) * .757)), 340px);
-    aspect-ratio:100/132;
+    width:300px;height:400px;
     container-type:inline-size;
   }
   .arch .sky{
-    position:absolute;left:6%;right:6%;top:4.6%;bottom:0;
-    border-radius:50% 50% 0 0 / 34% 34% 0 0;
+    position:absolute;
     overflow:hidden;
-    background:linear-gradient(180deg, #b9d5f1 0%, #dcebf8 45%, #f4f8fc 80%, #fbf7f0 100%);
-    opacity:0;transition:opacity 1.4s ease .2s;
+    background:linear-gradient(180deg, #b9d5f1 0%, #d4e6f7 40%, #eef5fb 78%, #fbf7f0 100%);
   }
-  .ready .arch .sky{opacity:1;}
   .sky .cloud{position:absolute;left:0;width:44%;opacity:.9;animation:cloud 38s linear infinite;}
   .sky .cloud.c1{top:12%;}
   .sky .cloud.c2{top:26%;width:30%;animation-duration:52s;animation-delay:-20s;opacity:.7;}
@@ -109,16 +103,16 @@
   @keyframes pine{to{transform:rotate(1.6deg);}}
   .arch > svg.archline{position:absolute;inset:0;width:100%;height:100%;overflow:visible;color:var(--azzurro);}
   .archline .draw{fill:none;stroke:currentColor;stroke-dasharray:1;stroke-dashoffset:1;}
-  .ready .archline .draw{animation:draw 2s var(--ease) forwards;}
+  .ready .archline .draw{animation:draw 1.4s var(--ease) forwards;}
   .ready .archline .draw.d2{animation-delay:.25s;}
-  .archline .stones{opacity:0;transition:opacity 1.2s ease 1s;}
+  .archline .stones{opacity:0;transition:opacity 1s ease .6s;}
   .ready .archline .stones{opacity:1;}
-  .archline .key{opacity:0;transition:opacity .8s ease 1.4s;}
+  .archline .key{opacity:0;transition:opacity .8s ease .9s;}
   .ready .archline .key{opacity:1;}
   @keyframes draw{to{stroke-dashoffset:0;}}
 
   .arch .content{
-    position:absolute;left:10%;right:10%;top:12%;bottom:24%;
+    position:absolute;left:10%;right:10%;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
   }
   .wreath{width:clamp(64px, 29cqi, 100px);color:var(--gold);position:relative;}
@@ -448,7 +442,7 @@
 
 <header class="cover" id="cover">
   <div class="stage">
-    <svg class="column l" viewBox="0 0 44 320" preserveAspectRatio="xMidYMax meet" aria-hidden="true"></svg>
+    <svg class="column l" aria-hidden="true"></svg>
     <div class="arch">
       <div class="sky">
         <svg class="cloud c1" viewBox="0 0 120 40"><path d="M14 34C4 34 2 22 12 20 12 10 26 6 32 14 36 4 56 2 62 14 70 8 86 10 86 22 98 20 104 34 94 34Z" fill="#fff"/></svg>
@@ -456,7 +450,7 @@
         <svg class="cloud c3" viewBox="0 0 120 40"><path d="M14 34C4 34 2 22 12 20 12 10 26 6 32 14 36 4 56 2 62 14 70 8 86 10 86 22 98 20 104 34 94 34Z" fill="#fff"/></svg>
         <svg class="skyline" viewBox="0 0 200 70" aria-hidden="true" id="skyline"></svg>
       </div>
-      <svg class="archline" viewBox="-6 -6 112 144" aria-hidden="true" id="archFrame"></svg>
+      <svg class="archline" aria-hidden="true" id="archFrame"></svg>
       <div class="content">
         <div class="wreath" id="wreathTop"></div>
         <h1 id="name">کافه آتزوری</h1>
@@ -464,7 +458,7 @@
         <p class="tag" id="tag"></p>
       </div>
     </div>
-    <svg class="column r" viewBox="0 0 44 320" preserveAspectRatio="xMidYMax meet" aria-hidden="true"></svg>
+    <svg class="column r" aria-hidden="true"></svg>
   </div>
   <div class="plinth"></div>
   <button class="open-btn" id="openBtn" type="button">
@@ -568,13 +562,14 @@ function laurel(){
 }
 function wreathHTML(letter){ return laurel() + `<div class="mono">${esc(letter)}</div>`; }
 
-function columnSVG(id){
+function columnSVG(id, H){
+  const b = H - 28;
   let s = `<defs><linearGradient id="${id}" x1="0" x2="1"><stop offset="0" stop-color="#e2dccf"/><stop offset=".35" stop-color="#ffffff"/><stop offset="1" stop-color="#d6cfc0"/></linearGradient></defs>`;
   s += `<g stroke="currentColor" stroke-width="1" fill="url(#${id})">`;
-  s += `<rect x="1" y="306" width="42" height="13" rx="1"/><rect x="4" y="298" width="36" height="9" rx="4"/><rect x="6" y="292" width="32" height="7" rx="3"/>`;
-  s += `<path d="M8 292L9 44H35L36 292Z"/>`;
+  s += `<rect x="1" y="${b + 14}" width="42" height="13" rx="1"/><rect x="4" y="${b + 6}" width="36" height="9" rx="4"/><rect x="6" y="${b}" width="32" height="7" rx="3"/>`;
+  s += `<path d="M8 ${b}L9 44H35L36 ${b}Z"/>`;
   s += `</g><g stroke="currentColor" stroke-width=".7" opacity=".55">`;
-  [14, 19, 25, 30].forEach(x => s += `<path d="M${x} 50V286"/>`);
+  [14, 19, 25, 30].forEach(x => s += `<path d="M${x} 50V${b - 6}"/>`);
   s += `</g><g stroke="currentColor" stroke-width="1" fill="url(#${id})">`;
   s += `<rect x="6" y="38" width="32" height="7" rx="2"/><path d="M2 28H42V38H2Z"/><rect x="0" y="22" width="44" height="6" rx="1"/>`;
   s += `</g><g fill="none" stroke="currentColor" stroke-width="1"><path d="M8 33a4.5 4.5 0 1 1-4.5-4.5M8 33a2.2 2.2 0 1 0-2.2 2.2"/><path d="M36 33a4.5 4.5 0 1 0 4.5-4.5M36 33a2.2 2.2 0 1 1 2.2 2.2"/></g>`;
@@ -582,18 +577,63 @@ function columnSVG(id){
   return s;
 }
 
-function archSVG(){
-  let s = `<path class="draw" pathLength="1" stroke-width="1.1" d="M0 132V50A50 50 0 0 1 100 50V132"/>`;
-  s += `<path class="draw d2" pathLength="1" stroke-width=".6" d="M6 132V52A44 44 0 0 1 94 52V132"/>`;
-  s += `<g class="stones" stroke="currentColor" stroke-width=".45" opacity=".55">`;
+function archSVG(w, h){
+  const f = v => v.toFixed(1);
+  const pad = Math.max(10, w * .045);
+  const x0 = pad, x1 = w - pad, r = (x1 - x0) / 2, cx = w / 2, cy = pad + r;
+  const d = r * .12, r2 = r - d;
+  let s = `<path class="draw" pathLength="1" stroke-width="2.2" d="M${f(x0)} ${h}V${f(cy)}A${f(r)} ${f(r)} 0 0 1 ${f(x1)} ${f(cy)}V${h}"/>`;
+  s += `<path class="draw d2" pathLength="1" stroke-width="1.2" d="M${f(x0 + d)} ${h}V${f(cy)}A${f(r2)} ${f(r2)} 0 0 1 ${f(x1 - d)} ${f(cy)}V${h}"/>`;
+  s += `<g class="stones" stroke="currentColor" stroke-width="1" opacity=".55">`;
   for(let a = 192; a <= 348; a += 12){
-    const r = a * Math.PI / 180;
-    s += `<path d="M${(50 + Math.cos(r) * 44).toFixed(2)} ${(52 + Math.sin(r) * 44).toFixed(2)}L${(50 + Math.cos(r) * 50).toFixed(2)} ${(50 + Math.sin(r) * 50).toFixed(2)}"/>`;
+    const t = a * Math.PI / 180;
+    s += `<path d="M${f(cx + Math.cos(t) * r2)} ${f(cy + Math.sin(t) * r2)}L${f(cx + Math.cos(t) * r)} ${f(cy + Math.sin(t) * r)}"/>`;
   }
-  s += `</g><path class="key" d="M45 -4H55L53.5 8H46.5Z" fill="#fffdf9" stroke="currentColor" stroke-width=".7"/>`;
-  s += `<path class="key" d="M47.6 -1H52.4L51.6 5H48.4Z" fill="currentColor" opacity=".85"/>`;
-  return s;
+  const kw = r * .1, kt = pad - 10, kb = pad + d + 2;
+  s += `</g><path class="key" d="M${f(cx - kw)} ${f(kt)}H${f(cx + kw)}L${f(cx + kw * .7)} ${f(kb)}H${f(cx - kw * .7)}Z" fill="#fffdf9" stroke="currentColor" stroke-width="1.4"/>`;
+  s += `<path class="key" d="M${f(cx - kw * .55)} ${f(kt + 5)}H${f(cx + kw * .55)}L${f(cx + kw * .4)} ${f(kb - 5)}H${f(cx - kw * .4)}Z" fill="currentColor" opacity=".85"/>`;
+  return { svg: s, pad, r, x0, x1, d };
 }
+
+let coverW = 0, coverH = 0;
+function layoutCover(force){
+  const vw = document.documentElement.clientWidth;
+  const vh = Math.round(Math.min(window.visualViewport ? visualViewport.height : innerHeight, innerHeight, document.documentElement.clientHeight || innerHeight));
+  if(!force && vw === coverW && Math.abs(vh - coverH) < 140) return;
+  coverW = vw; coverH = vh;
+  const cols = vw >= 340;
+  const colW = cols ? Math.round(Math.min(44, Math.max(28, vw * .085))) : 0;
+  const w = Math.round(Math.min(420, vw - 24 - (cols ? colW * 2 + 8 : 0)));
+  const reserved = 150;
+  const h = Math.round(Math.min(Math.max(vh - reserved, w * 1.18), w * 2.1));
+  const arch = $('.arch');
+  arch.style.width = w + 'px';
+  arch.style.height = h + 'px';
+  const a = archSVG(w, h);
+  const fr = $('#archFrame');
+  fr.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  fr.innerHTML = a.svg;
+  const sky = $('.arch .sky');
+  Object.assign(sky.style, {left: a.x0 + 'px', right: (w - a.x1) + 'px', top: a.pad + 'px', bottom: '0', borderRadius: `${a.r}px ${a.r}px 0 0`});
+  const skyH = (a.x1 - a.x0) * 70 / 200;
+  const content = $('.arch .content');
+  content.style.top = (a.pad + a.r * .3) + 'px';
+  content.style.bottom = (skyH * .72) + 'px';
+  document.querySelectorAll('.column').forEach((el, i) => {
+    el.hidden = !cols;
+    if(!cols) return;
+    const H = Math.round(h * 44 / colW);
+    el.setAttribute('viewBox', `0 0 44 ${H}`);
+    el.style.width = colW + 'px';
+    el.style.height = h + 'px';
+    el.innerHTML = columnSVG('colg' + i, H);
+  });
+}
+layoutCover(true);
+requestAnimationFrame(() => layoutCover(true));
+addEventListener('load', () => layoutCover(true));
+addEventListener('resize', () => layoutCover(false));
+addEventListener('orientationchange', () => setTimeout(() => layoutCover(true), 300));
 
 function skylineSVG(){
   let s = `<g fill="currentColor">`;
@@ -611,9 +651,7 @@ function skylineSVG(){
   return s;
 }
 
-$('#archFrame').innerHTML = archSVG();
 $('#skyline').innerHTML = skylineSVG();
-document.querySelectorAll('.column').forEach((el, i) => el.innerHTML = columnSVG('colg' + i));
 $('#wreathTop').innerHTML = wreathHTML('A');
 $('#wreathFoot').innerHTML = wreathHTML('A');
 requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('ready')));
