@@ -54,6 +54,7 @@
 
   .marble{
     position:fixed;inset:0;z-index:0;pointer-events:none;
+    transform:translateZ(0);will-change:transform;
     background:
       radial-gradient(120% 70% at 50% -10%, #ffffff 0%, transparent 60%),
       radial-gradient(80% 60% at 110% 100%, rgba(31,95,168,.07), transparent 70%),
@@ -63,7 +64,6 @@
     content:"";position:absolute;inset:0;opacity:.22;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .012' numOctaves='5' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .6 0 0 0 0 .7 0 0 0 -9 4.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
     background-size:600px 600px;
-    mix-blend-mode:multiply;
   }
 
   .cover{
@@ -191,9 +191,7 @@
 
   .topbar{
     position:sticky;top:0;z-index:30;
-    background:rgba(250,247,241,.9);
-    -webkit-backdrop-filter:blur(16px) saturate(150%);
-            backdrop-filter:blur(16px) saturate(150%);
+    background:rgba(250,247,241,.97);
     box-shadow:0 1px 0 var(--line), 0 10px 24px -20px rgba(19,37,74,.5);
     padding-top:env(safe-area-inset-top);
   }
@@ -303,7 +301,7 @@
     transition:transform .5s var(--ease), box-shadow .5s ease;
     isolation:isolate;
   }
-  .frame .az-art{position:absolute;inset:0;width:100%;height:100%;display:block;transition:transform 1.2s var(--ease), filter .6s ease;}
+  .frame .az-art{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;transition:transform 1.2s var(--ease), filter .6s ease;}
   .frame::after{
     content:"";position:absolute;inset:0;pointer-events:none;
     background:linear-gradient(180deg, rgba(255,255,255,.14), transparent 30%, transparent 72%, rgba(12,45,94,.16));
@@ -317,7 +315,6 @@
   @media (hover:hover){
     .card:hover .frame{transform:translateY(-5px);box-shadow:0 0 0 1px rgba(255,255,255,.9), 0 0 0 5px var(--paper), 0 0 0 6px color-mix(in srgb, var(--accent) 45%, transparent), 0 26px 36px -18px rgba(19,37,74,.6);}
     .card:hover .az-art{transform:scale(1.06);}
-    .card:hover .az-spin{animation-play-state:running;}
   }
   .card:active .frame{transform:scale(.97);}
   .card:focus-visible{outline:none;}
@@ -382,7 +379,8 @@
 
   .sheet{position:fixed;inset:0;z-index:100;}
   .sheet[hidden]{display:none;}
-  .sheet .scrim{position:absolute;inset:0;background:rgba(12,29,60,.42);opacity:0;transition:opacity .4s ease;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+  .sheet .scrim{position:absolute;inset:0;background:rgba(12,29,60,.5);opacity:0;transition:opacity .4s ease;}
+  body.away .cover *,body.away .cover *::before,body.away .cover *::after{animation-play-state:paused !important;}
   .sheet.open .scrim{opacity:1;}
   .panel{
     position:absolute;left:0;right:0;bottom:0;
@@ -422,7 +420,6 @@
   .sheet .vprice small{font-size:.8rem;color:var(--ink-2);}
   .sheet .vprice.off{background:#f7e3da;color:var(--terra);}
   .sheet .vprice.off b{font-size:1rem;}
-  .sheet .vpos{margin-top:14px;font-size:.68rem;color:var(--muted);}
 
   .state{position:relative;z-index:2;text-align:center;padding:40px 20px;color:var(--muted);line-height:2;}
   .state .big{font-family:var(--nastaliq);font-size:1.5rem;color:var(--ink);line-height:2.2;}
@@ -508,8 +505,8 @@
     <div class="sheet-top">
       <button class="iconbtn" id="vclose" type="button" aria-label="بستن"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
       <div class="nav">
-        <button class="iconbtn" id="vprev" type="button" aria-label="قبلی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
-        <button class="iconbtn" id="vnext" type="button" aria-label="بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button class="iconbtn" id="vnext" type="button" aria-label="بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+        <button class="iconbtn" id="vprev" type="button" aria-label="قبلی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
       </div>
     </div>
     <div class="vframe"><span class="keystone"></span><div class="frame" id="vmedia"></div></div>
@@ -518,7 +515,6 @@
     <h3 id="vtitle"></h3>
     <p class="vdesc" id="vdesc"></p>
     <div class="vprice" id="vprice"></div>
-    <div class="vpos" id="vpos"></div>
   </div>
 </div>
 
@@ -631,6 +627,7 @@ function layoutCover(force){
 }
 layoutCover(true);
 requestAnimationFrame(() => layoutCover(true));
+if('IntersectionObserver' in window) new IntersectionObserver(es => document.body.classList.toggle('away', !es[0].isIntersecting)).observe($('#cover'));
 addEventListener('load', () => layoutCover(true));
 addEventListener('resize', () => layoutCover(false));
 addEventListener('orientationchange', () => setTimeout(() => layoutCover(true), 300));
@@ -765,12 +762,12 @@ function render(data){
       ORDER.push({item: it, cat});
       const card = document.createElement('button');
       card.type = 'button';
-      card.className = 'card az-paused' + (it.available ? '' : ' off');
+      card.className = 'card' + (it.available ? '' : ' off');
       card.dataset.pos = pos;
       card.dataset.q = it.title + ' ' + (it.description || '') + ' ' + cat.name;
       card.style.setProperty('--d', ((j % 2) * .07).toFixed(2) + 's');
       card.setAttribute('aria-label', it.title + (it.available ? '، ' + price(it.price) + ' ' + cur : '، ناموجود'));
-      card.innerHTML = `<div class="card-wrap"><span class="keystone"></span><div class="frame">${AzArt.render(it, {icon: cat.icon})}${it.available ? '' : '<span class="badge">تمام شد</span>'}</div></div>
+      card.innerHTML = `<div class="card-wrap"><span class="keystone"></span><div class="frame"><img class="az-art" src="${AzArt.renderURL(it, {icon: cat.icon})}" alt="" loading="lazy" decoding="async" draggable="false">${it.available ? '' : '<span class="badge">تمام شد</span>'}</div></div>
         <div class="label"><h3>${esc(faNum(it.title))}</h3><div class="price"><b>${price(it.price)}</b><small>${esc(cur)}</small></div><span class="soldout">ناموجود</span></div>`;
       card.addEventListener('click', () => openSheet(pos));
       grid.appendChild(card);
@@ -787,21 +784,19 @@ function render(data){
   requestAnimationFrame(movePill);
 }
 
-let revealIO, liveIO;
+let revealIO;
 function observe(){
   const cards = document.querySelectorAll('.card');
   if(revealIO) revealIO.disconnect();
-  if(liveIO) liveIO.disconnect();
   if(!('IntersectionObserver' in window) || REDUCED){
-    cards.forEach(c => { c.classList.add('in'); c.classList.remove('az-paused'); });
+    cards.forEach(c => c.classList.add('in'));
     SECTIONS.forEach(s => s.classList.add('seen'));
     return;
   }
   revealIO = new IntersectionObserver(es => es.forEach(e => {
     if(e.isIntersecting){ e.target.classList.add(e.target.classList.contains('card') ? 'in' : 'seen'); revealIO.unobserve(e.target); }
   }), {threshold:.1, rootMargin:'0px 0px -20px 0px'});
-  liveIO = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('az-paused', !e.isIntersecting)), {rootMargin:'40px'});
-  cards.forEach(c => { revealIO.observe(c); liveIO.observe(c); });
+  cards.forEach(c => revealIO.observe(c));
   SECTIONS.forEach(s => revealIO.observe(s));
 }
 
@@ -912,7 +907,6 @@ function fillSheet(){
   if(item.available){ vp.className = 'vprice'; vp.innerHTML = `<b>${price(item.price)}</b><small>${esc(cur)}</small>`; }
   else { vp.className = 'vprice off'; vp.innerHTML = '<b>فعلاً ناموجود</b>'; }
   const list = visibleOrder(), k = list.indexOf(curPos);
-  $('#vpos').textContent = faNum(k + 1) + ' از ' + faNum(list.length);
   $('#vprev').disabled = k <= 0;
   $('#vnext').disabled = k >= list.length - 1;
   $('#vprev').style.opacity = k <= 0 ? .35 : 1;
@@ -952,7 +946,7 @@ function step(d){
   if(k < 0 || k >= list.length) return;
   curPos = list[k];
   fillSheet();
-  if(!REDUCED) $('#vmedia').animate([{opacity:0, transform:`translateX(${d > 0 ? -28 : 28}px)`}, {opacity:1, transform:'none'}], {duration:380, easing:'cubic-bezier(.22,1,.36,1)'});
+  if(!REDUCED) $('#vmedia').animate([{opacity:0, transform:`translateX(${d > 0 ? 28 : -28}px)`}, {opacity:1, transform:'none'}], {duration:380, easing:'cubic-bezier(.22,1,.36,1)'});
 }
 $('#vclose').addEventListener('click', () => closeSheet());
 $('#scrim').addEventListener('click', () => closeSheet());
@@ -962,8 +956,8 @@ addEventListener('popstate', () => closeSheet(true));
 addEventListener('keydown', e => {
   if(!sheetOpen) return;
   if(e.key === 'Escape') closeSheet();
-  if(e.key === 'ArrowLeft') step(1);
-  if(e.key === 'ArrowRight') step(-1);
+  if(e.key === 'ArrowRight') step(1);
+  if(e.key === 'ArrowLeft') step(-1);
 });
 
 let sx = 0, sy = 0, dragging = false, axis = null;
@@ -987,7 +981,7 @@ panel.addEventListener('touchend', e => {
   sheet.classList.remove('dragging');
   if(axis === 'y' && dy > 110 && panel.scrollTop <= 0){ closeSheet(); return; }
   sheet.style.setProperty('--drag', '0px');
-  if(axis === "x" && Math.abs(dx) > 60) step(dx > 0 ? 1 : -1);
+  if(axis === "x" && Math.abs(dx) > 60) step(dx < 0 ? 1 : -1);
 });
 
 fetch('items.json', {cache:'no-cache'})

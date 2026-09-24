@@ -678,38 +678,57 @@ def('mocha', 'قهوه گرم', 'موکا (ماگ شیشه‌ای)', c => {
 
 def('affogato', 'قهوه گرم', 'آفوگاتو (بستنی و اسپرسو)', c => {
   let s = backdrop(c) + floor(c);
-  const bowl = `M${CX - 50} 134C${CX - 50} 176 ${CX - 26} 190 ${CX} 190S${CX + 50} 176 ${CX + 50} 134Z`;
-  s += shadow(c, CX + 4, 204, 60, 9, .6);
-  s += `<path d="M${CX - 8} 188h16l6 14h-28z" fill="rgba(255,255,255,.25)" stroke="rgba(255,255,255,.5)"/>`;
+  const bowl = `M${CX - 52} 128C${CX - 52} 164 ${CX - 30} 178 ${CX} 178S${CX + 52} 164 ${CX + 52} 128Z`;
+  s += shadow(c, CX + 4, 204, 58, 9, .6);
+  s += `<path d="M${CX - 4} 178V196" stroke="rgba(255,255,255,.55)" stroke-width="5"/><ellipse cx="${CX}" cy="198" rx="30" ry="5" fill="rgba(255,255,255,.2)" stroke="rgba(255,255,255,.55)" stroke-width="1.5"/>`;
   const clip = c.clip(`<path d="${bowl}"/>`);
-  s += `<g clip-path="${clip}"><rect x="0" y="160" width="200" height="40" fill="${c.lin([[0, '#8a4e22'], [1, '#3a1a08']])}"/></g>`;
+  s += `<g clip-path="${clip}"><rect x="0" y="150" width="200" height="40" fill="${c.lin([[0, '#8a4e22'], [1, '#3a1a08']])}"/><ellipse cx="${CX}" cy="150" rx="50" ry="4" fill="#b8763a" opacity=".6"/></g>`;
   const ic = c.pick(['#fbf2df', '#f6e7b8', '#fff6ea']);
-  s += `<path d="${blob(c, CX, 138, 34, 11, .1)}" fill="${c.rad([[0, '#ffffff'], [.6, ic], [1, darken(ic, .15)]], .4, .3, .8)}"/>`;
-  s += `<path d="M${CX + 4} 106C${CX + 10} 116 ${CX + 24} 122 ${CX + 28} 136C${CX + 32} 150 ${CX + 30} 160 ${CX + 32} 170" stroke="${c.lin([[0, '#8a4a1a'], [1, '#4a220a']])}" stroke-width="9" fill="none" stroke-linecap="round" opacity=".95"/><path d="M${CX + 6} 110C${CX + 12} 118 ${CX + 22} 124 ${CX + 25} 134" stroke="#c98a4a" stroke-width="2" fill="none" stroke-linecap="round" opacity=".6"/>`;
-  s += `<path d="${blob(c, CX - 10, 128, 10, 8, .2)}" fill="#fff" opacity=".35"/>`;
-  s += `<path d="${bowl}" fill="${c.glass()}" stroke="rgba(255,255,255,.55)" stroke-width="2"/><ellipse cx="${CX}" cy="134" rx="50" ry="6" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.6"/>`;
-  s += `<g transform="translate(${CX + 44} 70) rotate(${c.int(30, 45)})"><path d="M-12-16H12L14 10Q14 18 6 18H-6Q-14 18-14 10Z" fill="${c.hcyl(c.pick(['#d9d6d0', '#f3ece1', '#2d5f9a']))}"/><path d="M-14-16L-22-20" stroke="#bbb" stroke-width="3"/></g>`;
-  s += `<path d="M${CX + 30} 84Q${CX + 14} 96 ${CX + 6} 112" stroke="#5a2c10" stroke-width="3" fill="none" stroke-linecap="round"/>`;
-  if(c.chance(.7)) s += wafer(c, CX - 40, 116, -60, 48);
-  s += beansAround(c, c.int(1, 3), 64, 84, CX, 212);
+  const sy = 124;
+  s += `<path d="${blob(c, CX, sy, 32, 12, .08)}" fill="${c.rad([[0, '#ffffff'], [.6, ic], [1, darken(ic, .16)]], .4, .3, .8)}"/>`;
+  let top = `M${CX - 29} ${sy - 4}C${CX - 26} ${sy - 30} ${CX + 24} ${sy - 36} ${CX + 30} ${sy - 6}`;
+  const dripsX = [22, 10, -3, -15, -24].map(v => v + c.rand(-2, 2));
+  let prevX = CX + 30;
+  dripsX.forEach(dx => {
+    const x = CX + dx, L = c.rand(6, 20), w = c.rand(2.2, 3.4);
+    top += `Q${n1((prevX + x + w) / 2)} ${n1(sy + 1)} ${n1(x + w)} ${n1(sy - 1)}V${n1(sy + L)}a${n1(w)} ${n1(w)} 0 0 1 ${n1(-2 * w)} 0V${n1(sy - 1)}`;
+    prevX = x - w;
+  });
+  top += `Q${n1((prevX + CX - 29) / 2)} ${n1(sy + 2)} ${CX - 29} ${sy - 4}Z`;
+  s += `<path d="${top}" fill="${c.lin([[0, '#8a4a1c'], [1, '#4a220a']])}"/><path d="M${CX - 16} ${sy - 20}Q${CX} ${sy - 28} ${CX + 14} ${sy - 22}" stroke="#d9a060" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".7"/>`;
+  s += `<path d="${bowl}" fill="${c.glass()}" stroke="rgba(255,255,255,.6)" stroke-width="2"/><ellipse cx="${CX}" cy="128" rx="52" ry="6" fill="none" stroke="rgba(255,255,255,.65)" stroke-width="1.6"/><path d="M${CX - 42} 138Q${CX - 40} 158 ${CX - 26} 168" stroke="#fff" stroke-opacity=".45" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+  if(c.chance(.7)) s += `<g transform="translate(${CX + 10} ${sy - 18}) rotate(-58)"><rect x="0" y="-5" width="50" height="10" rx="4" fill="${c.hcyl('#d9a35a')}"/><path d="M8 -5V5M16 -5V5M24 -5V5M32 -5V5M40 -5V5" stroke="#a86f2c" stroke-width=".8" opacity=".6"/></g>`;
+  else s += mintSprig(c, CX + 6, sy - 24, 15, .9);
+  const gx = CX + c.pick([-66, 66]);
+  const shot = `M${gx - 13} 170H${gx + 13}L${gx + 11} 202H${gx - 11}Z`;
+  const sc = c.clip(`<path d="${shot}"/>`);
+  s += shadow(c, gx + 2, 204, 18, 4, .5) + `<g clip-path="${sc}"><rect x="${gx - 14}" y="178" width="28" height="26" fill="${c.lin([[0, '#e2a868'], [.25, '#8a4a1c'], [1, '#2a1206']])}"/></g><path d="${shot}" fill="${c.glass()}" stroke="rgba(255,255,255,.6)" stroke-width="1.4"/>`;
+  s += beansAround(c, c.int(1, 3), 64, 86, CX, 216);
   return s;
 });
-
-def('filter', 'قهوه گرم', 'قهوه دمی (کمکس)', c => {
+def('filter', 'قهوه گرم', 'قهوه دمی دستگاهی (قهوه‌ساز)', c => {
   let s = backdrop(c) + floor(c);
-  const wood = c.pick(['#8a5a34', '#6b4125', '#a8743f']);
-  const flask = `M${CX - 14} 56L${CX - 44} 104Q${CX - 58} 128 ${CX - 50} 164Q${CX - 44} 198 ${CX} 198Q${CX + 44} 198 ${CX + 50} 164Q${CX + 58} 128 ${CX + 44} 104L${CX + 14} 56Z`;
-  s += shadow(c, CX + 4, 202, 64, 9, .6);
-  const clip = c.clip(`<path d="${flask}"/>`);
-  s += `<g clip-path="${clip}"><rect y="${c.int(142, 158)}" width="200" height="80" fill="${c.lin([[0, '#6a3614'], [1, '#2a1206']])}"/><path d="M${CX - 30} 56L${CX} 104L${CX + 30} 56Z" fill="#f7f1e6" opacity=".85"/></g>`;
-  s += `<path d="${flask}" fill="${c.glass()}" stroke="rgba(255,255,255,.55)" stroke-width="2"/>`;
-  s += `<path d="M${CX - 28} 94Q${CX} 112 ${CX + 28} 94L${CX + 22} 124Q${CX} 132 ${CX - 22} 124Z" fill="${c.hcyl(wood)}"/>`;
-  s += `<path d="M${CX} 116c-6 8-2 18 4 26M${CX} 116c6 8 10 16 4 28" stroke="#4a2a14" stroke-width="2" fill="none"/><circle cx="${CX}" cy="116" r="3.5" fill="${darken(wood, .3)}"/>`;
-  s += steam(c, CX, 50, 2, 12, .7);
-  if(c.chance(.7)) s += cupTop(c, { x: c.pick([34, 166]), y: 212, R: 18, saucer: false, liquid: '#2e170a', gold: false });
+  const body = c.pick(['#1f2a3a', '#2d5f9a', '#e9e4dc', '#8a2d2d', '#2b2b2b', '#1f6f78']);
+  const steel = '#c9ced6';
+  const light = body === '#e9e4dc';
+  s += shadow(c, CX + 6, 204, 70, 10, .6);
+  s += `<rect x="46" y="190" width="112" height="13" rx="5" fill="${c.hcyl(light ? '#9aa0a8' : steel)}"/>`;
+  s += `<rect x="112" y="38" width="44" height="156" rx="10" fill="${c.hcyl(body)}"/>`;
+  s += `<rect x="122" y="96" width="24" height="62" rx="5" fill="rgba(200,225,245,.35)" stroke="rgba(255,255,255,.5)"/><rect x="124" y="${c.int(116, 132)}" width="20" height="30" rx="3" fill="rgba(110,170,220,.55)"/><path d="M127 100V152" stroke="#fff" stroke-opacity=".5" stroke-width="2" stroke-linecap="round"/>`;
+  s += `<circle cx="134" cy="172" r="5" fill="${steel}" stroke="${darken(body, .3)}"/><circle cx="134" cy="172" r="2" fill="#6ee07a" class="az-glint"/>`;
+  s += `<rect x="44" y="38" width="114" height="46" rx="14" fill="${c.hcyl(body)}"/><rect x="44" y="74" width="114" height="10" rx="4" fill="${darken(body, .25)}"/>`;
+  s += `<path d="M52 46H150" stroke="#fff" stroke-opacity=".25" stroke-width="3" stroke-linecap="round"/><rect x="60" y="54" width="34" height="8" rx="4" fill="${steel}" opacity=".8"/>`;
+  s += `<path d="M60 84H106L100 100H66Z" fill="${darken(body, .35)}"/><rect x="78" y="100" width="10" height="4" rx="1" fill="#222"/>`;
+  s += `<path d="M83 104V128" stroke="#5a2c10" stroke-width="2.2" stroke-linecap="round"/><circle class="az-drip" cx="83" cy="112" r="2.2" fill="#5a2c10"/>`;
+  s += `<ellipse cx="83" cy="191" rx="34" ry="5" fill="#1a1a1a"/>`;
+  const pot = `M58 132Q56 128 62 126H104Q110 128 108 132L112 166Q114 188 92 190H74Q52 188 54 166Z`;
+  const clip = c.clip(`<path d="${pot}"/>`);
+  s += `<path d="M106 136c14 2 14 34 0 36" fill="none" stroke="#1a1a1a" stroke-width="6" stroke-linecap="round"/>`;
+  s += `<g clip-path="${clip}"><rect x="40" y="${c.int(150, 160)}" width="90" height="50" fill="${c.lin([[0, '#6a3614'], [1, '#2a1206']])}"/><ellipse cx="83" cy="${c.int(150, 160)}" rx="30" ry="3" fill="#8a4a1c" opacity=".7"/></g>`;
+  s += `<path d="${pot}" fill="${c.glass()}" stroke="rgba(255,255,255,.6)" stroke-width="1.6"/><path d="M60 126H106L104 134H62Z" fill="#1a1a1a"/><path d="M64 140Q60 160 64 180" stroke="#fff" stroke-opacity=".45" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+  s += beansAround(c, c.int(2, 4), 62, 84, CX, 216);
   return s;
 });
-
 def('hot-chocolate', 'نوشیدنی گرم', 'هات چاکلت با مارشمالو', c => {
   let s = backdrop(c);
   let inner = '';
@@ -1190,20 +1209,30 @@ function plateTop(c, x, y, r){
 }
 
 def('choco-twist', 'کیک و شیرینی', 'چاکلت تویست', c => {
-  let s = backdrop(c) + floor(c) + servingBase(c, 186);
-  const base = '#dd9a45';
-  let g = '';
-  for(let i = 0; i < 7; i++){
-    const x = -42 + i * 14;
-    g += `<ellipse cx="${x}" cy="${i % 2 ? 4 : -4}" rx="12" ry="14" transform="rotate(${i % 2 ? 30 : -30} ${x} 0)" fill="${c.rad([[0, lighten(base, .3)], [.6, base], [1, darken(base, .4)]], .4, .3, .8)}"/>`;
-    g += `<path d="M${x - 6} ${i % 2 ? 0 : -8}Q${x} ${i % 2 ? 10 : 2} ${x + 6} ${i % 2 ? 2 : -8}" stroke="#3a1a0a" stroke-width="3" fill="none" stroke-linecap="round"/>`;
-  }
-  const two = c.chance(.5);
-  if(two) s += `<g transform="translate(${CX + 6} 170) rotate(${c.int(-16, -6)}) scale(1)">${g}</g>`;
-  s += `<g transform="translate(${CX} ${two ? 146 : 156}) rotate(${c.int(-12, 12)}) scale(1.1)">${g}${dust(c, 30, 0, -4, 50, '#fff', .8, 1)}</g>`;
+  let s = backdrop(c);
+  s += plateTop(c, CX, CY + 4, 90);
+  const base = c.pick(['#e2a04a', '#d9923c', '#e8ac58']);
+  const twist = (x, y, rot, L) => {
+    const cap = `M${-L / 2} -14A14 14 0 0 0 ${-L / 2} 14H${L / 2}A14 14 0 0 0 ${L / 2} -14Z`;
+    const cl = c.clip(`<path d="${cap}"/>`);
+    let g = shadow(c, 3, 6, L / 2 + 14, 18, .45);
+    g += `<path d="${cap}" fill="${darken(base, .15)}"/>`;
+    let bands = '';
+    for(let bx = -L / 2 - 20; bx < L / 2 + 10; bx += 15){
+      bands += `<path d="M${bx} -16L${bx + 11} -16L${bx + 22} 16L${bx + 11} 16Z" fill="${c.lin([[0, lighten(base, .35)], [.5, base], [1, darken(base, .3)]])}"/>`;
+      bands += `<path d="M${bx + 11.5} -16L${bx + 22.5} 16" stroke="#3a1a0a" stroke-width="2.4" opacity=".85"/>`;
+      bands += `<path d="M${bx + 2} -12L${bx + 8} 4" stroke="#fff" stroke-opacity=".3" stroke-width="2" stroke-linecap="round"/>`;
+    }
+    g += `<g clip-path="${cl}">${bands}<rect x="${-L / 2 - 14}" y="-14" width="${L + 28}" height="28" fill="${c.lin([[0, '#fff', .12], [.5, '#fff', 0], [1, '#000', .25]])}"/></g>`;
+    g += `<path d="${cap}" fill="none" stroke="${darken(base, .45)}" stroke-width="1"/>`;
+    g += dust(c, 26, 0, 0, L / 2, '#fff8e0', .9, 1.1);
+    return `<g transform="translate(${n1(x)} ${n1(y)}) rotate(${n1(rot)})">${g}</g>`;
+  };
+  const r0 = c.rand(-35, -20);
+  s += twist(CX - 4, CY - 18, r0, 124) + twist(CX + 6, CY + 24, r0 + c.rand(-6, 6), 118);
+  if(c.chance(.6)) s += `<g transform="translate(${CX + c.pick([-58, 58])} ${CY + 64}) rotate(${c.int(-30, 30)})"><rect x="-14" y="-10" width="28" height="20" rx="2" fill="#3a1a0a"/><path d="M-4-10V10M6-10V10M-14 0H14" stroke="#1e0a04" stroke-width="1.2"/></g>`;
   return s;
 });
-
 function cookie(kind){
   return c => {
     let s = backdrop(c);
@@ -1458,21 +1487,33 @@ def('syrup', 'افزودنی', 'بطری سیروپ', c => {
   return s;
 });
 
-def('honey', 'افزودنی', 'ظرف عسل و قاشق', c => {
-  let s = backdrop(c) + floor(c);
-  const x = CX - 10;
-  s += shadow(c, x + 4, 202, 48, 9, .6);
-  const jar = `M${x - 36} 110Q${x - 40} 110 ${x - 40} 120V190Q${x - 40} 200 ${x - 30} 200H${x + 30}Q${x + 40} 200 ${x + 40} 190V120Q${x + 40} 110 ${x + 36} 110Z`;
-  s += `<path d="${jar}" fill="${c.lin([[0, '#f7c040'], [1, '#c77a0a']])}"/><path d="${jar}" fill="${c.glass()}" stroke="rgba(255,255,255,.45)"/>`;
-  let hex = '';
-  for(let r = 0; r < 3; r++) for(let q = 0; q < 4; q++){ const hx = x - 24 + q * 16 + (r % 2) * 8, hy = 140 + r * 14; hex += `<path transform="translate(${hx} ${hy})" d="M0-8L7-4V4L0 8-7 4V-4Z" fill="none" stroke="#fff3c0" stroke-opacity=".5"/>`; }
-  s += hex;
-  s += `<rect x="${x - 38}" y="98" width="76" height="14" rx="3" fill="${c.pick(['#b8233a', '#2d5f9a', '#efe0c2', '#1f6f78'])}"/><path d="M${x - 38} 112q9 8 19 0t19 0 19 0 19 0" fill="${c.pick(['#b8233a', '#2d5f9a', '#f3ece1'])}"/>`;
-  s += `<g transform="translate(${x + 40} 90) rotate(38)"><rect x="-3" y="-60" width="6" height="70" rx="3" fill="#b98a4e"/><g transform="translate(0 16)"><ellipse rx="11" ry="14" fill="#d59a3a"/><path d="M-11-6H11M-11 1H11M-10 8H10" stroke="#8a5a1a" stroke-width="2"/></g></g>`;
-  s += `<path d="M${x + 30} 128q-2 20 1 36" stroke="#e8a82a" stroke-width="4" fill="none" stroke-linecap="round"/><circle class="az-drip" cx="${x + 31}" cy="170" r="3.2" fill="#e8a82a"/>`;
+def('honey', 'افزودنی', 'ظرف عسل و موم عسل', c => {
+  let s = backdrop(c, c.pick(['#5a3a12', '#402b1e', '#1f4e8c', '#1c3a5e', '#5a6b3a'])) + floor(c);
+  const jx = CX - 14;
+  s += shadow(c, jx + 4, 204, 44, 8, .6);
+  const jar = `M${jx - 30} 118Q${jx - 36} 124 ${jx - 36} 136V188Q${jx - 36} 200 ${jx - 24} 200H${jx + 24}Q${jx + 36} 200 ${jx + 36} 188V136Q${jx + 36} 124 ${jx + 30} 118Z`;
+  const cl = c.clip(`<path d="${jar}"/>`);
+  const lvl = c.int(128, 136);
+  s += `<g clip-path="${cl}"><rect x="${jx - 40}" y="${lvl}" width="80" height="80" fill="${c.lin([[0, '#ffcf4a'], [.5, '#f0a41c'], [1, '#b8650a']])}"/><ellipse cx="${jx - 6}" cy="${lvl + 36}" rx="18" ry="26" fill="#fff3b0" opacity=".35"/><ellipse cx="${jx}" cy="${lvl}" rx="34" ry="4" fill="#ffe08a"/></g>`;
+  s += `<path d="${jar}" fill="${c.glass()}" stroke="rgba(255,255,255,.6)" stroke-width="1.8"/>`;
+  s += `<rect x="${jx - 30}" y="110" width="60" height="9" rx="3" fill="rgba(255,255,255,.3)" stroke="rgba(255,255,255,.6)"/>`;
+  s += `<path d="M${jx - 26} 128V190" stroke="#fff" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/>`;
+  const lab = c.pick(['#f6eee1', '#efe0c2']);
+  s += `<rect x="${jx - 24}" y="152" width="48" height="28" rx="3" fill="${lab}" opacity=".95"/><path transform="translate(${jx} 166)" d="M0-8L7-4V4L0 8-7 4V-4Z" fill="none" stroke="#b8650a" stroke-width="1.4"/><path d="M${jx - 18} 157H${jx + 18}M${jx - 18} 176H${jx + 18}" stroke="#c9a060" stroke-width=".8"/>`;
+  const hx = jx + 4, hy = 76;
+  s += `<path d="M${hx} ${hy + 14}Q${hx - 1} ${hy + 30} ${hx} ${lvl}" stroke="${c.lin([[0, '#ffc23a'], [1, '#e8900a']])}" stroke-width="4" fill="none" stroke-linecap="round"/><circle class="az-drip" cx="${hx}" cy="${hy + 30}" r="2.8" fill="#f2a20a"/>`;
+  s += `<g transform="translate(${hx} ${hy}) rotate(${c.int(-40, -28)})"><rect x="-3" y="-72" width="6" height="64" rx="3" fill="${c.hcyl('#b98a4e')}"/><g><ellipse rx="12" ry="15" fill="${c.hcyl('#d59a3a')}"/><path d="M-12-7H12M-12 0H12M-11 7H11" stroke="#8a5a1a" stroke-width="2.4"/><path d="M-9 10Q0 22 9 10" fill="#f2a20a"/></g></g>`;
+  const cx2 = CX + 58, cy2 = 190;
+  const comb = `M${cx2 - 30} ${cy2 + 10}L${cx2 - 34} ${cy2 - 8}L${cx2 - 14} ${cy2 - 22}L${cx2 + 18} ${cy2 - 18}L${cx2 + 32} ${cy2 - 2}L${cx2 + 26} ${cy2 + 14}Z`;
+  const ccl = c.clip(`<path d="${comb}"/>`);
+  let cells = '';
+  for(let r = -4; r <= 4; r++) for(let q = -5; q <= 5; q++){
+    const x = cx2 + q * 9 + (r % 2 ? 4.5 : 0), y = cy2 + r * 7.8;
+    cells += `<path transform="translate(${n1(x)} ${n1(y)})" d="M0-5L4.3-2.5V2.5L0 5-4.3 2.5V-2.5Z" fill="${c.pick(['#f7b41c', '#f2a20a', '#ffc84a'])}" stroke="#c9780a" stroke-width="1"/>`;
+  }
+  s += shadow(c, cx2 + 2, cy2 + 14, 36, 7, .5) + `<path d="${comb}" fill="#e89a10"/><g clip-path="${ccl}">${cells}</g><path d="${comb}" fill="none" stroke="#b8650a" stroke-width="1.6"/><path d="M${cx2 - 20} ${cy2 - 12}L${cx2 + 8} ${cy2 - 14}" stroke="#fff" stroke-opacity=".45" stroke-width="2" stroke-linecap="round"/>`;
   return s;
 });
-
 function sauce(col, name){
   return c => {
     let s = backdrop(c);
@@ -1615,6 +1656,17 @@ function resolveStyle(item, icon){
   return list[Math.floor(r() * list.length)];
 }
 
+const URL_CACHE = new Map();
+function renderURL(item, opts){
+  opts = opts || {};
+  const key = opts.style || resolveStyle(item, opts.icon);
+  const ck = [item.id, key, item.artSeed || 0, item.artColor || ''].join('|');
+  if(URL_CACHE.has(ck)) return URL_CACHE.get(ck);
+  const svg = render(item, opts).replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ').replace('<defs>', `<defs><style>${CSS}</style>`);
+  const url = URL.createObjectURL(new Blob([svg], {type: 'image/svg+xml'}));
+  URL_CACHE.set(ck, url);
+  return url;
+}
 function render(item, opts){
   opts = opts || {};
   const key = opts.style || resolveStyle(item, opts.icon);
@@ -1691,6 +1743,7 @@ injectCSS();
 
 window.AzArt = {
   render,
+  renderURL,
   resolveStyle,
   styles: S,
   groups: G,
