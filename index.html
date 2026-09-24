@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#110a07">
+<title>منوی آنلاین کافه آتزوری</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Noto+Serif+Arabic:wght@500;600;700&family=Vazirmatn:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  @property --tint{syntax:'<color>';inherits:true;initial-value:#d4ad6a;}
+
+  :root{
+    --bg:#110a07;
+    --bg-2:#1a110c;
+    --panel:#1f1510;
+    --gold:#d4ad6a;
+    --gold-hi:#f3dca6;
+    --gold-lo:#8f6a31;
+    --gold-soft:rgba(212,173,106,.34);
+    --gold-faint:rgba(212,173,106,.13);
+    --ivory:#f6eee1;
+    --muted:#b09a84;
+    --wine:#a3304a;
+    --tint:#d4ad6a;
+    --serif:'Noto Serif Arabic',Georgia,serif;
+    --sans:'Vazirmatn',Tahoma,'Segoe UI',sans-serif;
+    --callig:'Aref Ruqaa','Noto Serif Arabic',serif;
+    --ease:cubic-bezier(.22,1,.36,1);
+    --arch:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 125' preserveAspectRatio='none'%3E%3Cpath d='M0 125V50C0 22 27 9 50 0c23 9 50 22 50 50v75z'/%3E%3C/svg%3E");
+    transition:--tint 1.4s ease;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ivory);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    -webkit-tap-highlight-color:transparent;
+  }
+  body.locked{overflow:hidden;}
+  ::selection{background:var(--gold);color:#1a1109;}
+
+  /* =========================================================
+     INTRO — a cup is poured, then the curtain parts
+     ========================================================= */
+  #intro{
+    position:fixed;inset:0;z-index:1000;
+    display:grid;place-items:center;
+    cursor:pointer;
+  }
+  #intro .half{
+    position:absolute;top:0;bottom:0;width:50.5%;
+    background:
+      radial-gradient(120% 80% at 50% 50%, #1d130d 0%, var(--bg) 70%);
+    transition:transform 1.25s var(--ease);
+  }
+  #intro .half.l{left:0;}
+  #intro .half.r{right:0;}
+  #intro .half::after{
+    content:"";position:absolute;top:0;bottom:0;width:1px;
+    background:linear-gradient(transparent, var(--gold), transparent);
+    opacity:0;transition:opacity .4s ease;
+  }
+  #intro .half.l::after{right:0;}
+  #intro .half.r::after{left:0;}
+  #intro.open .half::after{opacity:.8;}
+  #intro.open .half.l{transform:translateX(-102%);}
+  #intro.open .half.r{transform:translateX(102%);}
+  #intro .stage{
+    position:relative;z-index:2;
+    display:flex;flex-direction:column;align-items:center;
+    transition:opacity .5s ease, transform .8s var(--ease), filter .6s ease;
+  }
+  #intro.open .stage{opacity:0;transform:scale(1.08);filter:blur(6px);}
+  #intro svg.cup{width:150px;height:150px;overflow:visible;}
+  #intro .ring{
+    fill:none;stroke:var(--gold);stroke-width:1.2;
+    stroke-dasharray:1;stroke-dashoffset:1;
+    animation:draw 1.1s var(--ease) forwards;
+  }
+  #intro .ring.r2{animation-delay:.18s;stroke-opacity:.5;}
+  #intro .crema{
+    transform-box:fill-box;transform-origin:center;
+    transform:scale(0);opacity:0;
+    animation:pourIn 1s var(--ease) forwards .55s;
+  }
+  #intro .heart{
+    fill:#f6ead6;
+    transform-box:fill-box;transform-origin:50% 100%;
+    transform:scale(0) translateY(20px);opacity:0;
+    animation:heartIn 1.1s var(--ease) forwards 1s;
+  }
+  #intro .stream{
+    stroke:#f6ead6;stroke-width:3;stroke-linecap:round;
+    stroke-dasharray:1;stroke-dashoffset:1;
+    animation:stream 1.1s ease forwards .7s;
+  }
+  #intro .name{
+    margin-top:22px;
+    font-family:var(--callig);
+    font-size:2.3rem;
+    color:var(--gold);
+    opacity:0;transform:translateY(14px);
+    animation:rise .9s var(--ease) forwards 1.3s;
+  }
+  #intro .sub{
+    font-size:.7rem;letter-spacing:.5em;color:var(--muted);
+    opacity:0;animation:fadeIn .8s ease forwards 1.7s;
+    margin-top:6px;
+  }
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  @keyframes pourIn{to{transform:scale(1);opacity:1;}}
+  @keyframes heartIn{60%{opacity:1;}to{transform:scale(1) translateY(0);opacity:1;}}
+  @keyframes stream{0%{stroke-dashoffset:1;opacity:1;}55%{stroke-dashoffset:0;opacity:1;}100%{stroke-dashoffset:-1;opacity:0;}}
+  @keyframes rise{to{opacity:1;transform:none;}}
+  @keyframes fadeIn{to{opacity:1;}}
+
+  /* =========================================================
+     ATMOSPHERE — tint, drifting light, gold dust, grain
+     ========================================================= */
+  .atmo{position:fixed;inset:0;pointer-events:none;z-index:0;}
+  .tint{
+    background:
+      radial-gradient(70% 45% at 50% -5%, color-mix(in srgb, var(--tint) 20%, transparent), transparent 70%),
+      radial-gradient(55% 40% at 105% 105%, color-mix(in srgb, var(--tint) 11%, transparent), transparent 70%),
+      radial-gradient(50% 35% at -10% 60%, rgba(163,48,74,.08), transparent 70%);
+  }
+  .blob{
+    position:absolute;border-radius:50%;
+    width:70vmax;height:70vmax;
+    opacity:.55;
+    will-change:transform;
+  }
+  .blob.b1{
+    background:radial-gradient(circle, rgba(212,173,106,.10), transparent 60%);
+    top:-30vmax;right:-25vmax;
+    animation:float1 26s ease-in-out infinite alternate;
+  }
+  .blob.b2{
+    background:radial-gradient(circle, rgba(45,111,158,.10), transparent 60%);
+    bottom:-35vmax;left:-30vmax;
+    animation:float2 32s ease-in-out infinite alternate;
+  }
+  .blob.b3{
+    background:radial-gradient(circle, rgba(163,48,74,.09), transparent 60%);
+    top:30vh;right:-40vmax;
+    animation:float1 38s ease-in-out infinite alternate-reverse;
+  }
+  @keyframes float1{to{transform:translate(-18vmax,22vmax) scale(1.15);}}
+  @keyframes float2{to{transform:translate(20vmax,-18vmax) scale(1.2);}}
+  #dust{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+  .grain{
+    z-index:50;opacity:.07;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .spot{
+    z-index:1;opacity:0;transition:opacity .6s ease;
+    background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(243,220,166,.07), transparent 60%);
+  }
+  @media (hover:hover) and (pointer:fine){ body.ready .spot{opacity:1;} }
+
+  .ripple{
+    position:fixed;z-index:60;pointer-events:none;
+    width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;
+    border:1px solid var(--gold);
+    animation:ripple .9s var(--ease) forwards;
+  }
+  .ripple.r2{animation-delay:.12s;opacity:0;border-color:var(--gold-hi);}
+  @keyframes ripple{0%{transform:scale(.2);opacity:.9;}100%{transform:scale(6);opacity:0;}}
+
+  /* =========================================================
+     HERO — a gilded arch
+     ========================================================= */
+  .hero{
+    position:relative;z-index:2;
+    min-height:100svh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:40px 20px 90px;
+    text-align:center;
+  }
+  .hero-arch{
+    position:relative;
+    width:min(82vw, 380px);
+    aspect-ratio:100/128;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:22% 10% 12%;
+  }
+  .hero-arch > svg.frame{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+  .hero-arch .frame path{
+    fill:none;stroke:var(--gold);
+    stroke-dasharray:1;stroke-dashoffset:1;
+  }
+  .hero-arch .frame .p1{stroke-width:.42;}
+  .hero-arch .frame .p2{stroke-width:.26;stroke-opacity:.45;}
+  .hero-arch .frame .p3{stroke-width:.2;stroke-opacity:.25;stroke-dasharray:.004 .012;stroke-dashoffset:0;opacity:0;}
+  body.ready .hero-arch .frame .p1{animation:draw 2.2s var(--ease) forwards .1s;}
+  body.ready .hero-arch .frame .p2{animation:draw 2.4s var(--ease) forwards .35s;}
+  body.ready .hero-arch .frame .p3{animation:fadeIn 1.5s ease forwards 1.4s;}
+  .hero-arch .fill{
+    position:absolute;inset:0;
+    -webkit-mask:var(--arch) center/100% 100% no-repeat;
+            mask:var(--arch) center/100% 100% no-repeat;
+    background:
+      radial-gradient(80% 60% at 50% 28%, rgba(212,173,106,.12), transparent 70%),
+      linear-gradient(180deg, rgba(31,21,16,.55), rgba(17,10,7,.2));
+    opacity:0;transition:opacity 1.6s ease .4s;
+  }
+  body.ready .hero-arch .fill{opacity:1;}
+  .rosette{
+    position:absolute;left:50%;top:44%;
+    width:118%;aspect-ratio:1;
+    transform:translate(-50%,-50%);
+    opacity:0;transition:opacity 2s ease .8s;
+    pointer-events:none;
+    -webkit-mask:radial-gradient(circle, #000 30%, transparent 68%);
+            mask:radial-gradient(circle, #000 30%, transparent 68%);
+  }
+  body.ready .rosette{opacity:.32;}
+  .rosette g.turn{transform-box:fill-box;transform-origin:center;animation:spin 140s linear infinite;}
+  .rosette g.turn.rev{animation-duration:90s;animation-direction:reverse;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .hero .star{
+    color:var(--gold);width:26px;height:26px;margin-bottom:18px;
+    opacity:0;transform:translateY(-10px) rotate(-90deg);
+  }
+  body.ready .hero .star{animation:starIn 1.4s var(--ease) forwards .5s;}
+  @keyframes starIn{to{opacity:1;transform:none;}}
+  .hero .star svg{animation:pulseStar 4s ease-in-out infinite;}
+  @keyframes pulseStar{50%{transform:scale(1.18) rotate(45deg);filter:drop-shadow(0 0 8px rgba(243,220,166,.6));}}
+
+  .hero h1{
+    position:relative;
+    margin:0;
+    font-family:var(--callig);
+    font-weight:700;
+    font-size:clamp(2.9rem, 13vw, 4.6rem);
+    line-height:1.25;
+    background:linear-gradient(100deg, var(--gold-lo) 0%, var(--gold) 22%, var(--gold-hi) 38%, #fff8e8 46%, var(--gold-hi) 54%, var(--gold) 70%, var(--gold-lo) 100%);
+    background-size:250% 100%;
+    -webkit-background-clip:text;background-clip:text;
+    color:transparent;
+    filter:drop-shadow(0 4px 24px rgba(212,173,106,.18));
+    opacity:0;transform:translateY(24px);
+  }
+  body.ready .hero h1{animation:rise 1.3s var(--ease) forwards .6s, shimmer 7s linear infinite 1.5s;}
+  @keyframes shimmer{from{background-position:120% 0;}to{background-position:-130% 0;}}
+
+  .hero .rule{
+    display:flex;align-items:center;gap:10px;margin:18px 0 16px;color:var(--gold);
+    opacity:0;
+  }
+  .hero .rule i{display:block;height:1px;width:0;background:linear-gradient(90deg, transparent, var(--gold));transition:width 1.2s var(--ease) 1.1s;}
+  .hero .rule i:last-child{background:linear-gradient(270deg, transparent, var(--gold));}
+  body.ready .hero .rule{opacity:1;transition:opacity .6s ease 1s;}
+  body.ready .hero .rule i{width:56px;}
+  .hero p.tag{
+    margin:0;color:var(--muted);font-size:.86rem;font-weight:300;letter-spacing:.02em;
+    opacity:0;
+  }
+  body.ready .hero p.tag{animation:rise 1s var(--ease) forwards 1.2s;transform:translateY(10px);}
+  .hero .count{
+    margin-top:14px;font-size:.66rem;letter-spacing:.35em;color:var(--gold);opacity:0;
+    display:flex;justify-content:center;align-items:center;gap:12px;
+  }
+  body.ready .hero .count{animation:fadeIn 1s ease forwards 1.6s;}
+
+  .scroll-cue{
+    position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    color:var(--muted);font-size:.66rem;letter-spacing:.2em;
+    background:none;border:0;cursor:pointer;font-family:var(--sans);
+    opacity:0;
+  }
+  body.ready .scroll-cue{animation:fadeIn 1s ease forwards 2s;}
+  .scroll-cue .track{width:1px;height:44px;background:var(--gold-faint);position:relative;overflow:hidden;}
+  .scroll-cue .track::after{
+    content:"";position:absolute;left:0;top:-40%;width:1px;height:40%;
+    background:linear-gradient(transparent, var(--gold));
+    animation:drip 2.2s cubic-bezier(.6,0,.4,1) infinite;
+  }
+  @keyframes drip{to{top:110%;}}
+
+  /* ribbon of category names */
+  .ribbon{
+    position:relative;z-index:2;
+    overflow:hidden;
+    border-block:1px solid var(--gold-faint);
+    padding:12px 0;
+    direction:ltr;
+    -webkit-mask:linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+            mask:linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+  .ribbon .run{display:flex;width:max-content;animation:marquee 48s linear infinite;}
+  .ribbon span{
+    direction:rtl;
+    font-family:var(--callig);font-size:1.15rem;color:var(--gold);
+    padding:0 18px;white-space:nowrap;opacity:.75;
+    display:inline-flex;align-items:center;gap:36px;
+  }
+  .ribbon span::after{content:"✦";font-size:.6rem;color:var(--gold-soft);}
+  @keyframes marquee{to{transform:translateX(-50%);}}
+
+  /* =========================================================
+     NAV — sticky, with a liquid gold indicator
+     ========================================================= */
+  nav#catnav{
+    position:sticky;top:0;z-index:20;
+    background:rgba(17,10,7,.78);
+    -webkit-backdrop-filter:blur(14px) saturate(140%);
+            backdrop-filter:blur(14px) saturate(140%);
+    border-bottom:1px solid var(--gold-faint);
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  nav#catnav::-webkit-scrollbar{display:none;}
+  nav#catnav .rail{
+    position:relative;
+    display:flex;gap:4px;
+    width:max-content;
+    margin-inline:auto;
+    padding:12px 16px;
+  }
+  nav#catnav .pill{
+    position:absolute;top:12px;height:calc(100% - 24px);
+    left:0;width:0;
+    border-radius:999px;
+    background:linear-gradient(135deg, var(--gold-hi), var(--gold) 45%, var(--gold-lo));
+    box-shadow:0 0 22px rgba(212,173,106,.35), inset 0 1px 0 rgba(255,255,255,.4);
+    transition:left .55s var(--ease), width .55s var(--ease);
+    z-index:0;
+  }
+  nav#catnav button{
+    position:relative;z-index:1;
+    flex:0 0 auto;
+    border:0;background:transparent;
+    color:var(--muted);
+    padding:8px 16px;
+    border-radius:999px;
+    font-family:var(--sans);font-size:.82rem;font-weight:500;
+    cursor:pointer;
+    transition:color .4s ease;
+  }
+  nav#catnav button:hover{color:var(--ivory);}
+  nav#catnav button.active{color:#1a1109;font-weight:600;}
+  nav#catnav button:focus-visible{outline:1px solid var(--gold);outline-offset:2px;}
+  .progress{
+    position:absolute;bottom:-1px;right:0;height:1px;width:100%;
+    background:linear-gradient(270deg, var(--gold-hi), var(--tint));
+    transform-origin:right;transform:scaleX(var(--p,0));
+  }
+
+  /* =========================================================
+     GALLERY
+     ========================================================= */
+  main{
+    position:relative;z-index:2;
+    max-width:1180px;margin:0 auto;
+    padding:10px 16px 60px;
+  }
+  section.category{
+    --accent:var(--gold);
+    margin-top:64px;
+    scroll-margin-top:66px;
+  }
+
+  .sec-head{
+    position:relative;
+    text-align:center;
+    padding:34px 0 40px;
+    isolation:isolate;
+  }
+  .sec-head .numeral{
+    position:absolute;left:0;right:0;top:-6px;z-index:-1;
+    font-family:var(--serif);font-weight:700;
+    font-size:clamp(7rem, 34vw, 12rem);line-height:1;
+    color:transparent;
+    -webkit-text-stroke:1px color-mix(in srgb, var(--accent) 40%, transparent);
+    opacity:0;transform:translateY(30px) scale(.9);
+    transition:opacity 1.4s ease, transform 1.6s var(--ease);
+    pointer-events:none;user-select:none;
+  }
+  .sec-head .emblem{
+    width:62px;height:62px;margin:0 auto 8px;
+    color:var(--accent);
+    opacity:0;transform:translateY(16px) scale(.7);
+    transition:opacity .9s ease .1s, transform 1.1s var(--ease) .1s;
+    filter:drop-shadow(0 0 12px color-mix(in srgb, var(--accent) 45%, transparent));
+  }
+  .sec-head .emblem svg{width:100%;height:100%;overflow:visible;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+  .sec-head h2{
+    margin:0;
+    font-family:var(--callig);font-weight:700;
+    font-size:clamp(2rem, 9vw, 2.8rem);line-height:1.35;
+    background:linear-gradient(180deg, var(--gold-hi), var(--gold) 55%, var(--gold-lo));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    clip-path:inset(0 0 100% 0);
+    transform:translateY(18px);
+    transition:clip-path 1.1s var(--ease) .2s, transform 1.1s var(--ease) .2s;
+  }
+  .sec-head .meta{
+    margin-top:8px;
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    font-size:.68rem;letter-spacing:.3em;color:var(--muted);
+    opacity:0;transition:opacity 1s ease .55s;
+  }
+  .sec-head .meta i{
+    display:block;height:1px;width:0;
+    background:linear-gradient(90deg, transparent, var(--accent));
+    transition:width 1.2s var(--ease) .5s;
+  }
+  .sec-head .meta i:last-child{background:linear-gradient(270deg, transparent, var(--accent));}
+  .sec-head .meta .sep,.hero .count .sep{font-size:.5rem;opacity:.6;letter-spacing:0;}
+  .sec-head .meta b{font-weight:500;color:var(--accent);letter-spacing:.1em;}
+  .category.seen .sec-head .numeral{opacity:.4;transform:none;}
+  .category.seen .sec-head .emblem{opacity:1;transform:none;}
+  .category.seen .sec-head h2{clip-path:inset(-20% -10% -20% -10%);transform:none;}
+  .category.seen .sec-head .meta{opacity:1;}
+  .category.seen .sec-head .meta i{width:46px;}
+
+  /* emblem micro-animations */
+  .emblem .steam{animation:steam 2.8s ease-in-out infinite;opacity:0;transform-box:fill-box;transform-origin:bottom;}
+  .emblem .steam.s2{animation-delay:.9s;}
+  .emblem .steam.s3{animation-delay:1.8s;}
+  @keyframes steam{0%{opacity:0;transform:translateY(3px) scaleY(.7);}40%{opacity:.9;}100%{opacity:0;transform:translateY(-6px) scaleY(1.1);}}
+  .emblem .bob{animation:bob 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center;}
+  .emblem .bob.b2{animation-delay:-1.4s;}
+  @keyframes bob{50%{transform:translateY(-2px) rotate(8deg);}}
+  .emblem .bubble{animation:bubble 2.4s ease-in infinite;opacity:0;}
+  .emblem .bubble.u2{animation-delay:.8s;}
+  .emblem .bubble.u3{animation-delay:1.6s;}
+  @keyframes bubble{0%{opacity:0;transform:translateY(4px);}30%{opacity:1;}100%{opacity:0;transform:translateY(-9px);}}
+  .emblem .flame{animation:flicker 1.3s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 100%;fill:currentColor;fill-opacity:.35;}
+  @keyframes flicker{0%{transform:scale(1,1) rotate(-3deg);}50%{transform:scale(.88,1.12) rotate(3deg);}100%{transform:scale(1.05,.92) rotate(-2deg);}}
+  .emblem .sway{animation:sway 3.6s ease-in-out infinite;transform-box:fill-box;transform-origin:0% 100%;}
+  @keyframes sway{50%{transform:rotate(-14deg);}}
+  .emblem .beat{animation:beat 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center;}
+  @keyframes beat{15%{transform:scale(1.2);}30%{transform:scale(1);}45%{transform:scale(1.12);}60%{transform:scale(1);}}
+  .emblem .drip{animation:dripDrop 2.4s ease-in infinite;transform-box:fill-box;fill:currentColor;fill-opacity:.5;}
+  @keyframes dripDrop{0%,30%{opacity:0;transform:translateY(-6px) scale(.4);}45%{opacity:1;transform:translateY(-2px) scale(1);}100%{opacity:0;transform:translateY(5px);}}
+  .emblem .twinkle{animation:twinkle 2.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center;}
+  @keyframes twinkle{50%{transform:scale(.4) rotate(45deg);opacity:.4;}}
+
+  /* ---------- the exhibit grid ---------- */
+  .items{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+    gap:30px 14px;
+  }
+  @media (min-width:640px){ .items{grid-template-columns:repeat(3, minmax(0,1fr));gap:40px 22px;} }
+  @media (min-width:980px){ .items{grid-template-columns:repeat(4, minmax(0,1fr));gap:48px 28px;} }
+
+  .card{
+    position:relative;
+    cursor:pointer;
+    outline:none;
+    opacity:0;
+    transform:translateY(40px) scale(.94);
+    transition:opacity .9s ease var(--d,0s), transform 1.1s var(--ease) var(--d,0s);
+  }
+  .card.in{opacity:1;transform:none;}
+  .card .tilt{
+    transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+    transition:transform .6s var(--ease);
+    transform-style:preserve-3d;
+  }
+  .card.tilting .tilt{transition:transform .12s linear;}
+
+  .frame{
+    position:relative;
+    aspect-ratio:4/5;
+    transition:transform .6s var(--ease), filter .6s ease;
+  }
+  .frame::before{ /* soft glow behind the arch */
+    content:"";position:absolute;inset:8% 6% -4%;
+    border-radius:50% 50% 16px 16px;
+    background:radial-gradient(closest-side, color-mix(in srgb, var(--accent) 38%, transparent), transparent);
+    filter:blur(18px);
+    opacity:0;transition:opacity .6s ease;
+    z-index:-1;
+  }
+  .arch{
+    position:absolute;inset:0;
+    -webkit-mask:var(--arch) center/100% 100% no-repeat;
+            mask:var(--arch) center/100% 100% no-repeat;
+    background:var(--panel);
+    overflow:hidden;
+  }
+  .arch img,.arch > svg{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;display:block;
+    transition:transform 1.4s var(--ease), filter .8s ease;
+  }
+  .arch img{opacity:0;transition:opacity .8s ease, transform 1.4s var(--ease), filter .8s ease;}
+  .arch img.loaded{opacity:1;}
+  .arch::after{ /* sheen that follows the pointer */
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(60% 45% at var(--sx,50%) var(--sy,20%), rgba(255,244,220,.28), transparent 70%);
+    mix-blend-mode:soft-light;
+    opacity:.5;transition:opacity .5s ease;
+    pointer-events:none;
+  }
+  .arch .shade{
+    position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg, transparent 55%, rgba(10,6,4,.45));
+  }
+  .outline{
+    position:absolute;inset:-5px;width:calc(100% + 10px);height:calc(100% + 10px);
+    overflow:visible;pointer-events:none;
+  }
+  .outline path{
+    fill:none;stroke:var(--gold);stroke-width:.55;
+    stroke-dasharray:1;stroke-dashoffset:1;
+    transition:stroke-dashoffset 1.8s var(--ease) calc(var(--d,0s) + .25s), stroke .5s ease;
+    opacity:.75;
+  }
+  .card.in .outline path{stroke-dashoffset:0;}
+  .card .keystone{
+    position:absolute;left:50%;top:-11px;
+    width:12px;height:12px;margin-left:-6px;
+    color:var(--gold);
+    transform:scale(0) rotate(0deg);
+    transition:transform .9s var(--ease) calc(var(--d,0s) + 1s);
+  }
+  .card.in .keystone{transform:scale(1) rotate(45deg);}
+  .keystone::before{content:"";position:absolute;inset:2px;border:1px solid currentColor;background:var(--bg);}
+
+  .card:hover .frame,.card:focus-visible .frame{transform:translateY(-6px);}
+  .card:hover .frame::before,.card:focus-visible .frame::before{opacity:1;}
+  .card:hover .arch img,.card:hover .arch > svg{transform:scale(1.07);}
+  .card:hover .arch::after{opacity:1;}
+  .card:hover .outline path,.card:focus-visible .outline path{stroke:var(--gold-hi);}
+  .card:hover .art .spin{animation-play-state:running;}
+  .card:active .frame{transform:scale(.97);}
+
+  .label{
+    position:relative;
+    text-align:center;
+    padding:16px 2px 0;
+  }
+  .label .no{
+    display:block;
+    font-size:.6rem;letter-spacing:.3em;color:color-mix(in srgb, var(--accent) 80%, var(--muted));
+    margin-bottom:4px;opacity:.85;
+  }
+  .label h3{
+    margin:0;
+    font-family:var(--serif);font-weight:600;
+    font-size:.95rem;line-height:1.6;
+    color:var(--ivory);
+    text-wrap:balance;
+  }
+  .label .price{
+    display:inline-flex;align-items:baseline;gap:5px;
+    margin-top:6px;
+    padding:3px 12px 4px;
+    border-top:1px solid var(--gold-faint);
+    font-family:var(--serif);color:var(--gold);
+  }
+  .label .price b{font-weight:700;font-size:1rem;}
+  .label .price small{font-size:.66rem;color:var(--muted);font-family:var(--sans);}
+
+  /* sold out — a wax seal */
+  .card.off .arch img,.card.off .arch > svg{filter:grayscale(.8) brightness(.62) contrast(.92);}
+  .card.off h3{color:var(--muted);}
+  .seal{
+    position:absolute;left:50%;top:56%;
+    width:74px;height:74px;margin:-37px 0 0 -37px;
+    display:grid;place-items:center;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #c8485f, var(--wine) 55%, #5e1426);
+    box-shadow:0 6px 18px rgba(0,0,0,.5), inset 0 -3px 6px rgba(0,0,0,.35), inset 0 2px 3px rgba(255,255,255,.25);
+    color:#f8dfe3;
+    font-family:var(--callig);font-weight:700;font-size:.95rem;
+    transform:rotate(-14deg) scale(0);
+    transition:transform .8s cubic-bezier(.34,1.56,.64,1) calc(var(--d,0s) + .7s);
+    z-index:2;
+  }
+  .seal::before{content:"";position:absolute;inset:6px;border-radius:50%;border:1px dashed rgba(248,223,227,.55);}
+  .card.in .seal{transform:rotate(-14deg) scale(1);}
+  .card.off .price{display:none;}
+  .card.off .gone{display:block;margin-top:6px;font-size:.72rem;color:#d47a8c;letter-spacing:.1em;}
+  .gone{display:none;}
+
+  /* generative art motion */
+  .art .spin{transform-box:fill-box;transform-origin:center;animation:spin 40s linear infinite;animation-play-state:paused;}
+  .art .ice{transform-box:fill-box;transform-origin:center;animation:iceDrift 7s ease-in-out infinite alternate;}
+  .art .ice:nth-of-type(2n){animation-duration:9s;animation-delay:-3s;}
+  @keyframes iceDrift{to{transform:translate(3px,-4px) rotate(12deg);}}
+  .art .fizz{animation:fizz 3s ease-in-out infinite;}
+  .art .fizz:nth-of-type(3n){animation-delay:-1s;}
+  .art .fizz:nth-of-type(3n+1){animation-delay:-2s;}
+  @keyframes fizz{50%{opacity:.1;}}
+  .art .glint{animation:glint 5s ease-in-out infinite;}
+  @keyframes glint{0%,100%{opacity:.18;}50%{opacity:.4;}}
+
+  /* =========================================================
+     VIEWER — tap an exhibit to step closer
+     ========================================================= */
+  #viewer{
+    position:fixed;inset:0;z-index:200;
+    display:grid;place-items:center;
+    padding:24px 18px;
+  }
+  #viewer[hidden]{display:none;}
+  #viewer .veil{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(80% 60% at 50% 35%, color-mix(in srgb, var(--vaccent, var(--gold)) 16%, #120b08), #080504 80%);
+    clip-path:circle(0 at var(--ox,50%) var(--oy,50%));
+    transition:clip-path .8s var(--ease);
+  }
+  #viewer.open .veil{clip-path:circle(150% at var(--ox,50%) var(--oy,50%));}
+  #viewer .panel{
+    position:relative;
+    width:min(100%, 420px);
+    text-align:center;
+    opacity:0;transform:translateY(40px) scale(.94);
+    transition:opacity .5s ease, transform .8s var(--ease);
+  }
+  #viewer.open .panel{opacity:1;transform:none;transition-delay:.18s;}
+  #viewer .vframe{
+    position:relative;
+    width:min(74vw, 300px, 46svh);
+    aspect-ratio:4/5;
+    margin:0 auto;
+  }
+  #viewer .vframe .outline{inset:-8px;width:calc(100% + 16px);height:calc(100% + 16px);}
+  #viewer .vframe .outline path{stroke-width:.4;stroke-dashoffset:1;transition:stroke-dashoffset 1.6s var(--ease) .35s;opacity:.9;}
+  #viewer.open .vframe .outline path{stroke-dashoffset:0;}
+  #viewer .vframe .arch img{opacity:1;}
+  #viewer .vsteam{
+    position:absolute;left:50%;top:-58px;width:90px;height:70px;margin-left:-45px;
+    fill:none;stroke:rgba(246,238,225,.5);stroke-width:2;stroke-linecap:round;
+    display:none;
+  }
+  #viewer.hot .vsteam{display:block;}
+  #viewer .vsteam path{animation:steam 3.4s ease-in-out infinite;opacity:0;transform-box:fill-box;transform-origin:bottom;filter:blur(1.2px);}
+  #viewer .vsteam path:nth-child(2){animation-delay:1.1s;}
+  #viewer .vsteam path:nth-child(3){animation-delay:2.2s;}
+  #viewer .vcat{margin-top:26px;font-size:.66rem;letter-spacing:.35em;color:var(--vaccent,var(--gold));}
+  #viewer h3{
+    margin:6px 0 0;
+    font-family:var(--callig);font-weight:700;
+    font-size:clamp(1.9rem, 8vw, 2.5rem);line-height:1.35;
+    color:var(--ivory);
+  }
+  #viewer .vrule{display:flex;align-items:center;justify-content:center;gap:10px;margin:12px 0;color:var(--gold);}
+  #viewer .vrule i{display:block;height:1px;width:50px;background:linear-gradient(90deg, transparent, var(--gold));}
+  #viewer .vrule i:last-child{background:linear-gradient(270deg, transparent, var(--gold));}
+  #viewer .vprice{font-family:var(--serif);font-size:1.5rem;color:var(--gold);font-weight:700;}
+  #viewer .vprice small{font-size:.8rem;color:var(--muted);font-family:var(--sans);font-weight:400;margin-inline-start:4px;}
+  #viewer .vprice.gone{display:block;color:#e07b90;font-family:var(--callig);}
+  #viewer .vno{margin-top:10px;font-size:.66rem;color:var(--muted);letter-spacing:.25em;}
+  #viewer .close{
+    position:absolute;top:max(16px, env(safe-area-inset-top));left:16px;z-index:3;
+    width:46px;height:46px;border-radius:50%;
+    border:1px solid var(--gold-soft);background:rgba(17,10,7,.6);
+    color:var(--gold);cursor:pointer;
+    display:grid;place-items:center;
+    opacity:0;transform:rotate(-90deg) scale(.6);
+    transition:opacity .4s ease .3s, transform .6s var(--ease) .3s, border-color .3s ease;
+  }
+  #viewer.open .close{opacity:1;transform:none;}
+  #viewer .close:hover{border-color:var(--gold);}
+  #viewer .hint{margin-top:22px;font-size:.62rem;color:rgba(176,154,132,.6);letter-spacing:.2em;}
+
+  /* =========================================================
+     FOOTER + back-to-top
+     ========================================================= */
+  footer{
+    position:relative;z-index:2;
+    text-align:center;
+    padding:70px 20px calc(50px + env(safe-area-inset-bottom));
+    color:var(--muted);
+  }
+  footer .sig{
+    font-family:var(--callig);font-size:2rem;color:var(--gold);margin:14px 0 6px;
+  }
+  footer svg.swash{width:220px;height:30px;display:block;margin:0 auto;}
+  footer svg.swash path{fill:none;stroke:var(--gold);stroke-width:1;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 2.4s var(--ease);}
+  footer.seen svg.swash path{stroke-dashoffset:0;}
+  footer .addr{font-size:.75rem;letter-spacing:.08em;}
+  footer .tiny{margin-top:18px;font-size:.6rem;letter-spacing:.3em;opacity:.5;}
+
+  #toTop{
+    position:fixed;z-index:30;
+    left:16px;bottom:calc(18px + env(safe-area-inset-bottom));
+    width:48px;height:48px;border-radius:50%;
+    border:0;padding:0;cursor:pointer;
+    background:rgba(17,10,7,.75);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    color:var(--gold);
+    display:grid;place-items:center;
+    opacity:0;transform:translateY(20px) scale(.8);pointer-events:none;
+    transition:opacity .5s ease, transform .6s var(--ease);
+  }
+  #toTop.show{opacity:1;transform:none;pointer-events:auto;}
+  #toTop svg.ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);}
+  #toTop svg.ring circle{fill:none;stroke-width:1.5;}
+  #toTop svg.ring .bgc{stroke:var(--gold-faint);}
+  #toTop svg.ring .fg{stroke:var(--gold);stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--p,0));stroke-linecap:round;}
+
+  /* =========================================================
+     Reduced motion — keep the art, drop the movement
+     ========================================================= */
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.001s !important;transition-delay:0s !important;}
+    #intro{display:none;}
+    .card,.sec-head *{opacity:1 !important;transform:none !important;clip-path:none !important;}
+    .blob{display:none;}
+  }
+</style>
+</head>
+<body class="locked">
+
+<!-- ================= intro ================= -->
+<div id="intro" aria-hidden="true">
+  <div class="half l"></div><div class="half r"></div>
+  <div class="stage">
+    <svg class="cup" viewBox="-80 -80 160 160">
+      <defs>
+        <radialGradient id="introCrema" cx="45%" cy="40%" r="60%">
+          <stop offset="0" stop-color="#b07a4a"/><stop offset=".6" stop-color="#7a4a2a"/><stop offset="1" stop-color="#3e2212"/>
+        </radialGradient>
+      </defs>
+      <circle class="ring r2" r="74" pathLength="1"/>
+      <circle class="ring" r="62" pathLength="1"/>
+      <circle class="crema" r="56" fill="url(#introCrema)"/>
+      <path class="heart" d="M0 30C-40 4-34-36 0-16 34-36 40 4 0 30Z"/>
+      <path class="stream" d="M0-120V10" pathLength="1"/>
+    </svg>
+    <div class="name" id="intro-name">کافه آتزوری</div>
+    <div class="sub">· · ·</div>
+  </div>
+</div>
+
+<!-- ================= atmosphere ================= -->
+<div class="atmo tint"></div>
+<div class="atmo"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<canvas id="dust" aria-hidden="true"></canvas>
+<div class="atmo spot"></div>
+<div class="atmo grain"></div>
+
+<!-- ================= hero ================= -->
+<header class="hero">
+  <div class="hero-arch">
+    <div class="fill"></div>
+    <svg class="rosette" viewBox="-100 -100 200 200" aria-hidden="true">
+      <g class="turn" id="rosA"></g>
+      <g class="turn rev" id="rosB"></g>
+    </svg>
+    <svg class="frame" viewBox="0 0 100 128" preserveAspectRatio="none" aria-hidden="true">
+      <path class="p1" pathLength="1" d="M0 128V51C0 23 27 10 50 1c23 9 50 22 50 50v77"/>
+      <path class="p2" pathLength="1" d="M5 128V53C5 28 29 16 50 7c21 9 45 21 45 46v75"/>
+      <path class="p3" pathLength="1" d="M10 128V55C10 33 31 22 50 14c19 8 40 19 40 41v73"/>
+    </svg>
+    <div class="star" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 1.5 14.2 9.8 22.5 12 14.2 14.2 12 22.5 9.8 14.2 1.5 12 9.8 9.8Z"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+    </div>
+    <h1 id="restaurant-title">کافه آتزوری</h1>
+    <div class="rule" aria-hidden="true"><i></i><svg width="9" height="9" viewBox="0 0 8 8"><rect x="1.2" y="1.2" width="5.6" height="5.6" fill="none" stroke="currentColor" transform="rotate(45 4 4)"/></svg><i></i></div>
+    <p class="tag">لیست غذاها و نوشیدنی‌ها با قیمت روز</p>
+    <div class="count" id="hero-count"></div>
+  </div>
+  <button class="scroll-cue" id="scrollCue" type="button" aria-label="ورود به منو">
+    <span>ورود به گالری</span>
+    <span class="track"></span>
+  </button>
+</header>
+
+<div class="ribbon" aria-hidden="true"><div class="run" id="ribbon"></div></div>
+
+<nav id="catnav" aria-label="دسته‌بندی‌ها"><div class="rail" id="rail"><span class="pill" id="pill"></span></div><span class="progress" id="progress"></span></nav>
+
+<main id="menu"></main>
+
+<footer id="footer">
+  <svg class="swash" viewBox="0 0 220 30" aria-hidden="true"><path pathLength="1" d="M4 15C40 15 50 4 80 10s30 14 30 5-10-10-10-3 18 12 40 6 40-8 76-8"/></svg>
+  <div class="sig" id="footer-name">کافه آتزوری</div>
+  <div class="addr">بلوار فردوس شرق</div>
+  <div class="tiny">✦ ✦ ✦</div>
+</footer>
+
+<button id="toTop" type="button" aria-label="بازگشت به بالا">
+  <svg class="ring" viewBox="0 0 48 48"><circle class="bgc" cx="24" cy="24" r="22"/><circle class="fg" cx="24" cy="24" r="22" pathLength="1"/></svg>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<!-- ================= viewer ================= -->
+<div id="viewer" hidden role="dialog" aria-modal="true" aria-labelledby="vtitle">
+  <div class="veil"></div>
+  <button class="close" type="button" aria-label="بستن">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+  </button>
+  <div class="panel">
+    <div class="vframe">
+      <svg class="vsteam" viewBox="0 0 90 70" aria-hidden="true">
+        <path d="M30 68c-8-10 8-16 0-28s6-18 2-30"/>
+        <path d="M45 68c-8-10 8-16 0-28s6-18 2-30"/>
+        <path d="M60 68c-8-10 8-16 0-28s6-18 2-30"/>
+      </svg>
+      <div class="arch" id="vart"></div>
+      <svg class="outline" viewBox="0 0 100 125" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M0 125V50C0 22 27 9 50 0c23 9 50 22 50 50v75z"/></svg>
+    </div>
+    <div class="vcat" id="vcat"></div>
+    <h3 id="vtitle"></h3>
+    <div class="vrule" aria-hidden="true"><i></i><svg width="9" height="9" viewBox="0 0 8 8"><rect x="1.2" y="1.2" width="5.6" height="5.6" fill="none" stroke="currentColor" transform="rotate(45 4 4)"/></svg><i></i></div>
+    <div class="vprice" id="vprice"></div>
+    <div class="vno" id="vno"></div>
+    <div class="hint">برای بستن، بیرون را لمس کنید</div>
+  </div>
+</div>
+
+<script>
+// Embedded copy of items.json — used only when this page is opened directly
+// from disk (file://) and the browser blocks fetch() of local JSON files.
+// When served over http(s), the live items.json file is used instead.
+const EMBEDDED_DATA = {"restaurant": "کافه آتزوری", "categories": ["گرم بر پایه اسپرسو", "سرد بر پایه اسپرسو", "گرم نوش", "دمنوش و چای", "ماکتیل", "شیک و اسمودی", "کیک و شیرینی", "میان وعده", "افزودنی ها"], "items": [{"id": 436192, "category": "گرم بر پایه اسپرسو", "title": "اسپرسو 100 عربیکا", "description": "", "price": 249000, "image": "assets/MainImage_3f05ccc1.jpg", "available": true}, {"id": 441512, "category": "گرم بر پایه اسپرسو", "title": "اسپرسو (50/50)", "description": "", "price": 179000, "image": "assets/MainImage_2edffe4e.jpg", "available": true}, {"id": 441560, "category": "گرم بر پایه اسپرسو", "title": "آمریکانو (100 عربیکا)", "description": "", "price": 269000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441558, "category": "گرم بر پایه اسپرسو", "title": "آمریکانو (50/50)", "description": "", "price": 199000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441517, "category": "گرم بر پایه اسپرسو", "title": "لاته (100 عربیکا)", "description": "", "price": 359000, "image": "assets/MainImage_fd592463.jpg", "available": true}, {"id": 441516, "category": "گرم بر پایه اسپرسو", "title": "لاته (50/50)", "description": "", "price": 279000, "image": "assets/MainImage_31558cee.jpg", "available": true}, {"id": 441533, "category": "گرم بر پایه اسپرسو", "title": "فلت وایت (100 عربیکا)", "description": "", "price": 359000, "image": "assets/MainImage_9e2a36f5.jpg", "available": true}, {"id": 441531, "category": "گرم بر پایه اسپرسو", "title": "فلت وایت (50/50)", "description": "", "price": 279000, "image": "assets/MainImage_0a06d44a.jpg", "available": true}, {"id": 441511, "category": "گرم بر پایه اسپرسو", "title": "کاپوچینو (100عربیکا)", "description": "", "price": 339000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441537, "category": "گرم بر پایه اسپرسو", "title": "کاپوچینو (50/50)", "description": "", "price": 259000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441519, "category": "گرم بر پایه اسپرسو", "title": "کورتادو (100عربیکا)", "description": "", "price": 339000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441556, "category": "گرم بر پایه اسپرسو", "title": "کورتادو (50/50)", "description": "", "price": 259000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441550, "category": "گرم بر پایه اسپرسو", "title": "کارامل ماکیاتو (100عربیکا)", "description": "", "price": 399000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441543, "category": "گرم بر پایه اسپرسو", "title": "کارامل ماکیاتو (50/50)", "description": "", "price": 319000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441551, "category": "گرم بر پایه اسپرسو", "title": "موکا (100عربیکا)", "description": "", "price": 399000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441524, "category": "گرم بر پایه اسپرسو", "title": "موکا (50/50)", "description": "", "price": 319000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441527, "category": "گرم بر پایه اسپرسو", "title": "آفوگاتو (100 عربیکا)", "description": "", "price": 339000, "image": "assets/MainImage_a33af7ea.jpg", "available": true}, {"id": 441530, "category": "گرم بر پایه اسپرسو", "title": "آفوگاتو (50/50)", "description": "", "price": 279000, "image": "assets/MainImage_6c73eccb.jpg", "available": true}, {"id": 441526, "category": "سرد بر پایه اسپرسو", "title": "آیس آمریکانو (100 عربیکا)", "description": "", "price": 269000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441555, "category": "سرد بر پایه اسپرسو", "title": "آیس آمریکانو (50/50)", "description": "", "price": 199000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441554, "category": "سرد بر پایه اسپرسو", "title": "آیس لاته (100عربیکا)", "description": "", "price": 359000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441528, "category": "سرد بر پایه اسپرسو", "title": "آیس لاته (50/50)", "description": "", "price": 279000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441563, "category": "سرد بر پایه اسپرسو", "title": "آیس کارامل ماکیاتو (100عربیکا)", "description": "", "price": 399000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441548, "category": "سرد بر پایه اسپرسو", "title": "آیس کارامل ماکیاتو (50/50)", "description": "", "price": 319000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441561, "category": "سرد بر پایه اسپرسو", "title": "آیس موکا (100عربیکا)", "description": "", "price": 399000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441559, "category": "سرد بر پایه اسپرسو", "title": "آیس موکا (50/50)", "description": "", "price": 319000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441535, "category": "گرم نوش", "title": "هات چاکلت", "description": "", "price": 269000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441532, "category": "گرم نوش", "title": "سیسامو داته", "description": "", "price": 259000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441553, "category": "گرم نوش", "title": "ماسالا", "description": "", "price": 249000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441510, "category": "گرم نوش", "title": "شیر شکلات فندق", "description": "", "price": 269000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441557, "category": "گرم نوش", "title": "ماچالاته", "description": "", "price": 359000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441547, "category": "گرم نوش", "title": "شیرعسل دارچین", "description": "", "price": 269000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441545, "category": "گرم نوش", "title": "قهوه دمی دستگاهی", "description": "", "price": 409000, "image": "assets/place-holder.jpg", "available": true}, {"id": 454824, "category": "گرم نوش", "title": "پینک چاکلت", "description": "", "price": 199000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441525, "category": "دمنوش و چای", "title": "چای سیاه", "description": "", "price": 129000, "image": "assets/MainImage_4cfce3bc.jpg", "available": true}, {"id": 441534, "category": "دمنوش و چای", "title": "چای هل و دارچین", "description": "", "price": 169000, "image": "assets/MainImage_e3d6c2f7.jpg", "available": true}, {"id": 441522, "category": "دمنوش و چای", "title": "واته لاته", "description": "", "price": 259000, "image": "assets/MainImage_0b9c2e83.jpg", "available": true}, {"id": 441518, "category": "دمنوش و چای", "title": "دمنوش استلا", "description": "", "price": 169000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441546, "category": "دمنوش و چای", "title": "دمنوش فرسکو", "description": "", "price": 169000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441542, "category": "دمنوش و چای", "title": "دمنوش سینیورا", "description": "", "price": 179000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441552, "category": "دمنوش و چای", "title": "دمنوش کالما", "description": "", "price": 179000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441520, "category": "دمنوش و چای", "title": "دمنوش کوتونیو", "description": "", "price": 169000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441513, "category": "ماکتیل", "title": "فوکودولچه", "description": "", "price": 220000, "image": "assets/place-holder.jpg", "available": false}, {"id": 441523, "category": "ماکتیل", "title": "اسکای", "description": "", "price": 349000, "image": "assets/MainImage_c4ac81c8.jpg", "available": true}, {"id": 441536, "category": "ماکتیل", "title": "ماریا", "description": "", "price": 359000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441562, "category": "ماکتیل", "title": "کوکین", "description": "", "price": 369000, "image": "assets/MainImage_86381f0e.jpg", "available": true}, {"id": 441565, "category": "ماکتیل", "title": "اسمرالدو", "description": "", "price": 359000, "image": "assets/MainImage_a6b383af.jpg", "available": true}, {"id": 441514, "category": "شیک و اسمودی", "title": "شیک توت فرنگی", "description": "", "price": 409000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441515, "category": "شیک و اسمودی", "title": "شیک OREO", "description": "", "price": 236000, "image": "assets/place-holder.jpg", "available": false}, {"id": 441521, "category": "شیک و اسمودی", "title": "شیک بیسکوییت مادر", "description": "", "price": 439000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441538, "category": "شیک و اسمودی", "title": "شیک بادام زمینی", "description": "", "price": 419000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441539, "category": "شیک و اسمودی", "title": "شیک شکلات نعنا", "description": "", "price": 439000, "image": "assets/place-holder.jpg", "available": true}, {"id": 441564, "category": "شیک و اسمودی", "title": "شیک شکلات فندق", "description": "", "price": 409000, "image": "assets/place-holder.jpg", "available": true}, {"id": 558666, "category": "شیک و اسمودی", "title": "شیک قهوه", "description": "", "price": 489000, "image": "assets/place-holder.jpg", "available": false}, {"id": 441529, "category": "کیک و شیرینی", "title": "کروسان شکلاتی", "description": "", "price": 205000, "image": "assets/place-holder.jpg", "available": false}, {"id": 441540, "category": "کیک و شیرینی", "title": "کروسان بادام", "description": "", "price": 310000, "image": "assets/MainImage_d98ee6a0.jpg", "available": false}, {"id": 441541, "category": "کیک و شیرینی", "title": "کروسان کره ای", "description": "", "price": 130000, "image": "assets/place-holder.jpg", "available": false}, {"id": 441544, "category": "کیک و شیرینی", "title": "کویینگ امان", "description": "", "price": 139000, "image": "assets/MainImage_a3a01fc6.jpg", "available": false}, {"id": 441549, "category": "کیک و شیرینی", "title": "چاکلت تویست", "description": "", "price": 209000, "image": "assets/place-holder.jpg", "available": false}, {"id": 447980, "category": "کیک و شیرینی", "title": "کوکی دبل چاکلت", "description": "", "price": 139000, "image": "assets/place-holder.jpg", "available": true}, {"id": 451774, "category": "کیک و شیرینی", "title": "سینامون رول", "description": "", "price": 330000, "image": "assets/place-holder.jpg", "available": false}, {"id": 452156, "category": "کیک و شیرینی", "title": "پستل دناتا", "description": "", "price": 169000, "image": "assets/MainImage_338e2527.jpg", "available": false}, {"id": 452157, "category": "کیک و شیرینی", "title": "چیز کیک سن سباستین", "description": "", "price": 279000, "image": "assets/place-holder.jpg", "available": true}, {"id": 455169, "category": "کیک و شیرینی", "title": "کوکی نیویورکی", "description": "", "price": 149000, "image": "assets/place-holder.jpg", "available": false}, {"id": 651034, "category": "کیک و شیرینی", "title": "موکا", "description": "", "price": 189000, "image": "assets/place-holder.jpg", "available": false}, {"id": 653668, "category": "کیک و شیرینی", "title": "دسر لکتور کاراملی", "description": "", "price": 199000, "image": "assets/place-holder.jpg", "available": false}, {"id": 653671, "category": "کیک و شیرینی", "title": "کوکی لیمویی", "description": "", "price": 139000, "image": "assets/place-holder.jpg", "available": false}, {"id": 795162, "category": "کیک و شیرینی", "title": "براونی", "description": "", "price": 189000, "image": "assets/place-holder.jpg", "available": false}, {"id": 896305, "category": "کیک و شیرینی", "title": "کیک صبحانه گردویی", "description": "", "price": 129000, "image": "assets/place-holder.jpg", "available": false}, {"id": 1044589, "category": "کیک و شیرینی", "title": "سه شیر", "description": "", "price": 169000, "image": "assets/place-holder.jpg", "available": false}, {"id": 1044590, "category": "کیک و شیرینی", "title": "ردولوت", "description": "", "price": 149000, "image": "assets/place-holder.jpg", "available": false}, {"id": 1044591, "category": "کیک و شیرینی", "title": "سیب و دارچین", "description": "", "price": 149000, "image": "assets/place-holder.jpg", "available": false}, {"id": 474437, "category": "میان وعده", "title": "تست بوقلمون", "description": "", "price": 238000, "image": "assets/place-holder.jpg", "available": false}, {"id": 483544, "category": "میان وعده", "title": "اگ پپرونی", "description": "", "price": 214000, "image": "assets/place-holder.jpg", "available": false}, {"id": 980768, "category": "میان وعده", "title": "فوکاچیا پنیری", "description": "", "price": 359000, "image": "assets/place-holder.jpg", "available": false}, {"id": 443732, "category": "افزودنی ها", "title": "سیروپ", "description": "", "price": 49000, "image": "assets/place-holder.jpg", "available": true}, {"id": 443733, "category": "افزودنی ها", "title": "عسل", "description": "", "price": 69000, "image": "assets/place-holder.jpg", "available": true}, {"id": 443734, "category": "افزودنی ها", "title": "سس شکلات", "description": "", "price": 49000, "image": "assets/place-holder.jpg", "available": true}, {"id": 443735, "category": "افزودنی ها", "title": "سس کارامل", "description": "", "price": 49000, "image": "assets/place-holder.jpg", "available": true}, {"id": 443863, "category": "افزودنی ها", "title": "آب معدنی", "description": "", "price": 15000, "image": "assets/place-holder.jpg", "available": true}, {"id": 447981, "category": "افزودنی ها", "title": "شات اسپرسو 100", "description": "", "price": 229000, "image": "assets/place-holder.jpg", "available": true}, {"id": 447982, "category": "افزودنی ها", "title": "شات اسپرسو 50/50", "description": "", "price": 139000, "image": "assets/place-holder.jpg", "available": true}, {"id": 448243, "category": "افزودنی ها", "title": "بستنی", "description": "", "price": 129000, "image": "assets/place-holder.jpg", "available": true}, {"id": 1072432, "category": "افزودنی ها", "title": "نبات", "description": "", "price": 39000, "image": "assets/place-holder.jpg", "available": false}]};
+
+const FALLBACK_IMG = 'assets/place-holder.jpg';
+// Items that still use the placeholder photo get a hand-drawn generative
+// artwork instead (latte art, iced glasses, Persian tile medallions…).
+// Set to false to show assets/place-holder.jpg as before.
+const ART_FOR_PLACEHOLDER = true;
+
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FINE = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+const $ = s => document.querySelector(s);
+
+/* ---------- numbers ---------- */
+const FA_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
+const faNum = s => String(s).replace(/\d/g, d => FA_DIGITS[d]);
+function formatPrice(n){ return n.toLocaleString('fa-IR'); }
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* =========================================================
+   Category identities: accent colour, emblem, art style
+   ========================================================= */
+const CAT_STYLE = {
+  'گرم بر پایه اسپرسو': {accent:'#d4ad6a', emblem:'espresso', art:'latte',  hot:true},
+  'سرد بر پایه اسپرسو': {accent:'#8ec5e6', emblem:'iced',     art:'iced'},
+  'گرم نوش':            {accent:'#e39a6d', emblem:'mug',      art:'latte',  hot:true},
+  'دمنوش و چای':        {accent:'#a9c98f', emblem:'tea',      art:'tea',    hot:true},
+  'ماکتیل':             {accent:'#6fd1c4', emblem:'cocktail', art:'glass'},
+  'شیک و اسمودی':       {accent:'#f19bb5', emblem:'shake',    art:'shake'},
+  'کیک و شیرینی':       {accent:'#e7b77a', emblem:'cake',     art:'tile'},
+  'میان وعده':          {accent:'#e6c35c', emblem:'toast',    art:'tile'},
+  'افزودنی ها':         {accent:'#d9a441', emblem:'drop',     art:'tile'}
+};
+const STYLE_CYCLE = Object.values(CAT_STYLE);
+const styleFor = (cat, i) => CAT_STYLE[cat] || STYLE_CYCLE[i % STYLE_CYCLE.length];
+
+const STEAM = (x, y) =>
+  `<path class="steam s1" d="M${x-5} ${y}c-2-2.5 2-4 0-7"/><path class="steam s2" d="M${x} ${y}c-2-2.5 2-4 0-7"/><path class="steam s3" d="M${x+5} ${y}c-2-2.5 2-4 0-7"/>`;
+
+const EMBLEMS = {
+  espresso: `<path d="M10 22h22v6a11 11 0 0 1-11 11 11 11 0 0 1-11-11z"/><path d="M32 24h3a4.5 4.5 0 0 1 0 9h-3.6"/><path d="M6 43h30"/>${STEAM(21,17)}`,
+  iced: `<path d="M12 10h24l-3 32H15z"/><path d="M13.3 19h21.4" opacity=".5"/><rect class="bob" x="17" y="22" width="7" height="7" rx="1.5"/><rect class="bob b2" x="25" y="28" width="6" height="6" rx="1.5"/><path d="M29 3l-3 26"/>`,
+  mug: `<path d="M10 17h22v13a10 10 0 0 1-10 10h-2a10 10 0 0 1-10-10z"/><path d="M32 20h2.5a5 5 0 0 1 0 10H32"/><path class="beat" fill="currentColor" fill-opacity=".45" d="M21 32c-3.5-2.4-5-4-5-6a2.6 2.6 0 0 1 5-1 2.6 2.6 0 0 1 5 1c0 2-1.5 3.6-5 6z"/>${STEAM(21,13)}`,
+  tea: `<path d="M16 15h16c0 5-3 7-3 11s4 5 4 9a4 4 0 0 1-4 4H19a4 4 0 0 1-4-4c0-4 4-5 4-9s-3-6-3-11z"/><path d="M18.3 29h11.4" opacity=".55"/><path d="M9 43h30"/><path class="sway" d="M35 15c0-5 3-8 8-8 0 5-3 8-8 8zM35 15l4-4"/>${STEAM(24,11)}`,
+  cocktail: `<path d="M8 10h32L24 27z"/><path d="M24 27v12M17 40h14"/><circle cx="36" cy="9" r="5"/><path d="M36 4v10M31 9h10" opacity=".5"/><circle class="bubble" cx="20" cy="17" r="1.2"/><circle class="bubble u2" cx="26" cy="20" r="1"/><circle class="bubble u3" cx="23" cy="15" r="1.3"/>`,
+  shake: `<path d="M14 19h20l-2.5 24h-15z"/><path d="M13 19c0-4 3-6 5.5-6 1-3 3.5-4.5 5.5-4.5s4.5 1.5 5.5 4.5c2.5 0 5.5 2 5.5 6z"/><circle class="beat" cx="24" cy="6" r="2.4" fill="currentColor" fill-opacity=".45"/><path d="M29 12l6-9"/><path d="M17 28h14" opacity=".5"/>`,
+  cake: `<path d="M9 25h30v15H9z"/><path d="M9 29c3 3 5 0 7.5 1.5S20 33 22.5 30s4 2 7 0 5 1 9.5-1"/><path d="M24 25v-8"/><path class="flame" d="M24 15c-2.2-2-2.2-4.4 0-7 2.2 2.6 2.2 5 0 7z"/><path d="M6 43h36"/>`,
+  toast: `<path d="M12 42V22a7 7 0 0 1 2-13h20a7 7 0 0 1 2 13v20z"/><path d="M18 30c2-2 4 2 6 0s4 2 6 0" opacity=".6"/><path class="twinkle" d="M41 2v8M37 6h8"/>`,
+  drop: `<path d="M24 5c6 8 11 13 11 20a11 11 0 0 1-22 0c0-7 5-12 11-20z"/><path d="M18.5 26a5.5 5.5 0 0 0 5.5 5.5" opacity=".6"/><path class="drip" d="M24 39c1.3 1.8 2.2 2.9 2.2 4a2.2 2.2 0 0 1-4.4 0c0-1.1.9-2.2 2.2-4z"/>`
+};
+
+/* =========================================================
+   Generative art — every item gets its own unique piece
+   (seeded by its id, so it never changes between visits)
+   ========================================================= */
+function rng(seed){ // mulberry32
+  let s = Math.imul(seed ^ 0x9e3779b9, 0x85ebca6b) >>> 0;
+  return () => {
+    s = (s + 0x6D2B79F5) >>> 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const pick = (r, a) => a[Math.floor(r() * a.length)];
+const f1 = n => Math.round(n * 10) / 10;
+
+const CREAM = '#f6ead6', CUT = '#86532f';
+
+function latteArt(r){
+  const kind = Math.floor(r() * 4);
+  let g = '';
+  if(kind === 0){ // layered heart
+    const layers = 2 + Math.floor(r() * 3);
+    for(let i = 0; i < layers; i++){
+      const s = 1 - i * .22;
+      g += `<path transform="scale(${s.toFixed(2)}) translate(0 ${i*5})" d="M0 32C-46 4-38-40 0-18 38-40 46 4 0 32Z" fill="${i%2 ? CUT : CREAM}"/>`;
+    }
+    g += `<path d="M0-44V36" stroke="${CUT}" stroke-width="2" stroke-linecap="round"/>`;
+  } else if(kind === 1){ // rosetta
+    const n = 6 + Math.floor(r() * 4);
+    for(let i = 0; i < n; i++){
+      const t = i / (n - 1);
+      const cy = 38 - t * 70, rx = 46 - t * 32, ry = 10 - t * 4;
+      g += `<ellipse cy="${f1(cy)}" rx="${f1(rx)}" ry="${f1(ry)}" fill="${CREAM}"/>`;
+      g += `<ellipse cy="${f1(cy - ry*.55)}" rx="${f1(rx*.84)}" ry="${f1(ry*.72)}" fill="${CUT}"/>`;
+    }
+    g += `<path transform="translate(0 -40) scale(.34)" d="M0 32C-46 4-38-40 0-18 38-40 46 4 0 32Z" fill="${CREAM}"/>`;
+    g += `<path d="M0-46V44" stroke="${CUT}" stroke-width="2.2" stroke-linecap="round"/>`;
+  } else if(kind === 2){ // tulip
+    const n = 3 + Math.floor(r() * 3);
+    for(let i = 0; i < n; i++){
+      const y = 30 - i * 15, rx = 30 - i * 3.5;
+      g += `<ellipse cy="${y}" rx="${f1(rx)}" ry="13" fill="${CREAM}"/>`;
+      g += `<ellipse cy="${y+7}" rx="${f1(rx*.78)}" ry="9" fill="${CUT}"/>`;
+    }
+    g += `<path transform="translate(0 ${30 - n*15}) scale(.45)" d="M0 32C-46 4-38-40 0-18 38-40 46 4 0 32Z" fill="${CREAM}"/>`;
+    g += `<path d="M0 ${36 - n*15}V46" stroke="${CUT}" stroke-width="2" stroke-linecap="round"/>`;
+  } else { // web / etched rings
+    [48, 38, 28, 18].forEach(rad => g += `<circle r="${rad}" fill="none" stroke="${CREAM}" stroke-width="4.2"/>`);
+    g += `<circle r="7" fill="${CREAM}"/>`;
+    const k = 6 + Math.floor(r() * 5), bend = (r() * 30 + 10) * (r() < .5 ? -1 : 1);
+    for(let i = 0; i < k; i++){
+      const a = i / k * Math.PI * 2, x = Math.cos(a) * 56, y = Math.sin(a) * 56;
+      const cx = Math.cos(a + bend/100) * 28 + Math.cos(a + Math.PI/2) * bend * .3,
+            cy = Math.sin(a + bend/100) * 28 + Math.sin(a + Math.PI/2) * bend * .3;
+      g += `<path d="M0 0Q${f1(cx)} ${f1(cy)} ${f1(x)} ${f1(y)}" fill="none" stroke="${CUT}" stroke-width="1.6"/>`;
+    }
+  }
+  return g;
+}
+
+function bubbles(r, n, rad, col, op){
+  let g = '';
+  for(let i = 0; i < n; i++){
+    const a = r() * Math.PI * 2, d = Math.sqrt(r()) * rad;
+    g += `<circle class="fizz" cx="${f1(Math.cos(a)*d)}" cy="${f1(Math.sin(a)*d)}" r="${f1(.8 + r()*2.2)}" fill="${col}" opacity="${op}"/>`;
+  }
+  return g;
+}
+
+function spiral(turns, r0, r1){
+  const pts = [], steps = Math.round(turns * 40);
+  for(let i = 0; i <= steps; i++){
+    const t = i / steps, a = t * turns * Math.PI * 2, rr = r1 - (r1 - r0) * t;
+    pts.push(f1(Math.cos(a) * rr) + ' ' + f1(Math.sin(a) * rr));
+  }
+  return 'M' + pts.join('L');
+}
+
+function starPath(k, R, ri){
+  let d = '';
+  for(let i = 0; i < k * 2; i++){
+    const a = i / (k * 2) * Math.PI * 2 - Math.PI / 2, rr = i % 2 ? ri : R;
+    d += (i ? 'L' : 'M') + f1(Math.cos(a) * rr) + ' ' + f1(Math.sin(a) * rr);
+  }
+  return d + 'Z';
+}
+
+function artSVG(item, kind){
+  const r = rng(item.id * 7 + 13);
+  const u = 'g' + item.id;
+  const rot = Math.round(r() * 40 - 20);
+  let defs = '', body = '';
+  const table = `<radialGradient id="${u}t" cx="50%" cy="42%" r="75%"><stop offset="0" stop-color="#3a2519"/><stop offset="1" stop-color="#0f0805"/></radialGradient>`;
+  const porcelain = `<radialGradient id="${u}p" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#fdf8ef"/><stop offset="1" stop-color="#cdbda4"/></radialGradient>`;
+  const highlight = `<path class="glint" d="M52 104A62 62 0 0 1 96 76" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".25"/>`;
+  const hub = '<circle r="70" fill="none"/>'; // keeps the rotation centred
+
+  if(kind === 'latte'){
+    defs = table + porcelain +
+      `<radialGradient id="${u}c" cx="45%" cy="40%" r="62%"><stop offset="0" stop-color="#b98150"/><stop offset=".55" stop-color="#86532f"/><stop offset="1" stop-color="#46270f"/></radialGradient>`;
+    body =
+      `<rect width="200" height="250" fill="url(#${u}t)"/>` +
+      `<circle cx="106" cy="144" r="92" fill="#000" opacity=".4"/>` +
+      `<circle cx="100" cy="135" r="90" fill="url(#${u}p)"/>` +
+      `<circle cx="100" cy="135" r="80" fill="none" stroke="#b8a488" stroke-opacity=".5"/>` +
+      `<rect x="158" y="126" width="36" height="18" rx="9" fill="url(#${u}p)" stroke="#b8a488" stroke-opacity=".5"/>` +
+      `<circle cx="102" cy="139" r="74" fill="#000" opacity=".2"/>` +
+      `<circle cx="100" cy="135" r="73" fill="url(#${u}p)"/>` +
+      `<circle cx="100" cy="135" r="63" fill="url(#${u}c)"/>` +
+      `<g transform="translate(100 135)"><g class="spin">${hub}<g transform="rotate(${rot})">${latteArt(r)}</g></g></g>` +
+      `<circle cx="100" cy="135" r="63" fill="none" stroke="#2e1708" stroke-opacity=".55" stroke-width="2.5"/>` +
+      highlight;
+  }
+  else if(kind === 'iced' || kind === 'glass' || kind === 'tea' || kind === 'shake'){
+    const liquids = {
+      iced:  [['#d2ab82','#6b4126']],
+      tea:   [['#e38a2b','#7a220a'],['#d9651f','#5e1a06'],['#c9a13a','#6a4a0a']],
+      glass: [['#46d0c2','#0b4f5a'],['#f0587a','#6d0f28'],['#f6be45','#9a4b0e'],['#6f9cf0','#1c2f7a'],['#9ad872','#2d6b1f']],
+      shake: [['#f9c3d2','#c2587a'],['#efdcbc','#9a7048'],['#7a4a33','#2e160c'],['#d3ebc3','#5f8a4c']]
+    }[kind];
+    const [c1, c2] = pick(r, liquids);
+    defs = table +
+      `<radialGradient id="${u}l" cx="42%" cy="38%" r="65%"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></radialGradient>`;
+    body =
+      `<rect width="200" height="250" fill="url(#${u}t)"/>` +
+      `<circle cx="100" cy="135" r="88" fill="#1c120c"/>` +
+      `<circle cx="100" cy="135" r="82" fill="none" stroke="#d4ad6a" stroke-opacity=".35" stroke-dasharray="2 5"/>` +
+      `<circle cx="108" cy="144" r="72" fill="#000" opacity=".45"/>` +
+      `<circle cx="100" cy="135" r="71" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.45)" stroke-width="2.5"/>` +
+      `<circle cx="100" cy="135" r="64" fill="url(#${u}l)"/>`;
+    let inner = '';
+    if(kind === 'iced'){
+      inner += `<path d="${spiral(2.2, 4, 46)}" fill="none" stroke="#f3e4cc" stroke-opacity=".45" stroke-width="6" stroke-linecap="round"/>`;
+      const n = 3 + Math.floor(r() * 2);
+      for(let i = 0; i < n; i++){
+        const a = i / n * Math.PI * 2 + r(), d = 22 + r() * 16, s = 18 + r() * 8;
+        inner += `<rect class="ice" x="${f1(Math.cos(a)*d - s/2)}" y="${f1(Math.sin(a)*d - s/2)}" width="${f1(s)}" height="${f1(s)}" rx="5" transform="rotate(${Math.round(r()*90)} ${f1(Math.cos(a)*d)} ${f1(Math.sin(a)*d)})" fill="rgba(255,255,255,.22)" stroke="rgba(255,255,255,.65)" stroke-width="1.2"/>`;
+      }
+      inner += bubbles(r, 10, 56, '#fff', .35);
+    }
+    if(kind === 'tea'){
+      inner += `<ellipse cx="-14" cy="-18" rx="30" ry="18" fill="#fff" opacity=".08"/>`;
+      inner += bubbles(r, 5, 50, '#ffd9a0', .4);
+      if(r() < .6){ // a sprig of mint
+        inner += `<g transform="translate(${f1(r()*30-15)} ${f1(r()*20)}) rotate(${Math.round(r()*360)})"><path d="M0 0C10-14 26-14 30 0 26 14 10 14 0 0Z" fill="#5e9c4a"/><path d="M0 0H28" stroke="#3b6b2c" stroke-width="1.2"/></g>`;
+      } else { // a cinnamon stick
+        inner += `<g transform="rotate(${Math.round(r()*180)})"><rect x="-44" y="-6" width="88" height="12" rx="6" fill="#7b3c17"/><rect x="-44" y="-2" width="88" height="3" fill="#a55a28" opacity=".7"/></g>`;
+      }
+    }
+    if(kind === 'glass'){
+      inner += bubbles(r, 18, 58, '#fff', .45);
+      const a = r() * Math.PI * 2, citrus = pick(r, [['#f7d34f','#fff3b0'],['#b8d85a','#eaf7b8'],['#f39a3a','#ffd8a8']]);
+      const x = Math.cos(a) * 52, y = Math.sin(a) * 52;
+      let seg = '';
+      for(let i = 0; i < 8; i++){ const b = i / 8 * Math.PI * 2; seg += `<path d="M0 0L${f1(Math.cos(b)*17)} ${f1(Math.sin(b)*17)}" stroke="${citrus[1]}" stroke-width="1.4"/>`; }
+      inner += `<g transform="translate(${f1(x)} ${f1(y)})"><circle r="23" fill="${citrus[1]}"/><circle r="20" fill="${citrus[0]}"/>${seg}<circle r="3" fill="${citrus[1]}"/></g>`;
+      inner += `<g transform="rotate(${Math.round(r()*140 + 200)})"><circle cx="20" r="6" fill="none" stroke="#f6eee1" stroke-width="3"/></g>`;
+      if(r() < .5) inner += `<g transform="translate(${f1(-x*.4)} ${f1(-y*.4)}) rotate(${Math.round(r()*360)})"><path d="M0 0C8-10 20-10 24 0 20 10 8 10 0 0Z" fill="#4f9a45"/><path d="M0 0H22" stroke="#2f6a2a" stroke-width="1"/></g>`;
+    }
+    if(kind === 'shake'){
+      inner += `<circle r="50" fill="#fbf4ea" opacity=".25"/>`;
+      inner += `<path d="${spiral(3.1, 4, 44)}" fill="none" stroke="#6b4a36" stroke-opacity=".25" stroke-width="15" stroke-linecap="round" transform="translate(2 3)"/>`;
+      inner += `<path d="${spiral(3.1, 4, 44)}" fill="none" stroke="#fbf4ea" stroke-width="13" stroke-linecap="round"/>`;
+      const drizzle = pick(r, ['#5a2c14', '#c07a2c', '#b0203c']);
+      let zz = 'M-44 -30';
+      for(let i = 0; i < 9; i++) zz += `L${-40 + i*10} ${i % 2 ? 30 : -30}`;
+      inner += `<path d="${zz}" fill="none" stroke="${drizzle}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity=".85" transform="rotate(${Math.round(r()*180)})"/>`;
+      inner += `<circle r="8" fill="#b0152f"/><circle cx="-2.5" cy="-2.5" r="2.2" fill="#fff" opacity=".6"/><path d="M0-8C3-18 10-22 16-24" fill="none" stroke="#3b5a20" stroke-width="1.6"/>`;
+      inner += `<g transform="rotate(${Math.round(r()*360)})"><circle cx="46" r="6" fill="none" stroke="${pick(r, ['#f6eee1','#e7b77a','#8ec5e6'])}" stroke-width="3.2"/></g>`;
+    }
+    body += `<g transform="translate(100 135)"><g class="spin">${hub}<g transform="rotate(${rot})">${inner}</g></g></g>` +
+      `<circle cx="100" cy="135" r="64" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="5"/>` + highlight;
+  }
+  else { // tile — Persian medallion in azure & gold
+    const pal = pick(r, [
+      ['#1f5680','#0a1f33','#48b5c4'], ['#1f5680','#0a1f33','#48b5c4'],
+      ['#135a5a','#062424','#e0b25e'], ['#6a1f33','#240910','#48b5c4'], ['#233d78','#0b1430','#e39a6d']
+    ]);
+    const G = '#d9b36e', k = pick(r, [6, 8, 8, 10, 12, 16]);
+    defs = `<radialGradient id="${u}m" cx="50%" cy="50%" r="70%"><stop offset="0" stop-color="${pal[0]}"/><stop offset="1" stop-color="${pal[1]}"/></radialGradient>`;
+    let m = `<circle r="88" fill="none" stroke="${G}" stroke-opacity=".45"/>` +
+            `<circle r="81" fill="none" stroke="${G}" stroke-width="1.5" stroke-dasharray=".5 6" stroke-linecap="round"/>`;
+    for(let i = 0; i < k; i++){
+      const a = i * 360 / k;
+      m += `<ellipse transform="rotate(${a})" cy="-52" rx="${f1(64/k + 3)}" ry="24" fill="${G}" fill-opacity=".08" stroke="${G}" stroke-width="1"/>`;
+      m += `<rect transform="rotate(${a + 180/k}) translate(0 -72) rotate(45)" x="-3" y="-3" width="6" height="6" fill="${pal[2]}"/>`;
+    }
+    m += `<path d="${starPath(k, 42, 24)}" fill="${pal[1]}" stroke="${G}" stroke-width="1.4"/>`;
+    m += `<path d="${starPath(k, 30, 17)}" transform="rotate(${180/k})" fill="none" stroke="${pal[2]}" stroke-width="1.2"/>`;
+    m += `<circle r="12" fill="${G}" fill-opacity=".18" stroke="${G}"/><circle r="4" fill="${G}"/>`;
+    let corners = '';
+    [[0,0],[200,0],[0,250],[200,250]].forEach(([x,y]) => {
+      corners += `<circle cx="${x}" cy="${y}" r="34" fill="none" stroke="${G}" stroke-opacity=".3"/><circle cx="${x}" cy="${y}" r="24" fill="${pal[2]}" fill-opacity=".15"/>`;
+    });
+    body =
+      `<rect width="200" height="250" fill="url(#${u}m)"/>` + corners +
+      `<path d="M0 30H200M0 220H200" stroke="${G}" stroke-opacity=".18"/>` +
+      `<g transform="translate(100 135)"><g class="spin">${hub}${m}</g></g>`;
+  }
+  return `<svg class="art art-${kind}" viewBox="0 0 200 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>${defs}</defs>${body}</svg>`;
+}
+
+/* ---------- hero rosette (girih) ---------- */
+(function buildRosette(){
+  let a = '<circle r="98" fill="none"/>', b = '<circle r="60" fill="none"/>';
+  for(let i = 0; i < 16; i++){
+    a += `<ellipse transform="rotate(${i*22.5})" cy="-62" rx="10" ry="34" fill="none" stroke="#d4ad6a" stroke-width=".5"/>`;
+  }
+  a += `<path d="${starPath(16, 96, 78)}" fill="none" stroke="#d4ad6a" stroke-width=".5"/>`;
+  a += `<circle r="92" fill="none" stroke="#d4ad6a" stroke-width=".4" stroke-dasharray="1 3"/>`;
+  b += `<path d="${starPath(8, 58, 30)}" fill="none" stroke="#d4ad6a" stroke-width=".6"/>`;
+  b += `<path d="${starPath(8, 58, 30)}" transform="rotate(22.5)" fill="none" stroke="#d4ad6a" stroke-width=".4"/>`;
+  b += `<circle r="22" fill="none" stroke="#d4ad6a" stroke-width=".5"/>`;
+  $('#rosA').innerHTML = a;
+  $('#rosB').innerHTML = b;
+})();
+
+/* =========================================================
+   Render
+   ========================================================= */
+const ARCH_PATH = 'M0 125V50C0 22 27 9 50 0c23 9 50 22 50 50v75z';
+let SECTIONS = [], NAVBTNS = [], ITEMS_BY_ID = {};
+
+function render(data){
+  const name = data.restaurant || 'منو';
+  $('#restaurant-title').textContent = name;
+  $('#intro-name').textContent = name;
+  $('#footer-name').textContent = name;
+  document.title = 'منوی آنلاین ' + name;
+
+  const rail = $('#rail');
+  const main = $('#menu');
+  rail.querySelectorAll('button').forEach(b => b.remove());
+  main.innerHTML = '';
+  SECTIONS = []; NAVBTNS = [];
+
+  const byCategory = {};
+  data.categories.forEach(c => byCategory[c] = []);
+  data.items.forEach(it => {
+    if(!byCategory[it.category]) byCategory[it.category] = [];
+    byCategory[it.category].push(it);
+  });
+  const cats = Object.keys(byCategory).filter(c => byCategory[c].length);
+
+  $('#hero-count').innerHTML = `<span>${faNum(cats.length)} تالار</span><span class="sep">✦</span><span>${faNum(data.items.length)} اثر</span>`;
+  const words = cats.map(c => `<span>${esc(c)}</span>`).join('');
+  $('#ribbon').innerHTML = words + words + words + words;
+
+  let exhibitNo = 0;
+  cats.forEach((cat, idx) => {
+    const items = byCategory[cat];
+    const st = styleFor(cat, idx);
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = cat;
+    btn.addEventListener('click', () => {
+      document.getElementById('cat-' + idx).scrollIntoView({behavior: REDUCED ? 'auto' : 'smooth', block:'start'});
+    });
+    rail.appendChild(btn);
+    NAVBTNS.push(btn);
+
+    const section = document.createElement('section');
+    section.className = 'category';
+    section.id = 'cat-' + idx;
+    section.style.setProperty('--accent', st.accent);
+    section.dataset.accent = st.accent;
+
+    const available = items.filter(i => i.available).length;
+    section.innerHTML =
+      `<div class="sec-head">
+         <div class="numeral" aria-hidden="true">${faNum(idx + 1)}</div>
+         <div class="emblem" aria-hidden="true"><svg viewBox="0 0 48 48">${EMBLEMS[st.emblem] || EMBLEMS.espresso}</svg></div>
+         <h2>${esc(cat)}</h2>
+         <div class="meta"><i></i><span>تالار <b>${faNum(idx + 1)}</b></span><span class="sep">✦</span><span>${faNum(available)} از ${faNum(items.length)} اثر</span><i></i></div>
+       </div>`;
+
+    const list = document.createElement('div');
+    list.className = 'items';
+
+    items.forEach((it, j) => {
+      exhibitNo++;
+      ITEMS_BY_ID[it.id] = {item: it, cat, st, no: exhibitNo};
+
+      const card = document.createElement('article');
+      card.className = 'card' + (it.available ? '' : ' off');
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.dataset.id = it.id;
+      card.style.setProperty('--d', ((j % 4) * 0.09) + 's');
+      card.setAttribute('aria-label', it.title + (it.available ? ' — ' + formatPrice(it.price) + ' تومان' : ' — ناموجود'));
+
+      const usesArt = ART_FOR_PLACEHOLDER && (!it.image || it.image === FALLBACK_IMG);
+      card.innerHTML =
+        `<div class="tilt">
+           <div class="frame">
+             <div class="arch">${usesArt ? artSVG(it, st.art) : ''}<div class="shade"></div></div>
+             <svg class="outline" viewBox="0 0 100 125" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="${ARCH_PATH}"/></svg>
+             <span class="keystone" aria-hidden="true"></span>
+             ${it.available ? '' : '<span class="seal" aria-hidden="true">تمام شد</span>'}
+           </div>
+           <div class="label">
+             <span class="no">اثر ${faNum(String(exhibitNo).padStart(3, '0'))}</span>
+             <h3></h3>
+             <div class="price"><b>${formatPrice(it.price)}</b><small>تومان</small></div>
+             <div class="gone">ناموجود</div>
+           </div>
+         </div>`;
+      card.querySelector('h3').textContent = it.title;
+
+      if(!usesArt){
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.alt = it.title;
+        img.addEventListener('load', () => img.classList.add('loaded'));
+        img.addEventListener('error', function onErr(){
+          img.removeEventListener('error', onErr);
+          if(ART_FOR_PLACEHOLDER){
+            img.insertAdjacentHTML('afterend', artSVG(it, st.art));
+            img.remove();
+          } else if(img.src.indexOf(FALLBACK_IMG) === -1){
+            img.src = FALLBACK_IMG;
+          }
+        });
+        img.src = it.image;
+        card.querySelector('.arch').prepend(img);
+      }
+
+      list.appendChild(card);
+    });
+
+    section.appendChild(list);
+    main.appendChild(section);
+    SECTIONS.push(section);
+  });
+
+  setupObservers();
+  onScroll();
+  requestAnimationFrame(movePill);
+}
+
+/* =========================================================
+   Reveal on scroll
+   ========================================================= */
+function setupObservers(){
+  const cards = document.querySelectorAll('.card');
+  if(!('IntersectionObserver' in window) || REDUCED){
+    SECTIONS.forEach(s => s.classList.add('seen'));
+    cards.forEach(c => c.classList.add('in'));
+    $('#footer').classList.add('seen');
+    return;
+  }
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add(e.target.classList.contains('card') ? 'in' : 'seen');
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold:.15, rootMargin:'0px 0px -30px 0px'});
+  SECTIONS.forEach(s => io.observe(s));
+  cards.forEach(c => io.observe(c));
+  io.observe($('#footer'));
+}
+
+/* =========================================================
+   Scroll: nav scroll-spy, gold pill, progress, tint
+   ========================================================= */
+let activeIdx = -1, ticking = false;
+function movePill(){
+  const btn = NAVBTNS[Math.max(activeIdx, 0)];
+  const pill = $('#pill');
+  if(!btn) return;
+  pill.style.left = btn.offsetLeft + 'px';
+  pill.style.width = btn.offsetWidth + 'px';
+}
+function setActive(i){
+  if(i === activeIdx) return;
+  activeIdx = i;
+  NAVBTNS.forEach((b, k) => b.classList.toggle('active', k === i));
+  movePill();
+  const btn = NAVBTNS[i], nav = $('#catnav');
+  if(btn){
+    const nb = btn.getBoundingClientRect(), nr = nav.getBoundingClientRect();
+    nav.scrollBy({left:(nb.left + nb.width/2) - (nr.left + nr.width/2), behavior: REDUCED ? 'auto' : 'smooth'});
+  }
+  const acc = SECTIONS[i] && SECTIONS[i].dataset.accent;
+  if(acc) document.documentElement.style.setProperty('--tint', acc);
+}
+function onScroll(){
+  ticking = false;
+  let cur = 0;
+  SECTIONS.forEach((sec, i) => { if(sec.getBoundingClientRect().top - 140 <= 0) cur = i; });
+  setActive(cur);
+
+  const max = document.documentElement.scrollHeight - innerHeight;
+  const p = max > 0 ? Math.min(1, scrollY / max) : 0;
+  $('#progress').style.setProperty('--p', p.toFixed(4));
+  const tt = $('#toTop');
+  tt.style.setProperty('--p', p.toFixed(4));
+  tt.classList.toggle('show', scrollY > innerHeight * .9);
+}
+addEventListener('scroll', () => { if(!ticking){ ticking = true; requestAnimationFrame(onScroll); } }, {passive:true});
+addEventListener('resize', () => requestAnimationFrame(movePill));
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(movePill);
+
+$('#toTop').addEventListener('click', () => scrollTo({top:0, behavior: REDUCED ? 'auto' : 'smooth'}));
+$('#scrollCue').addEventListener('click', () => $('#catnav').scrollIntoView({behavior: REDUCED ? 'auto' : 'smooth'}));
+
+/* =========================================================
+   Card tilt + sheen (mouse only)
+   ========================================================= */
+if(FINE && !REDUCED){
+  document.addEventListener('pointermove', e => {
+    const card = e.target.closest && e.target.closest('.card');
+    document.querySelectorAll('.card.tilting').forEach(c => { if(c !== card){ c.classList.remove('tilting'); resetTilt(c); } });
+    if(!card) return;
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    card.classList.add('tilting');
+    card.style.setProperty('--ry', ((x - .5) * 14).toFixed(2) + 'deg');
+    card.style.setProperty('--rx', ((.5 - y) * 10).toFixed(2) + 'deg');
+    card.style.setProperty('--sx', (x * 100).toFixed(1) + '%');
+    card.style.setProperty('--sy', (y * 100).toFixed(1) + '%');
+  }, {passive:true});
+  document.addEventListener('pointerleave', () => document.querySelectorAll('.card.tilting').forEach(resetTilt));
+}
+function resetTilt(c){
+  c.classList.remove('tilting');
+  c.style.setProperty('--rx', '0deg');
+  c.style.setProperty('--ry', '0deg');
+}
+
+/* spotlight that follows the mouse like gallery lighting */
+if(FINE){
+  const root = document.documentElement;
+  addEventListener('pointermove', e => {
+    root.style.setProperty('--mx', e.clientX + 'px');
+    root.style.setProperty('--my', e.clientY + 'px');
+  }, {passive:true});
+}
+
+/* touch: a drop of milk ripples wherever you tap */
+if(!REDUCED){
+  addEventListener('pointerdown', e => {
+    if(e.pointerType === 'mouse' && e.button !== 0) return;
+    ['', ' r2'].forEach(cls => {
+      const d = document.createElement('span');
+      d.className = 'ripple' + cls;
+      d.style.left = e.clientX + 'px';
+      d.style.top = e.clientY + 'px';
+      document.body.appendChild(d);
+      setTimeout(() => d.remove(), 1200);
+    });
+  }, {passive:true});
+}
+
+/* =========================================================
+   Viewer
+   ========================================================= */
+const viewer = $('#viewer');
+let viewerOpen = false, lastFocus = null;
+
+function openViewer(card){
+  const rec = ITEMS_BY_ID[card.dataset.id];
+  if(!rec) return;
+  const {item, cat, st, no} = rec;
+  const rect = card.querySelector('.frame').getBoundingClientRect();
+  viewer.style.setProperty('--ox', (rect.left + rect.width/2) + 'px');
+  viewer.style.setProperty('--oy', (rect.top + rect.height/2) + 'px');
+  viewer.style.setProperty('--vaccent', st.accent);
+  viewer.classList.toggle('hot', !!st.hot && item.available);
+
+  const art = $('#vart');
+  const src = card.querySelector('.arch');
+  art.innerHTML = '';
+  const media = src.querySelector('img, svg.art');
+  if(media) art.appendChild(media.cloneNode(true));
+  if(!item.available && art.firstChild) art.firstChild.style.filter = 'grayscale(.9) brightness(.6)';
+
+  $('#vcat').textContent = cat;
+  $('#vtitle').textContent = item.title;
+  const vp = $('#vprice');
+  if(item.available){
+    vp.className = 'vprice';
+    vp.innerHTML = `${formatPrice(item.price)}<small>تومان</small>`;
+  } else {
+    vp.className = 'vprice gone';
+    vp.textContent = 'فعلاً ناموجود';
+  }
+  $('#vno').textContent = 'اثر شماره ' + faNum(String(no).padStart(3, '0'));
+
+  lastFocus = card;
+  viewer.hidden = false;
+  document.body.classList.add('locked');
+  void viewer.offsetWidth;
+  viewer.classList.add('open');
+  viewerOpen = true;
+  history.pushState({viewer:true}, '');
+  viewer.querySelector('.close').focus({preventScroll:true});
+}
+
+function closeViewer(fromPop){
+  if(!viewerOpen) return;
+  viewerOpen = false;
+  viewer.classList.remove('open');
+  document.body.classList.remove('locked');
+  setTimeout(() => { if(!viewerOpen) viewer.hidden = true; }, REDUCED ? 0 : 750);
+  if(!fromPop && history.state && history.state.viewer) history.back();
+  if(lastFocus) lastFocus.focus({preventScroll:true});
+}
+
+document.addEventListener('click', e => {
+  const card = e.target.closest('.card');
+  if(card) openViewer(card);
+});
+document.addEventListener('keydown', e => {
+  if(viewerOpen && e.key === 'Escape') closeViewer();
+  const card = e.target.closest && e.target.closest('.card');
+  if(card && (e.key === 'Enter' || e.key === ' ')){ e.preventDefault(); openViewer(card); }
+});
+viewer.addEventListener('click', e => { if(!e.target.closest('.vframe')) closeViewer(); });
+addEventListener('popstate', () => closeViewer(true));
+
+/* =========================================================
+   Gold dust — slow embers rising through the room
+   ========================================================= */
+(function dust(){
+  const cv = $('#dust'), ctx = cv.getContext('2d');
+  let W, H, DPR, motes = [], running = true, lastY = scrollY, drift = 0;
+  function size(){
+    DPR = Math.min(devicePixelRatio || 1, 2);
+    W = cv.width = innerWidth * DPR;
+    H = cv.height = innerHeight * DPR;
+    const n = Math.round(Math.min(90, innerWidth * innerHeight / 14000));
+    motes = Array.from({length:n}, () => spawn(true));
+  }
+  function spawn(anywhere){
+    return {
+      x: Math.random() * W,
+      y: anywhere ? Math.random() * H : H + 10,
+      r: (Math.random() * 1.4 + .3) * DPR,
+      vy: (Math.random() * .25 + .06) * DPR,
+      ph: Math.random() * Math.PI * 2,
+      sp: Math.random() * .02 + .005,
+      hue: Math.random() < .15 ? 'rgba(246,238,225,' : 'rgba(226,190,120,'
+    };
+  }
+  function frame(){
+    if(!running) return;
+    ctx.clearRect(0, 0, W, H);
+    const dy = scrollY - lastY; lastY = scrollY;
+    drift += (dy * .35 - drift) * .08;
+    ctx.globalCompositeOperation = 'lighter';
+    for(const m of motes){
+      m.ph += m.sp;
+      m.y -= m.vy + drift * DPR * .15;
+      m.x += Math.sin(m.ph) * .25 * DPR;
+      if(m.y < -10){ Object.assign(m, spawn(false)); }
+      if(m.y > H + 20){ m.y = -5; }
+      const a = (.35 + Math.sin(m.ph * 2) * .3);
+      ctx.beginPath();
+      ctx.fillStyle = m.hue + (a * .18).toFixed(3) + ')';
+      ctx.arc(m.x, m.y, m.r * 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.fillStyle = m.hue + a.toFixed(3) + ')';
+      ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  size();
+  addEventListener('resize', size);
+  if(REDUCED){ running = true; frame(); running = false; return; }
+  document.addEventListener('visibilitychange', () => {
+    running = !document.hidden;
+    if(running){ lastY = scrollY; requestAnimationFrame(frame); }
+  });
+  requestAnimationFrame(frame);
+})();
+
+/* =========================================================
+   Load data, then open the curtain
+   ========================================================= */
+fetch('items.json')
+  .then(r => { if(!r.ok) throw new Error('no items.json'); return r.json(); })
+  .then(render)
+  .catch(() => render(EMBEDDED_DATA));
+
+(function intro(){
+  const el = $('#intro');
+  let opened = false;
+  function open(){
+    if(opened) return;
+    opened = true;
+    el.classList.add('open');
+    document.body.classList.remove('locked');
+    document.body.classList.add('ready');
+    setTimeout(() => el.remove(), 1400);
+  }
+  if(REDUCED){ el.remove(); document.body.classList.remove('locked'); document.body.classList.add('ready'); return; }
+  const t0 = performance.now();
+  const whenLoaded = () => setTimeout(open, Math.max(0, 2300 - (performance.now() - t0)));
+  if(document.readyState === 'complete') whenLoaded(); else addEventListener('load', whenLoaded);
+  setTimeout(open, 4200);           // never keep guests waiting
+  el.addEventListener('click', open); // tap to skip
+})();
+</script>
+
+</body>
+</html>
