@@ -1,8 +1,8 @@
 {
   "restaurant": "کافه آتزوری",
   "latin": "Caffè Azzurri",
-  "tagline": "لیست غذاها و نوشیدنی‌ها با قیمت روز",
-  "address": "بلوار فردوس شرق",
+  "tagline": "لحظه‌های خاص با نوشیدنی‌های خاص.",
+  "address": "کریمخان، به آفرین",
   "currency": "تومان",
   "categories": [
     {
@@ -479,7 +479,7 @@
       "description": "",
       "price": 220000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "mocktail-hurricane",
       "artColor": "#ff5a2a"
     },
@@ -543,7 +543,7 @@
       "description": "",
       "price": 236000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "shake-oreo"
     },
     {
@@ -593,7 +593,7 @@
       "description": "",
       "price": 489000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "shake-coffee"
     },
     {
@@ -603,7 +603,7 @@
       "description": "",
       "price": 205000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "croissant-chocolate"
     },
     {
@@ -613,7 +613,7 @@
       "description": "",
       "price": 310000,
       "image": "assets/MainImage_d98ee6a0.jpg",
-      "available": false,
+      "available": true,
       "art": "croissant-almond"
     },
     {
@@ -623,7 +623,7 @@
       "description": "",
       "price": 130000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "croissant"
     },
     {
@@ -633,7 +633,7 @@
       "description": "",
       "price": 139000,
       "image": "assets/MainImage_a3a01fc6.jpg",
-      "available": false,
+      "available": true,
       "art": "kouign-amann"
     },
     {
@@ -643,7 +643,7 @@
       "description": "",
       "price": 209000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "choco-twist"
     },
     {
@@ -663,7 +663,7 @@
       "description": "",
       "price": 330000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "cinnamon-roll"
     },
     {
@@ -673,7 +673,7 @@
       "description": "",
       "price": 169000,
       "image": "assets/MainImage_338e2527.jpg",
-      "available": false,
+      "available": true,
       "art": "pastel-nata"
     },
     {
@@ -693,7 +693,7 @@
       "description": "",
       "price": 149000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "cookie-ny"
     },
     {
@@ -703,7 +703,7 @@
       "description": "",
       "price": 189000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "cake-mocha"
     },
     {
@@ -713,7 +713,7 @@
       "description": "",
       "price": 199000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "dessert-cup"
     },
     {
@@ -723,7 +723,7 @@
       "description": "",
       "price": 139000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "cookie-lemon"
     },
     {
@@ -733,7 +733,7 @@
       "description": "",
       "price": 189000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "brownie"
     },
     {
@@ -743,7 +743,7 @@
       "description": "",
       "price": 129000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "cake-walnut"
     },
     {
@@ -753,7 +753,7 @@
       "description": "",
       "price": 169000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "cake-tresleches"
     },
     {
@@ -763,7 +763,7 @@
       "description": "",
       "price": 149000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "cake-redvelvet"
     },
     {
@@ -773,7 +773,7 @@
       "description": "",
       "price": 149000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "cake-apple"
     },
     {
@@ -783,7 +783,7 @@
       "description": "",
       "price": 238000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "toast"
     },
     {
@@ -793,7 +793,7 @@
       "description": "",
       "price": 214000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "egg-skillet"
     },
     {
@@ -803,7 +803,7 @@
       "description": "",
       "price": 359000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "focaccia"
     },
     {
@@ -893,7 +893,7 @@
       "description": "",
       "price": 39000,
       "image": "assets/place-holder.jpg",
-      "available": false,
+      "available": true,
       "art": "nabat"
     }
   ]

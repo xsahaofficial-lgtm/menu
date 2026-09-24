@@ -438,6 +438,74 @@ function glassTop(c, o){
   return s;
 }
 
+
+function cup34(c, o){
+  const col = o.color || c.pick(PORCELAIN);
+  const sc = c.chance(.6) ? col : c.pick(PORCELAIN);
+  const rx = o.rx || 50, top = o.top || 118, ry = n1(rx * .3), bot = o.bot || 190;
+  const shape = o.shape || c.pick(['round', 'tulip', 'straight']);
+  let s = shadow(c, CX + 4, 204, 86, 14, .6);
+  s += `<ellipse cx="${CX}" cy="196" rx="80" ry="18" fill="${c.hcyl(sc, .8)}"/><ellipse cx="${CX}" cy="193" rx="62" ry="12" fill="${darken(sc, .12)}"/>`;
+  if(c.chance(.45)) s += `<ellipse cx="${CX}" cy="196" rx="77" ry="16" fill="none" stroke="${GOLD}" stroke-width="1.3"/>`;
+  if(o.onSaucer) s += o.onSaucer;
+  s += `<path d="M${CX + rx - 5} ${top + 16}c28-6 32 36 2 42" stroke="${c.hcyl(col)}" stroke-width="9" fill="none" stroke-linecap="round"/>`;
+  let body;
+  if(shape === 'tulip') body = `M${CX - rx} ${top}C${CX - rx} ${top + 20} ${CX - rx * .62} ${top + 30} ${CX - rx * .62} ${bot - 22}Q${CX - rx * .6} ${bot} ${CX} ${bot}Q${CX + rx * .6} ${bot} ${CX + rx * .62} ${bot - 22}C${CX + rx * .62} ${top + 30} ${CX + rx} ${top + 20} ${CX + rx} ${top}Z`;
+  else if(shape === 'straight') body = `M${CX - rx} ${top}L${CX - rx * .78} ${bot - 8}Q${CX - rx * .76} ${bot} ${CX - rx * .6} ${bot}H${CX + rx * .6}Q${CX + rx * .76} ${bot} ${CX + rx * .78} ${bot - 8}L${CX + rx} ${top}Z`;
+  else body = `M${CX - rx} ${top}C${CX - rx} ${bot - 26} ${CX - rx * .55} ${bot} ${CX} ${bot}S${CX + rx} ${bot - 26} ${CX + rx} ${top}Z`;
+  s += `<path d="${body}" fill="${c.hcyl(col)}"/>`;
+  const deco = c.int(0, 4);
+  const bc = c.clip(`<path d="${body}"/>`);
+  if(deco === 1) s += `<g clip-path="${bc}"><rect x="0" y="${top + 14}" width="200" height="3" fill="${GOLD}"/></g>`;
+  if(deco === 2) s += `<g clip-path="${bc}"><rect x="0" y="${top + 18}" width="200" height="9" fill="${c.pick(['#2d5f9a', '#b8613b', '#1f6f78', '#7a2e3a'])}" opacity=".85"/></g>`;
+  if(deco === 3){ let d = ''; for(let i = 0; i < 9; i++) d += `<circle cx="${n1(CX - rx + 10 + i * (rx * 2 - 20) / 8)}" cy="${top + 22}" r="2.2"/>`; s += `<g clip-path="${bc}" fill="${c.pick(['#2d5f9a', GOLD, '#b8613b'])}">${d}</g>`; }
+  s += `<path d="M${CX - rx + 8} ${top + 14}C${CX - rx + 8} ${top + 40} ${CX - rx + 16} ${bot - 30} ${CX - rx * .4} ${bot - 12}" stroke="#fff" stroke-opacity=".35" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+  s += `<ellipse cx="${CX}" cy="${top}" rx="${rx}" ry="${ry}" fill="${lighten(col, .3)}"/>`;
+  s += `<ellipse cx="${CX}" cy="${top + .6}" rx="${rx - 3.5}" ry="${n1(ry - 1.4)}" fill="${darken(col, .3)}"/>`;
+  const lr = rx - 6, lry = n1(ry - 2.6);
+  s += `<ellipse cx="${CX}" cy="${top + 1.6}" rx="${lr}" ry="${lry}" fill="${o.liquid}"/>`;
+  if(o.art){
+    const cl = c.id();
+    c.defs.push(`<clipPath id="${cl}"><circle r="${lr}"/></clipPath>`);
+    s += `<g transform="translate(${CX} ${top + 1.6}) scale(1 ${n1(lry / lr * 100) / 100})"><g clip-path="url(#${cl})"><g class="az-spin"><circle r="${lr}" fill="none"/>${o.art}</g></g></g>`;
+  }
+  if(o.steam !== false) s += steam(c, CX, top - 8, 3, 14);
+  return `<g transform="translate(${CX} 204) scale(1.16) translate(${-CX} -204)">${s}</g>`;
+}
+
+function glass34(c, o){
+  const top = o.top || 88, rx = o.rx || 40, ry = n1(rx * .28), bot = 198, brx = rx - 6;
+  const body = `M${CX - rx} ${top}L${CX - brx} ${bot - 8}Q${CX - brx} ${bot} ${CX - brx + 8} ${bot}H${CX + brx - 8}Q${CX + brx} ${bot} ${CX + brx} ${bot - 8}L${CX + rx} ${top}Z`;
+  let s = shadow(c, CX + 4, bot + 4, rx + 30, 10, .6);
+  if(o.handle) s += `<path d="M${CX + rx - 3} ${top + 22}c30-2 32 58 0 62" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="9"/><path d="M${CX + rx - 3} ${top + 22}c30-2 32 58 0 62" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="3" transform="translate(2 0)"/>`;
+  const lt = top + (o.gap || 10);
+  const clip = c.clip(`<path d="${body}"/>`);
+  const stops = [];
+  let acc = 0;
+  const layers = o.layers;
+  const tot = layers.reduce((a, l) => a + l[1], 0);
+  layers.forEach((l, i) => {
+    const f0 = acc / tot, f1 = (acc + l[1]) / tot;
+    stops.push([n1(Math.min(1, f0 + .03) * 100) / 100, l[0]], [n1(Math.max(0, f1 - .03) * 100) / 100, l[0]]);
+    acc += l[1];
+  });
+  const lw = rx - (lt - top) * (6 / (bot - top));
+  s += `<g clip-path="${clip}"><rect x="0" y="${lt}" width="200" height="${bot - lt + 2}" fill="${c.lin(stops)}"/>${o.inside || ''}</g>`;
+  s += `<ellipse cx="${CX}" cy="${lt}" rx="${n1(lw - 1)}" ry="${n1(ry * .9)}" fill="${layers[0][0]}"/>`;
+  if(o.art){
+    const lr = lw - 2, lry = n1(ry * .9 - .6);
+    const cl = c.id();
+    c.defs.push(`<clipPath id="${cl}"><circle r="${n1(lr)}"/></clipPath>`);
+    s += `<g transform="translate(${CX} ${lt}) scale(1 ${n1(lry / lr * 100) / 100})"><g clip-path="url(#${cl})"><g class="az-spin"><circle r="${n1(lr)}" fill="none"/>${o.art}</g></g></g>`;
+  }
+  s += `<path d="${body}" fill="${c.glass()}" stroke="rgba(255,255,255,.55)" stroke-width="2"/>`;
+  s += `<path d="M${CX - rx + 8} ${top + 12}L${CX - brx + 7} ${bot - 16}" stroke="#fff" stroke-opacity=".4" stroke-width="3" stroke-linecap="round"/>`;
+  s += `<path d="M${CX - brx + 4} ${bot - 3}H${CX + brx - 4}" stroke="rgba(255,255,255,.4)" stroke-width="5" stroke-linecap="round"/>`;
+  s += `<ellipse cx="${CX}" cy="${top}" rx="${rx}" ry="${ry}" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.8"/>`;
+  if(o.steam !== false) s += steam(c, CX, top - 8, 2, 16);
+  return `<g transform="translate(${CX} 204) scale(1.08) translate(${-CX} -204)">${s}</g>`;
+}
+
 function latteStyle(kind, tone, extra){
   return c => {
     const t = TONES[tone] || TONES.coffee;
@@ -512,21 +580,32 @@ def('americano', 'قهوه گرم', 'آمریکانو (ماگ بزرگ)', c => {
 });
 
 def('latte-rosetta', 'قهوه گرم', 'لاته آرت روزتا', latteStyle('rosetta', 'coffee'));
-def('latte-tulip', 'قهوه گرم', 'لاته آرت تولیپ', latteStyle('tulip', 'coffee2'));
-def('latte-heart', 'قهوه گرم', 'لاته آرت قلب', latteStyle('heart', 'coffee'));
+def('latte-tulip', 'قهوه گرم', 'لاته لایه‌ای در لیوان شیشه‌ای', c => {
+  let s = backdrop(c) + floor(c);
+  const t = TONES.coffee2;
+  s += glass34(c, { handle: c.chance(.5), top: c.rand(84, 96), rx: c.rand(38, 42), layers: [['#fbf1e0', 1.2], ['#c9905a', 1], ['#e9d3b4', 1.6], ['#f6ecdb', 2.2]], art: latteArt(c, c.pick(['tulip', 'rosetta', 'heart']), 38, t[1], t[0][1]) });
+  if(c.chance(.6)) s += spoon(c, CX + c.pick([-62, 62]), 214, c.pick([0, 180]), .7);
+  s += beansAround(c, c.int(0, 2), 70, 92, CX, 214);
+  return s;
+});
+def('latte-heart', 'قهوه گرم', 'لاته قلب در فنجان (نمای کنار)', c => {
+  let s = backdrop(c) + floor(c);
+  const t = TONES[c.pick(['coffee', 'coffee2'])];
+  s += cup34(c, { liquid: toneFill(c, t), art: latteArt(c, c.pick(['heart', 'nested']), 44, t[1], t[0][1]), rx: c.rand(48, 54), top: c.rand(114, 122) });
+  s += beansAround(c, c.int(1, 3), 70, 92, CX, 214);
+  return s;
+});
 def('latte-swan', 'قهوه گرم', 'لاته آرت قو', latteStyle('swan', 'coffee2'));
 def('latte-web', 'قهوه گرم', 'لاته آرت حلقه‌ای', latteStyle('web', 'coffee'));
 def('latte-wing', 'قهوه گرم', 'لاته آرت پَر', latteStyle('wing', 'coffee2'));
 
-def('flatwhite', 'قهوه گرم', 'فلت وایت (لیوان شیشه‌ای)', c => {
-  let s = backdrop(c);
+def('flatwhite', 'قهوه گرم', 'فلت وایت (فنجان کوچک از کنار)', c => {
+  let s = backdrop(c) + floor(c);
   const t = TONES.dark;
-  s += glassTop(c, { R: 54, liquid: toneFill(c, t), inner: latteArt(c, c.pick(['heart', 'tulip', 'nested', 'rosetta']), 40, t[1], t[0][1]) });
-  if(c.chance(.6)) s += spoon(c, c.pick([34, 166]), c.pick([46, 206]), c.rand(0, 360), .7);
-  s += beansAround(c, c.int(1, 4), 95, 108);
+  const sa = c.chance(.5) ? sugarCube(c, CX - 58, 194, c.rand(0, 40), .6) : bean(c, CX - 60, 196, c.rand(0, 360), .8) + bean(c, CX - 50, 200, c.rand(0, 360), .7);
+  s += cup34(c, { rx: c.rand(40, 44), top: c.rand(130, 136), bot: 188, shape: c.pick(['tulip', 'round']), liquid: toneFill(c, t), art: latteArt(c, c.pick(['tulip', 'rosetta', 'heart']), 38, t[1], t[0][1]), onSaucer: sa });
   return s;
 });
-
 def('cappuccino', 'قهوه گرم', 'کاپوچینو با پودر کاکائو', c => {
   let s = backdrop(c);
   const cocoa = c.pick(['#6b3a1f', '#4e2a15', '#7a4a2a']);
@@ -680,38 +759,32 @@ def('hot-chocolate', 'نوشیدنی گرم', 'هات چاکلت با مارشم
 });
 
 def('pink-chocolate', 'نوشیدنی گرم', 'پینک چاکلت', c => {
-  let s = backdrop(c, c.pick(['#4b1628', '#3a1d2e', '#1c3a5e']));
+  let s = backdrop(c, c.pick(['#4b1628', '#3a1d2e', '#1c3a5e', '#1f4e8c'])) + floor(c);
   const t = TONES.pink;
-  let inner = latteArt(c, c.pick(['heart', 'nested', 'tulip']), 49, t[1], t[0][1]);
-  inner += sprinkles(c, 24, -40, 40, -40, 40);
-  s += cupTop(c, { R: 60, color: c.pick(['#f3ece1', '#f7d7de', '#fbf6ef', '#2d5f9a']), liquid: toneFill(c, t), inner });
-  for(let i = 0; i < 5; i++){ const a = c.rand(0, 6.28); s += `<rect x="${n1(CX + Math.cos(a) * 98)}" y="${n1(CY + Math.sin(a) * 98)}" width="10" height="4" rx="2" fill="#fbf2e4" transform="rotate(${c.int(0, 180)} ${n1(CX + Math.cos(a) * 98)} ${n1(CY + Math.sin(a) * 98)})"/>`; }
+  const art = latteArt(c, c.pick(['heart', 'nested']), 40, t[1], t[0][1]) + sprinkles(c, 22, -40, 40, -40, 40);
+  if(c.chance(.5)) s += glass34(c, { handle: true, layers: [['#fff3f6', .8], ['#f6b3c6', 2], ['#e88aa6', 1.4]], art });
+  else s += cup34(c, { color: c.pick(['#f3ece1', '#f7d7de', '#fbf6ef']), liquid: toneFill(c, t), art });
+  for(let i = 0; i < 4; i++){ const x = c.pick([30, 44, 156, 170]) + c.rand(-6, 6), y = 214 + c.rand(-6, 6); s += `<rect x="${n1(x)}" y="${n1(y)}" width="10" height="4" rx="2" fill="#fbf2e4" transform="rotate(${c.int(0, 180)} ${n1(x)} ${n1(y)})"/>`; }
   return s;
 });
-
 def('matcha', 'نوشیدنی گرم', 'ماچا لاته', c => {
-  let s = backdrop(c, c.pick(['#243b2f', '#27361c', '#0e3b3b', '#2a1a11']));
+  let s = backdrop(c, c.pick(['#243b2f', '#27361c', '#0e3b3b', '#1b4470', '#5a6b3a'])) + floor(c);
   const t = TONES.matcha;
-  s += cupTop(c, { R: 60, color: c.pick(['#f3ece1', '#232120', '#efe0c2', '#8ea888']), liquid: toneFill(c, t), inner: latteArt(c, c.pick(['rosetta', 'tulip', 'swan', 'wing']), 49, t[1], t[0][1]) });
-  const wx = c.pick([36, 164]), wy = c.pick([48, 206]);
-  let whisk = `<g transform="translate(${wx} ${wy}) rotate(${c.int(-30, 30)})"><path d="M-12 10Q-14-10 0-14 14-10 12 10Z" fill="#e9d8a6"/>`;
-  for(let i = -10; i <= 10; i += 3) whisk += `<path d="M${i} 10Q${i * .9} -4 0 -12" stroke="#c7b27a" stroke-width=".8" fill="none"/>`;
-  whisk += `<rect x="-5" y="10" width="10" height="22" rx="2" fill="#d9c38a"/></g>`;
-  s += whisk + dust(c, 20, c.pick([40, 160]), c.pick([210, 40]), 10, '#7aa640', .8, 1.4);
+  const glass = c.chance(.6);
+  if(glass) s += glass34(c, { handle: c.chance(.5), top: c.rand(86, 96), layers: [['#f7f5e4', .6], ['#a3c872', 1.4], ['#7fa84a', 1], ['#f4f1e2', 2]], art: latteArt(c, c.pick(['rosetta', 'tulip', 'heart']), 38, t[1], t[0][1]) });
+  else s += cup34(c, { color: c.pick(['#232120', '#efe0c2', '#8ea888', '#f3ece1']), shape: 'straight', liquid: toneFill(c, t), art: latteArt(c, c.pick(['rosetta', 'swan', 'wing']), 44, t[1], t[0][1]) });
+  const wx = c.pick([34, 166]), wy = 218;
+  s += `<g transform="translate(${wx} ${wy})">${shadow(c, 0, 4, 22, 6, .45)}<path d="M-18 2Q-12-12 0-13 12-12 18 2Z" fill="${c.rad([[0, '#b7d67a'], [1, '#6e9a3f']], .45, .3, .8)}"/><path d="M-26 -2L10 -16" stroke="#d9c38a" stroke-width="3" stroke-linecap="round"/></g>` + dust(c, 16, wx, wy - 2, 20, '#7aa640', .9, 1.3);
   return s;
 });
-
 def('masala', 'نوشیدنی گرم', 'ماسالا (چای ادویه‌ای)', c => {
-  let s = backdrop(c, c.pick(['#5a3a12', '#3e1f15', '#402b1e', '#4b1628']));
+  let s = backdrop(c, c.pick(['#5a3a12', '#3e1f15', '#402b1e', '#a4552f', '#1f4e8c'])) + floor(c);
   const t = TONES.chai;
-  let inner = latteArt(c, c.pick(['heart', 'rosetta', 'web', 'nested']), 49, t[1], t[0][1]) + dust(c, 50, 0, 0, 44, '#7a3c14', .6);
-  let onS = starAnise(c, CX - 62, CY + 34, c.rand(0, 90), .8);
-  s += cupTop(c, { R: 56, liquid: toneFill(c, t), inner, onSaucer: onS });
-  s += cinnamonStick(c, c.pick([34, 166]), c.pick([40, 212]), c.rand(0, 180), 64) + starAnise(c, c.pick([160, 40]), c.pick([214, 36]), c.rand(0, 90), .9);
-  for(let i = 0; i < 3; i++){ const a = c.rand(0, 6.28); s += cardamom(c, CX + Math.cos(a) * 96, CY + Math.sin(a) * 100, c.rand(0, 360)); }
+  const onS = starAnise(c, CX - 62, 196, c.rand(0, 90), .7) + cardamom(c, CX + 64, 198, c.rand(0, 360));
+  s += cup34(c, { color: c.pick(['#b8613b', '#f3ece1', '#2d5f9a', '#efe0c2', '#232120']), liquid: toneFill(c, t), art: latteArt(c, c.pick(['heart', 'web', 'rosetta']), 44, t[1], t[0][1]) + dust(c, 40, 0, 0, 40, '#7a3c14', .7), onSaucer: onS });
+  s += cinnamonStick(c, c.pick([30, 170]), 222, c.rand(-20, 20), 50);
   return s;
 });
-
 def('sesame-date', 'نوشیدنی گرم', 'کنجد و خرما', c => {
   let s = backdrop(c, c.pick(['#3e1f15', '#5a3a12', '#402b1e']));
   const t = TONES.chai;
@@ -727,18 +800,15 @@ def('sesame-date', 'نوشیدنی گرم', 'کنجد و خرما', c => {
 });
 
 def('hazelnut-milk', 'نوشیدنی گرم', 'شیر شکلات فندق', c => {
-  let s = backdrop(c);
+  let s = backdrop(c) + floor(c);
   const t = TONES.choco;
-  s += cupTop(c, { R: 58, liquid: toneFill(c, t), inner: latteArt(c, c.pick(['heart', 'rosetta', 'wing', 'tulip']), 48, t[1], t[0][1]) });
+  s += glass34(c, { handle: c.chance(.7), top: c.rand(86, 94), layers: [['#f3e5d3', .9], ['#8e5638', 1.6], ['#5c3120', 1.2], ['#3a1a0a', .6]], art: latteArt(c, c.pick(['heart', 'rosetta', 'tulip']), 38, t[1], t[0][1]), inside: `<path d="M50 150q10 -10 20 0t20 0 20 0 20 0 20 0" stroke="#2e160c" stroke-opacity=".35" stroke-width="3" fill="none"/>` });
   for(let i = 0; i < c.int(3, 5); i++){
-    const a = c.rand(0, 6.28), x = CX + Math.cos(a) * 94, y = CY + Math.sin(a) * 100;
-    if(x < 10 || x > 190 || y < 20 || y > 230) continue;
-    s += `<g transform="translate(${n1(x)} ${n1(y)}) rotate(${c.int(0, 360)})"><circle r="8" fill="${c.ball('#9a5a2a')}"/><path d="M-7-3Q0-10 7-3" fill="#c79a66" stroke="#7a4a1a" stroke-width=".8"/></g>`;
+    const x = c.pick([28, 40, 52, 148, 160, 172]) + c.rand(-4, 4), y = 214 + c.rand(-6, 8);
+    s += `<g transform="translate(${n1(x)} ${n1(y)}) rotate(${c.int(0, 360)})"><circle r="7" fill="${c.ball('#9a5a2a')}"/><path d="M-6-3Q0-9 6-3" fill="#c79a66" stroke="#7a4a1a" stroke-width=".8"/></g>`;
   }
-  if(c.chance(.6)) s += `<g transform="translate(${c.pick([38, 162])} ${c.pick([210, 42])}) rotate(${c.int(-30, 30)})"><rect x="-14" y="-10" width="28" height="20" rx="2" fill="#4a2412"/><path d="M-5-10V10M5-10V10M-14 0H14" stroke="#2e140a" stroke-width="1.2"/></g>`;
   return s;
 });
-
 def('honey-milk', 'نوشیدنی گرم', 'شیر عسل دارچین', c => {
   let s = backdrop(c, c.pick(['#5a3a12', '#402b1e', '#1c3a5e']));
   let inner = `<path d="${spiral(c.rand(2.5, 3.5), 2, 42)}" stroke="#e0a42a" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"/>` + dust(c, 40, 0, 0, 44, '#8a4520', .55);
@@ -915,8 +985,7 @@ function icedStyle(kind){
       l += bubbles(c, 6, CX - g.bw + 6, CX + g.bw - 6, lt + 20, g.bot - 10, '#fff');
       return l;
     }, { drops: c.int(8, 16) });
-    s += r.s;
-    s += straw(c, CX + c.rand(-6, 8), r.g.bot - 30, CX + c.rand(18, 34), r.g.top - c.rand(24, 40), 6);
+    s += straw(c, CX + c.rand(-6, 8), r.g.bot - 30, CX + c.rand(18, 34), r.g.top - c.rand(24, 40), 6) + r.s;
     if(kind === 'mocha' && c.chance(.6)) s += `<path d="M${CX - r.g.tw + 2} ${r.g.top}C${CX - 20} ${r.g.top - 22} ${CX + 20} ${r.g.top - 22} ${CX + r.g.tw - 2} ${r.g.top}Z" fill="#fbf4ea"/>` + dust(c, 20, CX, r.g.top - 8, 14, '#3a1a0a', .7);
     s += beansAround(c, c.int(0, 3), 70, 88, CX, 214);
     return s;
@@ -955,13 +1024,13 @@ function mocktail(shape){
       if(gk === 2) s += cherry(c, CX + 20, 112, 1);
       if(gk === 3) s += mintSprig(c, CX + 34, 100, 20, 1);
     } else if(shape === 'hurricane'){
+      s += straw(c, CX - 6, 150, CX - 24, 30, 5);
       const p = `M${CX - 30} 58C${CX - 36} 96 ${CX - 18} 110 ${CX - 22} 136C${CX - 28} 170 ${CX - 30} 186 ${CX - 12} 186H${CX + 12}C${CX + 30} 186 ${CX + 28} 170 ${CX + 22} 136C${CX + 18} 110 ${CX + 36} 96 ${CX + 30} 58Z`;
       s += shadow(c, CX + 4, 204, 40, 7, .6);
       s += `<path d="M${CX} 186V200" stroke="rgba(255,255,255,.55)" stroke-width="6"/><ellipse cx="${CX}" cy="201" rx="26" ry="4" fill="rgba(255,255,255,.25)" stroke="rgba(255,255,255,.55)"/>`;
       const clip = c.clip(`<path d="${p}"/>`);
       s += `<g clip-path="${clip}"><rect y="70" width="200" height="140" fill="${liquid}"/>${ice(c, 3, CX - 18, CX + 18, 78, 120)}${bubbles(c, 12, CX - 22, CX + 22, 90, 180)}</g>`;
       s += `<path d="${p}" fill="${c.glass()}" stroke="rgba(255,255,255,.6)" stroke-width="1.8"/><ellipse cx="${CX}" cy="58" rx="30" ry="4" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.6"/>`;
-      s += straw(c, CX - 6, 150, CX - 24, 30, 5);
       s += c.chance(.5) ? citrusWheel(c, CX + 28, 58, 16, c.pick(['orange', 'lemon', 'lime']), 0) : `<g transform="translate(${CX + 18} 36) rotate(20)"><path d="M0 30V-2" stroke="#caa36a" stroke-width="1.6"/><path d="M-22 0Q0-18 22 0Q0-6-22 0Z" fill="${c.pick(['#e8453c', '#2a9d8f', '#f2c94c', '#e07a9a'])}"/><path d="M0-10L-12-2M0-10L12-2M0-10V0" stroke="#fff" stroke-opacity=".6"/></g>`;
     } else {
       const glassShape = shape;
@@ -974,8 +1043,7 @@ function mocktail(shape){
         l += bubbles(c, 16, CX - g.bw + 6, CX + g.bw - 6, lt + 10, g.bot - 6);
         return l;
       }, { drops: c.int(4, 12) });
-      s += r.s;
-      s += straw(c, CX + c.rand(-8, 8), r.g.bot - 20, CX + c.rand(16, 34), r.g.top - c.rand(20, 36), 6);
+      s += straw(c, CX + c.rand(-8, 8), r.g.bot - 20, CX + c.rand(16, 34), r.g.top - c.rand(20, 36), 6) + r.s;
       const gk = c.int(0, 2);
       if(gk === 0) s += citrusWheel(c, CX - r.g.tw + 2, r.g.top + 2, 16, c.pick(['orange', 'lemon', 'lime', 'grapefruit']), 0);
       if(gk === 1) s += mintSprig(c, CX - 10, r.g.top + 6, -10, 1.1);
@@ -1009,6 +1077,7 @@ function shake(flavor){
     const col = c.tint || F.col;
     let s = backdrop(c) + floor(c);
     const shape = c.pick(['tall', 'jar', 'tumbler', 'sundae']);
+    const mark = s.length;
     let top, tw;
     if(shape === 'sundae'){
       const p = `M${CX - 40} 84C${CX - 42} 120 ${CX - 20} 150 ${CX - 8} 158V186H${CX + 8}V158C${CX + 20} 150 ${CX + 42} 120 ${CX + 40} 84Z`;
@@ -1045,8 +1114,8 @@ function shake(flavor){
     if(F.top === 'beans'){ for(let i = 0; i < 5; i++) s += bean(c, tx + c.rand(-22, 22), ty + c.rand(6, 22), c.rand(0, 360), .7); }
     if(F.top === 'cherry') s += cherry(c, tx, ty + 8, 1.1) + sprinkles(c, 14, tx - 24, tx + 24, ty + 8, ty + 24);
     if(F.top === 'fruit') s += `<g transform="translate(${n1(tx)} ${n1(ty + 6)})"><path d="M-14 8Q-14-10 0-12 14-10 14 8Z" fill="${c.ball('#ffb020')}"/><path d="M-8-2L8-2M-10 3H10" stroke="#e08a10" stroke-width="1"/></g>` + berry(c, tx - 18, ty + 16, 5, '#26164a');
-    s += straw(c, CX + c.rand(0, 10), top + 30, CX + c.rand(22, 36), top - c.rand(60, 76), 7);
-    return s;
+    const st = straw(c, CX + c.rand(0, 10), top + 30, CX + c.rand(22, 36), top - c.rand(60, 76), 7);
+    return s.slice(0, mark) + st + s.slice(mark);
   };
 }
 def('shake-strawberry', 'شیک و اسمودی', 'شیک توت‌فرنگی', shake('strawberry'));
@@ -1439,24 +1508,30 @@ def('shot', 'افزودنی', 'شات اسپرسو', c => {
 
 def('icecream', 'افزودنی', 'بستنی', c => {
   let s = backdrop(c) + floor(c);
-  const bowl = c.pick(['#f3ece1', '#2d5f9a', '#232120', '#1f6f78', '#e7b6ae']);
-  s += shadow(c, CX + 4, 204, 60, 9, .6);
+  const bowl = c.pick(['#f3ece1', '#2d5f9a', '#232120', '#1f6f78', '#e7b6ae', '#efe0c2']);
+  const rimY = 146, rx = 58, ry = 11;
+  s += shadow(c, CX + 4, 206, 64, 10, .6);
+  s += `<path d="M${CX - 14} 196h28l5 10h-38z" fill="${darken(bowl, .15)}"/>`;
+  s += `<ellipse cx="${CX}" cy="${rimY}" rx="${rx}" ry="${ry}" fill="${lighten(bowl, .15)}"/><ellipse cx="${CX}" cy="${rimY + 1}" rx="${rx - 4}" ry="${ry - 3}" fill="${darken(bowl, .35)}"/>`;
   const flavors = [['#f6e9c8', 'vanilla'], ['#f3c44a', 'saffron'], ['#5a2e1a', 'choco'], ['#f7b0c4', 'straw'], ['#b8d68a', 'pistachio']];
   const k = c.int(2, 3);
-  const used = [];
+  const xs = k === 2 ? [-18, 18] : [-26, 26, 0];
+  const ys = k === 2 ? [136, 138] : [140, 141, 120];
   for(let i = 0; i < k; i++){
-    const f = c.pick(flavors); used.push(f);
-    const x = CX + (i - (k - 1) / 2) * 30 + c.rand(-3, 3), y = 136 - (i === 1 ? 14 : 0);
-    s += `<path d="${blob(c, x, y, 26, 11, .1)}" fill="${c.rad([[0, lighten(f[0], .35)], [.7, f[0]], [1, darken(f[0], .2)]], .4, .3, .8)}"/>`;
-    if(f[1] === 'saffron') s += dust(c, 14, x, y, 18, '#5a8a2a', 1, 1.6) + `<path d="${blob(c, x + 6, y + 4, 6, 6, .3)}" fill="#fffaf0" opacity=".9"/>`;
-    if(f[1] === 'choco') s += dust(c, 10, x, y, 18, '#2a1006', 1, 1.5);
-    if(f[1] === 'straw') s += dust(c, 12, x, y, 18, '#c2183a', 1, 1.3);
-    if(f[1] === 'pistachio') s += dust(c, 12, x, y, 18, '#4a7a2a', 1, 1.5);
+    const f = c.pick(flavors);
+    const x = CX + xs[i] + c.rand(-3, 3), y = ys[i] + c.rand(-2, 2), r = k === 2 ? c.rand(25, 28) : c.rand(22, 25);
+    s += `<path d="${blob(c, x, y, r, 11, .08)}" fill="${c.rad([[0, lighten(f[0], .35)], [.7, f[0]], [1, darken(f[0], .2)]], .4, .3, .8)}"/>`;
+    s += `<path d="${arc(x, y, r * .6, 200, 250)}" stroke="#fff" stroke-opacity=".45" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    if(f[1] === 'saffron') s += dust(c, 14, x, y, r * .7, '#5a8a2a', 1, 1.6) + `<path d="${blob(c, x + 6, y + 4, 6, 6, .3)}" fill="#fffaf0" opacity=".9"/>`;
+    if(f[1] === 'choco') s += dust(c, 10, x, y, r * .7, '#2a1006', 1, 1.5);
+    if(f[1] === 'straw') s += dust(c, 12, x, y, r * .7, '#c2183a', 1, 1.3);
+    if(f[1] === 'pistachio') s += dust(c, 12, x, y, r * .7, '#4a7a2a', 1, 1.5);
   }
-  const b = `M${CX - 56} 142C${CX - 56} 182 ${CX - 30} 196 ${CX} 196S${CX + 56} 182 ${CX + 56} 142Z`;
-  s += `<path d="${b}" fill="${c.hcyl(bowl)}"/><ellipse cx="${CX}" cy="142" rx="56" ry="7" fill="${lighten(bowl, .2)}"/>`;
-  if(c.chance(.5)){ for(let i = 0; i < 9; i++) s += `<circle cx="${n1(CX - 44 + i * 11)}" cy="${n1(170 + Math.sin(i / 8 * Math.PI) * 14)}" r="2" fill="${bowl === '#f3ece1' ? '#2d5f9a' : GOLD}"/>`; }
-  if(c.chance(.6)) s += wafer(c, CX + 10, 104, -70, 50);
+  if(c.chance(.6)) s += `<g transform="translate(${CX + 24} 150) rotate(-62)"><rect x="0" y="-5" width="54" height="10" rx="4" fill="${c.hcyl('#d9a35a')}"/><path d="M8 -5V5M16 -5V5M24 -5V5M32 -5V5M40 -5V5M48 -5V5" stroke="#a86f2c" stroke-width=".8" opacity=".6"/></g>`;
+  const front = `M${CX - rx} ${rimY}A${rx} ${ry} 0 0 0 ${CX + rx} ${rimY}C${CX + rx} ${rimY + 36} ${CX + 32} 198 ${CX} 198S${CX - rx} ${rimY + 36} ${CX - rx} ${rimY}Z`;
+  s += `<path d="${front}" fill="${c.hcyl(bowl)}"/>`;
+  s += `<path d="M${CX - rx} ${rimY}A${rx} ${ry} 0 0 0 ${CX + rx} ${rimY}" fill="none" stroke="${lighten(bowl, .4)}" stroke-width="2.5"/>`;
+  if(c.chance(.5)){ for(let i = 0; i < 9; i++){ const t = i / 8, x = CX - 44 + t * 88; s += `<circle cx="${n1(x)}" cy="${n1(rimY + 22 + Math.sin(t * Math.PI) * 10)}" r="2" fill="${bowl === '#f3ece1' || bowl === '#efe0c2' ? '#2d5f9a' : GOLD}"/>`; } }
   return s;
 });
 

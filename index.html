@@ -70,7 +70,7 @@
     position:relative;z-index:2;
     min-height:100svh;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
-    padding:calc(28px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom));
+    padding:calc(18px + env(safe-area-inset-top)) 16px calc(22px + env(safe-area-inset-bottom));
     text-align:center;
   }
   .stage{display:flex;align-items:flex-end;justify-content:center;gap:4px;}
@@ -85,8 +85,10 @@
   @media (max-width:350px){.column{display:none;}}
   .arch{
     position:relative;
-    width:min(74vw, 330px);
+    width:clamp(220px, min(76vw, calc((100vh - 210px) * .757)), 340px);
+    width:clamp(220px, min(76vw, calc((100svh - 210px) * .757)), 340px);
     aspect-ratio:100/132;
+    container-type:inline-size;
   }
   .arch .sky{
     position:absolute;left:6%;right:6%;top:4.6%;bottom:0;
@@ -119,7 +121,7 @@
     position:absolute;left:10%;right:10%;top:12%;bottom:24%;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
   }
-  .wreath{width:clamp(76px, 23vw, 100px);color:var(--gold);position:relative;}
+  .wreath{width:clamp(64px, 29cqi, 100px);color:var(--gold);position:relative;}
   .wreath svg{width:100%;height:auto;display:block;overflow:visible;}
   .wreath .lf{opacity:0;transform:scale(.2);transform-box:fill-box;transform-origin:center;transition:opacity .5s ease, transform .7s var(--ease);}
   .ready .wreath .lf{opacity:1;transform:none;}
@@ -131,9 +133,9 @@
   }
   .ready .wreath .mono{opacity:1;transform:none;}
   .cover h1{
-    margin:4px 0 0;
+    margin:2px 0 12px;
     font-family:var(--nastaliq);font-weight:700;
-    font-size:clamp(2rem, 10vw, 3rem);
+    font-size:clamp(1.7rem, 13.5cqi, 3rem);
     line-height:1.9;
     color:var(--azzurro-deep);
     text-shadow:0 1px 0 #fff;
@@ -141,9 +143,9 @@
     transition:opacity 1s ease .6s, transform 1.2s var(--ease) .6s;
   }
   .cover .latin{
-    margin-top:-2px;
+    margin-top:2px;
     font-family:var(--roman);font-style:italic;
-    font-size:clamp(.95rem, 4.2vw, 1.2rem);letter-spacing:.3em;text-transform:uppercase;
+    font-size:clamp(.85rem, 5.4cqi, 1.2rem);letter-spacing:.3em;text-transform:uppercase;
     color:var(--azzurro);
     direction:ltr;
     opacity:0;transition:opacity 1s ease 1s;
@@ -192,8 +194,6 @@
   .open-btn:active{transform:scale(.97);transition-delay:0s;}
   .open-btn svg{width:20px;height:20px;animation:nudge 1.8s ease-in-out infinite;}
   @keyframes nudge{50%{transform:translateY(3px);}}
-  .cover .addr{margin-top:16px;font-size:.72rem;color:var(--muted);opacity:0;transition:opacity 1s ease 1.8s;display:flex;align-items:center;gap:6px;}
-  .ready .cover .addr{opacity:1;}
 
   .topbar{
     position:sticky;top:0;z-index:30;
@@ -279,14 +279,12 @@
     font-size:clamp(1.7rem, 8vw, 2.3rem);line-height:2;
     color:var(--ink);
   }
-  .cat-head .count{margin-top:6px;font-size:.72rem;color:var(--muted);}
   .cat-head .tiles{width:120px;height:5px;margin:12px auto 0;background:var(--mosaic) repeat-x;background-size:15px 5px;opacity:.8;}
   .cat-head > *{opacity:0;transform:translateY(12px);transition:opacity .8s ease, transform 1s var(--ease);}
   .cat.seen .cat-head > *{opacity:1;transform:none;}
   .cat.seen .cat-head > :nth-child(2){transition-delay:.08s;}
   .cat.seen .cat-head > :nth-child(3){transition-delay:.16s;}
   .cat.seen .cat-head > :nth-child(4){transition-delay:.24s;}
-  .cat.seen .cat-head > :nth-child(5){transition-delay:.3s;}
 
   .items{display:grid;grid-template-columns:repeat(2, minmax(0,1fr));gap:24px 14px;}
   @media (min-width:620px){.items{grid-template-columns:repeat(3, minmax(0,1fr));gap:30px 18px;}}
@@ -474,7 +472,6 @@
     <span>بازکردن منو</span>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
   </button>
-  <div class="addr" id="addr"></div>
 </header>
 
 <div class="topbar" id="topbar">
@@ -621,10 +618,22 @@ $('#wreathTop').innerHTML = wreathHTML('A');
 $('#wreathFoot').innerHTML = wreathHTML('A');
 requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('ready')));
 
+if('scrollRestoration' in history) history.scrollRestoration = 'manual';
+scrollTo(0, 0);
+
+function sectionY(idx){
+  const sec = SECTIONS[idx];
+  if(!sec) return $('#topbar').getBoundingClientRect().top + scrollY;
+  const h2 = sec.querySelector('h2');
+  const bar = $('#topbar').offsetHeight;
+  return Math.max(0, h2.getBoundingClientRect().top + scrollY - bar - 22);
+}
+function goTo(idx){
+  scrollTo({top: sectionY(idx), behavior: REDUCED ? 'auto' : 'smooth'});
+}
 $('#openBtn').addEventListener('click', () => {
   if(navigator.vibrate) navigator.vibrate(8);
-  const y = $('#topbar').getBoundingClientRect().top + scrollY;
-  scrollTo({top: y, behavior: REDUCED ? 'auto' : 'smooth'});
+  goTo(0);
 });
 
 let DATA = null, CATS = [], SECTIONS = [], CHIPS = [], ORDER = [], activeIdx = -1;
@@ -670,7 +679,6 @@ function render(data){
   $('#latin').textContent = latin;
   $('#latin').hidden = !latin;
   $('#tag').textContent = data.tagline || '';
-  $('#addr').innerHTML = data.address ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>${esc(data.address)}` : '';
   $('#fname').textContent = name;
   $('#flatin').textContent = latin;
   $('#faddr').textContent = data.address || '';
@@ -698,8 +706,7 @@ function render(data){
     chip.className = 'chip';
     chip.innerHTML = AzArt.icon(cat.icon) + `<span>${esc(cat.name)}</span>`;
     chip.addEventListener('click', () => {
-      const sec = SECTIONS[idx];
-      if(sec) sec.scrollIntoView({behavior: REDUCED ? 'auto' : 'smooth', block:'start'});
+      goTo(idx);
     });
     rail.appendChild(chip);
     CHIPS.push(chip);
@@ -707,12 +714,10 @@ function render(data){
     const sec = document.createElement('section');
     sec.className = 'cat';
     sec.style.setProperty('--accent', cat.color);
-    const avail = items.filter(i => i.available).length;
     sec.innerHTML = `<div class="cat-head">
         <div class="num">${roman(idx + 1)}</div>
         <div class="medal">${AzArt.icon(cat.icon)}</div>
         <h2>${esc(cat.name)}</h2>
-        <div class="count">${avail === items.length ? faNum(items.length) + ' مورد' : faNum(avail) + ' مورد موجود از ' + faNum(items.length)}</div>
         <div class="tiles"></div>
       </div>`;
     const grid = document.createElement('div');
@@ -783,9 +788,9 @@ function setActive(i){
 let ticking = false;
 function onScroll(){
   ticking = false;
-  const off = $('#topbar').offsetHeight + 40;
+  const off = $('#topbar').offsetHeight + 60;
   let cur = 0;
-  SECTIONS.forEach((s, i) => { if(!s.hidden && s.getBoundingClientRect().top - off <= 0) cur = i; });
+  SECTIONS.forEach((s, i) => { if(!s.hidden && s.querySelector('h2').getBoundingClientRect().top - off <= 0) cur = i; });
   setActive(cur);
   const max = document.documentElement.scrollHeight - innerHeight;
   const p = max > 0 ? Math.min(1, scrollY / max) : 0;
