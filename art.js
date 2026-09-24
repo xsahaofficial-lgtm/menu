@@ -340,14 +340,16 @@ function naghsheLatte(c, kind, Rl, foam, cut){
     g += `<path transform="translate(0 -40) scale(.32)" d="${GHALB}" fill="${foam}"/>`;
     g += `<path d="M0-46Q${gerd(curve * 30)} 0 0 46" stroke="${cut}" stroke-width="2.2" stroke-linecap="round" fill="none"/>`;
   } else if(kind === 'tulip'){
-    const n = c.sahih(3, 6);
+    const n = c.sahih(10, 13), kaj = c.bein(-.35, .35);
+    let akhar = 0;
     for(let i = 0; i < n; i++){
-      const y = 30 - i * 14, rx = 30 - i * 3;
-      g += `<ellipse cy="${y}" rx="${gerd(rx)}" ry="13" fill="${foam}"/>`;
-      g += `<ellipse cy="${y + 7}" rx="${gerd(rx * .78)}" ry="9" fill="${cut}"/>`;
+      const t = i / (n - 1), cy = 42 - t * 80, rx = 36 - t * 28, ry = 6.6 - t * 3, dx = Math.sin(t * Math.PI) * kaj * 18;
+      g += `<ellipse cx="${gerd(dx)}" cy="${gerd(cy)}" rx="${gerd(rx)}" ry="${gerd(ry)}" fill="${foam}"/>`;
+      g += `<ellipse cx="${gerd(dx)}" cy="${gerd(cy - ry * .6)}" rx="${gerd(rx * .86)}" ry="${gerd(ry * .74)}" fill="${cut}"/>`;
+      akhar = dx;
     }
-    g += `<path transform="translate(0 ${30 - n * 14}) scale(.45)" d="${GHALB}" fill="${foam}"/>`;
-    g += `<path d="M0 ${36 - n * 14}V46" stroke="${cut}" stroke-width="2" stroke-linecap="round"/>`;
+    g += `<path transform="translate(${gerd(akhar)} -42) scale(.26)" d="${GHALB}" fill="${foam}"/>`;
+    g += `<path d="M0-46Q${gerd(kaj * 26)} 0 0 46" stroke="${cut}" stroke-width="1.6" stroke-linecap="round" fill="none"/>`;
   } else if(kind === 'swan'){
     for(let i = 0; i < 6; i++){
       const t = i / 5, x = -12 - t * 10, y = 34 - t * 48, rx = 30 - t * 18;
@@ -468,6 +470,21 @@ function adviyeDorTaDor(c, n, r0, r1){
     s += k === 0 ? badiyan(c, x, y, c.bein(0, 90), .8) : k === 1 ? hel(c, x, y, c.bein(0, 360)) : chubDarchin(c, x, y, c.bein(0, 180), 40);
   }
   return s;
+}
+
+
+function changal(c, x, y){
+  const col = c.yeki(['#d4d0c8', '#cfcac2', TALAEI]);
+  const g = c.khatti([[0, roshanTar(col, .45)], [1, tireTar(col, .25)]]);
+  return `<g transform="translate(${x} ${y}) scale(1 .62)">${saye(c, 12, 7, 40, 6, .3)}<rect x="0" y="-2.6" width="48" height="5.2" rx="2.6" fill="${g}"/><path d="M1-6H-7Q-11-6-11-2V2Q-11 6-7 6H1Z" fill="${g}"/><path d="M-11-4.6H-27M-11-1.5H-27M-11 1.5H-27M-11 4.6H-27" stroke="${col}" stroke-width="1.8" stroke-linecap="round"/><path d="M4-1H44" stroke="#fff" stroke-opacity=".5" stroke-width="1"/></g>`;
+}
+function tameshk(c, x, y, r){
+  let g = '';
+  const col = c.yeki(['#d6245a', '#c21e4e', '#e03a6a']);
+  [[0, 0], [-1, -.9], [1, -.9], [-1.4, .3], [1.4, .3], [-.7, 1.1], [.7, 1.1], [0, -1.6], [0, 1.8]].forEach(([dx, dy]) => {
+    g += `<circle cx="${gerd(dx * r * .42)}" cy="${gerd(dy * r * .42)}" r="${gerd(r * .36)}" fill="${c.gooy(col)}"/>`;
+  });
+  return `<g transform="translate(${gerd(x)} ${gerd(y)})">${g}<path d="M-3-${gerd(r * .95)}L0-${gerd(r * .7)}L3-${gerd(r * .95)}" stroke="#4a7a2a" stroke-width="1.2" fill="none"/></g>`;
 }
 
 function sabkeLatte(kind, tone, extra){
@@ -730,20 +747,18 @@ sabt('filter', 'قهوه گرم', 'قهوه دمی دستگاهی (قهوه‌س
   s += daneHayeAtraf(c, c.sahih(2, 4), 62, 84, CX, 216);
   return s;
 });
-sabt('hot-chocolate', 'نوشیدنی گرم', 'هات چاکلت با مارشمالو', c => {
+sabt('hot-chocolate', 'نوشیدنی گرم', 'هات چاکلت', c => {
   let s = pasZamine(c);
-  let inner = '';
-  const n = c.sahih(5, 9);
-  for(let i = 0; i < n; i++){
-    const a = c.bein(0, 6.28), d = c.bein(4, 34), x = Math.cos(a) * d, y = Math.sin(a) * d, col = c.yeki(['#fbf6ef', '#f7c6d4', '#fbf6ef', '#fde2b8']), sz = c.bein(10, 15);
-    inner += `<g transform="translate(${gerd(x)} ${gerd(y)}) rotate(${c.sahih(0, 90)})"><rect x="${gerd(-sz / 2 + 2)}" y="${gerd(-sz / 2 + 2)}" width="${gerd(sz)}" height="${gerd(sz)}" rx="4" fill="#000" opacity=".25"/><rect x="${gerd(-sz / 2)}" y="${gerd(-sz / 2)}" width="${gerd(sz)}" height="${gerd(sz)}" rx="4" fill="${c.shoaei([[0, '#fff'], [1, col]], .35, .3, .8)}"/></g>`;
+  const inner = naghsheLatte(c, c.yeki(['rosetta', 'tulip']), 48, '#f6e8d6', '#5c3120') + pudr(c, 40, 0, 0, 46, '#2a110a', .55);
+  const ha = c.bein(-40, 40);
+  let tarash = '';
+  for(let i = 0; i < 5; i++){
+    const a = (ha + 180 + c.bein(-40, 40)) * Math.PI / 180, d = c.bein(60, 70);
+    tarash += `<path transform="translate(${gerd(CX + Math.cos(a) * d)} ${gerd(CY + Math.sin(a) * d)}) rotate(${c.sahih(0, 180)})" d="M-5 0C-5-4 3-4 3 0S-3 4-3 0" stroke="#4a2412" stroke-width="2" fill="none" stroke-linecap="round"/>`;
   }
-  inner += pudr(c, 40, 0, 0, 46, '#3a1a0a', .6);
-  s += fenjanAzBala(c, { R: 62, liquid: c.shoaei([[0, '#8a5234'], [.6, '#5a2e1a'], [1, '#2a110a']], .45, .42, .6), inner });
-  if(c.shans(.6)) s += chubDarchin(c, c.yeki([40, 160]), c.yeki([44, 208]), c.bein(0, 180), 60);
+  s += fenjanAzBala(c, { R: 60, ha, liquid: c.shoaei([[0, '#8a5234'], [.6, '#5a2e1a'], [1, '#2a110a']], .45, .42, .6), inner, onSaucer: tarash });
   return s;
 });
-
 sabt('pink-chocolate', 'نوشیدنی گرم', 'پینک چاکلت', c => {
   let s = pasZamine(c, c.yeki(['#4b1628', '#3a1d2e', '#1c3a5e', '#1f4e8c']));
   const t = TONHA.pink;
@@ -1349,10 +1364,7 @@ function keyk(kind){
         return q;
       }
     });
-    if(kind === 'cheesecake'){
-      s += `<path d="M${CX - 70} 150L${CX - 60} 130M${CX + 60} 120L${CX + 70} 100" stroke="#e8dcc4" stroke-width="3" opacity=".6"/>`;
-    }
-    if(c.shans(.6)) s += `<g transform="translate(${CX + 62} 186) rotate(${c.sahih(-20, 10)})"><rect x="-2" y="-30" width="4" height="36" rx="2" fill="#cfcac2"/><rect x="-5" y="-40" width="10" height="12" rx="2" fill="#cfcac2"/><path d="M-4-40V-46M0-40V-46M4-40V-46" stroke="#cfcac2" stroke-width="1.4"/></g>`;
+    if(c.shans(.7)) s += changal(c, CX + 30, 197);
     return s;
   };
 }
@@ -1401,47 +1413,41 @@ sabt('dessert-cup', 'کیک و شیرینی', 'دسر لیوانی کارامل�
 });
 
 sabt('toast', 'میان وعده', 'تست ساندویچ', c => {
-  let s = pasZamine(c) + rooyeMiz(c) + zirSarv(c, 194);
-  const mojdar = (x0, x1, y, amp, per, rev) => {
-    const pts = [];
-    for(let x = x0; x <= x1 + .01; x += per / 4) pts.push([x, y + Math.sin((x - x0) / per * Math.PI * 2) * amp]);
-    if(rev) pts.reverse();
-    return pts.map(p => `L${gerd(p[0])} ${gerd(p[1])}`).join('');
+  let s = pasZamine(c);
+  if(c.shans(.55)){
+    const wood = c.yeki(['#b07a44', '#9a6a3a', '#c28e55']);
+    let rg = '';
+    for(let y = 52; y < 208; y += c.sahih(9, 14)) rg += `<path d="M26 ${y}C70 ${y + c.sahih(-3, 3)} 130 ${y + c.sahih(-3, 3)} 174 ${y}" stroke="${tireTar(wood, .25)}" stroke-opacity=".45" fill="none"/>`;
+    s += `<g transform="rotate(${c.sahih(-6, 6)} 100 128)">${saye(c, 106, 136, 88, 98, .5)}<rect x="22" y="40" width="156" height="172" rx="20" fill="${c.shoaei([[0, roshanTar(wood, .15)], [1, tireTar(wood, .15)]])}"/>${rg}<circle cx="100" cy="54" r="5" fill="${tireTar(wood, .5)}"/></g>`;
+  } else s += boshghabAzBala(c, CX, CY + 6, 92);
+  const S = 100, h = S / 2, gap = c.bein(15, 20);
+  const noon = c.khatti([[0, '#f2c878'], [1, '#d9953f']], 0, 0, 1, 1);
+  const mojdar = (o, amp) => {
+    let d = '';
+    for(let k = 0; k <= 20; k++){
+      const t = k / 20, x = h - t * S, y = -h + t * S, w = Math.sin(t * Math.PI * 7) * amp;
+      d += (k ? 'L' : 'M') + gerd(x + o + w) + ' ' + gerd(y + o + w);
+    }
+    return d;
   };
-  const tikeSandvich = (x, y, w, H, depth, flip) => {
-    const x1 = x + w, y0 = y - H;
+  const nime = (sign) => {
+    const tri = sign < 0 ? `M${-h} ${-h}L${h} ${-h}L${-h} ${h}Z` : `M${h} ${h}L${-h} ${h}L${h} ${-h}Z`;
     let g = '';
-    const face = `M${x} ${y0}H${x1}V${y}H${x}Z`;
-    const cl = c.boresh(`<path d="${face}"/>`);
-    let f = `<rect x="${x}" y="${y0}" width="${w}" height="${H}" fill="#f6e2b8"/>`;
-    const b = (t, h, col, amp) => `<path d="M${x} ${gerd(y0 + t)}${mojdar(x, x1, y0 + t, amp, 14)}${mojdar(x, x1, y0 + t + h, amp, 14, true)}Z" fill="${col}"/>`;
-    f += b(H * .25, H * .1, '#e2453a', 1);
-    f += b(H * .34, H * .1, '#f6c742', .6);
-    for(let k = 0; k < 5; k++){ const dx = x + 8 + k * (w - 16) / 4; f += `<path d="M${gerd(dx - 3)} ${gerd(y0 + H * .44)}L${gerd(dx)} ${gerd(y0 + H * .54)}L${gerd(dx + 3)} ${gerd(y0 + H * .44)}Z" fill="#f6c742"/>`; }
-    f += b(H * .43, H * .18, '#f3a9a2', 1.6);
-    f += `<path d="M${x} ${gerd(y0 + H * .52)}${mojdar(x, x1, y0 + H * .52, 1.4, 10)}" stroke="#f9cbc4" stroke-width="1.2" fill="none"/>`;
-    f += b(H * .6, H * .1, '#6cbf4a', 2.4);
-    f += pudr(c, 26, x + w / 2, y0 + H * .12, w * .45, '#d9b27a', .9, 1.3) + pudr(c, 20, x + w / 2, y0 + H * .85, w * .45, '#d9b27a', .9, 1.3);
-    g += `<g clip-path="${cl}">${f}</g>`;
-    g += `<path d="${face}" fill="none" stroke="#b8732a" stroke-width="3"/>`;
-    const apex = [x + w * .5 + flip * w * .18, y0 - depth];
-    const top = `M${x} ${y0}L${x1} ${y0}L${gerd(apex[0])} ${gerd(apex[1])}Z`;
-    const tcl = c.boresh(`<path d="${top}"/>`);
-    g += `<path d="${top}" fill="${c.khatti([[0, '#e2a352'], [1, '#c8802c']])}" stroke="#a8601e" stroke-width="3" stroke-linejoin="round"/>`;
+    [['#6cbf4a', 9, 1.8, 5.5], ['#f3a9a2', 5.5, 1, 5.5], ['#f6c742', 2.2, .6, 4.5]].forEach(([col, o, amp, w]) => {
+      g += `<path d="${mojdar(-sign * o, amp)}" stroke="${col}" stroke-width="${w}" fill="none" stroke-linecap="round"/>`;
+    });
+    const cl = c.boresh(`<path d="${tri}"/>`);
     let marks = '';
-    for(let k = -2; k <= 3; k++) marks += `<path d="M${gerd(x + k * 22)} ${y0}L${gerd(x + k * 22 + 36)} ${gerd(y0 - depth)}" stroke="#7a3a10" stroke-width="3" opacity=".45"/>`;
-    g += `<g clip-path="${tcl}">${marks}</g>`;
-    return g;
+    for(let k = -5; k <= 5; k++) marks += `<path d="M${k * 16 - 60} -60L${k * 16 + 60} 60" stroke="#8a4a14" stroke-width="3.2" opacity=".42"/>`;
+    g += `<path d="${tri}" fill="#c07a34" stroke="#b06a28" stroke-width="9" stroke-linejoin="round"/>`;
+    g += `<path d="${tri}" fill="${noon}"/><g clip-path="${cl}">${marks}${pudr(c, 30, sign * -h * .3, sign * -h * .3, h * .8, '#b8702a', .6, 1.1)}</g>`;
+    const off = sign * gap / 2;
+    return `<g transform="translate(${gerd(off)} ${gerd(off)}) rotate(${gerd(sign * c.bein(2, 5))})">${g}</g>`;
   };
-  const back = c.shans(.5) ? 1 : -1;
-  let sw = saye(c, CX + 4, 192, 80, 12, .5);
-  sw += tikeSandvich(CX - 44 + back * 8, 166, 96, 34, 30, back);
-  sw += tikeSandvich(CX - 60 - back * 6, 192, 112, 40, 34, -back);
-  const tx = CX - 4 + c.bein(-10, 10);
-  sw += `<path d="M${gerd(tx)} 150V96" stroke="#e8d4a8" stroke-width="2.2"/><circle cx="${gerd(tx)}" cy="93" r="6" fill="${c.gooy(c.yeki(['#3a4a1a', '#1a1a1a', '#6a7a2a']))}"/><circle cx="${gerd(tx)}" cy="93" r="2" fill="#b8233a"/>`;
-  s += `<g transform="translate(${CX} 194) scale(1.14) translate(${-CX} -194)">${sw}</g>`;
-  const gx = CX + c.yeki([-62, 62]);
-  for(let k = 0; k < 3; k++) s += `<g transform="translate(${gerd(gx + k * 9 - 9)} ${gerd(200 + (k % 2) * 4)})"><ellipse rx="8" ry="5" fill="#6f9a3a" stroke="#4a6a20"/><circle r="1" cx="-2" fill="#e8f0c0"/><circle r="1" cx="2" fill="#e8f0c0"/></g>`;
+  s += `<g transform="translate(${CX} ${CY + 4}) rotate(${c.sahih(-24, 24)})">${saye(c, 5, 8, h * 1.5, h * 1.5, .45)}${nime(-1)}${nime(1)}</g>`;
+  const px = c.yeki([34, 166]), py = c.yeki([54, 204]);
+  if(c.shans(.5)) s += `<g transform="translate(${px} ${py})">${saye(c, 2, 3, 18, 18, .4)}<circle r="15" fill="#fbf6ef"/><circle r="11.5" fill="${c.shoaei([[0, '#e8453c'], [1, '#a81e18']])}"/><circle cx="-3" cy="-4" r="3" fill="#fff" opacity=".4"/></g>`;
+  else for(let k = 0; k < 3; k++) s += `<g transform="translate(${gerd(px + k * 9 - 9)} ${gerd(py + (k % 2) * 5)})"><ellipse rx="8" ry="5" fill="#6f9a3a" stroke="#4a6a20"/><circle r="1" cx="-2" fill="#e8f0c0"/><circle r="1" cx="2" fill="#e8f0c0"/></g>`;
   return s;
 });
 sabt('egg-skillet', 'میان وعده', 'تابه تخم‌مرغ و پپرونی', c => {
@@ -1476,18 +1482,27 @@ sabt('focaccia', 'میان وعده', 'فوکاچیا پنیری', c => {
 });
 
 sabt('syrup', 'افزودنی', 'بطری سیروپ', c => {
-  let s = pasZamine(c) + rooyeMiz(c);
-  const liq = c.rangAsli || c.yeki(['#c97a2b', '#8a1a2a', '#4a7a2a', '#6a3a1a', '#d4a020', '#b8233a']);
-  const x = CX + c.bein(-8, 8);
-  s += saye(c, x + 4, 202, 40, 8, .6);
-  const body = `M${x - 26} 94Q${x - 26} 84 ${x - 16} 80L${x - 12} 62H${x + 12}L${x + 16} 80Q${x + 26} 84 ${x + 26} 94V194Q${x + 26} 200 ${x + 20} 200H${x - 20}Q${x - 26} 200 ${x - 26} 194Z`;
-  s += `<path d="${body}" fill="${c.ostovane(liq)}"/><path d="${body}" fill="${c.shishe()}" stroke="rgba(255,255,255,.4)"/>`;
-  s += `<rect x="${x - 22}" y="120" width="44" height="50" rx="3" fill="${c.yeki(['#f6eee1', '#1a1a1a', '#efe0c2'])}"/><path transform="translate(${x} 145)" d="${masirSetare(8, 12, 6)}" fill="none" stroke="${liq}" stroke-width="1.4"/><path d="M${x - 16} 126H${x + 16}M${x - 16} 164H${x + 16}" stroke="${TALAEI}" stroke-width="1"/>`;
-  s += `<rect x="${x - 10}" y="50" width="20" height="14" rx="2" fill="#1a1a1a"/><rect x="${x - 3}" y="30" width="6" height="22" fill="#2a2a2a"/><path d="M${x} 32H${x + 24}V38" stroke="#2a2a2a" stroke-width="5" fill="none" stroke-linejoin="round"/><rect x="${x - 12}" y="24" width="24" height="8" rx="3" fill="#1a1a1a"/>`;
-  s += `<path d="M${x - 19} 96V190" stroke="#fff" stroke-opacity=".3" stroke-width="3" stroke-linecap="round"/>`;
+  let s = pasZamine(c, c.yeki(['#1f4e8c', '#163a6b', '#2c3e66', '#3a1d2e', '#12325e'])) + rooyeMiz(c);
+  const liq = c.rangAsli || c.yeki(['#e8578a', '#f06a9a', '#d94878', '#ec5f95']);
+  const x = CX - 18;
+  const badane = `M${x - 25} 190V122Q${x - 25} 106 ${x - 11} 100Q${x - 7} 97 ${x - 7} 88V56H${x + 7}V88Q${x + 7} 97 ${x + 11} 100Q${x + 25} 106 ${x + 25} 122V190Q${x + 25} 200 ${x + 15} 200H${x - 15}Q${x - 25} 200 ${x - 25} 190Z`;
+  const cl = c.boresh(`<path d="${badane}"/>`);
+  s += saye(c, x + 4, 203, 34, 7, .6);
+  s += `<g clip-path="${cl}"><rect x="${x - 30}" y="76" width="60" height="130" fill="${c.khatti([[0, roshanTar(liq, .25)], [.5, liq], [1, tireTar(liq, .35)]], 0, 0, 1, 0)}"/><ellipse cx="${x - 6}" cy="150" rx="10" ry="40" fill="#fff" opacity=".12"/></g>`;
+  s += `<path d="${badane}" fill="${c.shishe()}" stroke="rgba(255,255,255,.55)" stroke-width="1.6"/>`;
+  s += `<path d="M${x - 19} 118V186" stroke="#fff" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/>`;
+  s += `<rect x="${x - 8}" y="48" width="16" height="10" rx="2" fill="${c.ostovane('#c9ced6')}"/><path d="M${x} 48L${x + 14} 26" stroke="${c.ostovane('#c9ced6')}" stroke-width="4.5" stroke-linecap="round"/><path d="M${x + 14} 26L${x + 17} 22" stroke="#9aa0a8" stroke-width="3" stroke-linecap="round"/>`;
+  const lab = c.yeki(['#fbf4e8', '#f3e6d0']);
+  let gol = '';
+  for(let k = 0; k < 5; k++) gol += `<ellipse transform="rotate(${k * 72})" cy="-4.2" rx="3" ry="4.6" fill="${liq}"/>`;
+  s += `<rect x="${x - 19}" y="134" width="38" height="40" rx="4" fill="${lab}"/><rect x="${x - 16}" y="137" width="32" height="34" rx="3" fill="none" stroke="${TALAEI}" stroke-width=".8"/><g transform="translate(${x} 150)">${gol}<circle r="2.2" fill="${TALAEI}"/></g><path d="M${x - 10} 162H${x + 10}M${x - 7} 166H${x + 7}" stroke="#9a8a7a" stroke-width="1"/>`;
+  const gx = CX + 42;
+  const jam = `M${gx - 16} 164H${gx + 16}L${gx + 13} 200H${gx - 13}Z`;
+  const jcl = c.boresh(`<path d="${jam}"/>`);
+  s += saye(c, gx + 2, 203, 20, 4, .5) + `<g clip-path="${jcl}"><rect x="${gx - 20}" y="184" width="40" height="20" fill="${liq}" opacity=".85"/></g><path d="${jam}" fill="${c.shishe()}" stroke="rgba(255,255,255,.6)" stroke-width="1.4"/>`;
+  s += tameshk(c, gx - 30, 204, 7) + tameshk(c, gx + 26, 206, 6) + tameshk(c, x - 40, 206, 6.5);
   return s;
 });
-
 sabt('honey', 'افزودنی', 'ظرف عسل و موم عسل', c => {
   let s = pasZamine(c, c.yeki(['#5a3a12', '#402b1e', '#1f4e8c', '#1c3a5e', '#5a6b3a'])) + rooyeMiz(c);
   const jx = CX - 14;
@@ -1549,22 +1564,42 @@ sabt('water', 'افزودنی', 'آب معدنی', c => {
   return s;
 });
 
-sabt('shot', 'افزودنی', 'شات اسپرسو', c => {
-  let s = pasZamine(c) + rooyeMiz(c);
-  const n = c.sahih(1, 2);
-  for(let i = 0; i < n; i++){
-    const x = n === 1 ? CX : CX - 26 + i * 52, top = 132 + i * 6;
-    const p = `M${x - 22} ${top}L${x + 22} ${top}L${x + 18} 198H${x - 18}Z`;
-    s += saye(c, x + 3, 202, 30, 6, .6);
-    const clip = c.boresh(`<path d="${p}"/>`);
-    s += `<g clip-path="${clip}"><rect y="${top + 10}" width="200" height="80" fill="${c.khatti([[0, '#e8b070'], [.18, '#b8763a'], [.3, '#6a3a1a'], [1, '#2a1206']])}"/></g>`;
-    s += `<path d="${p}" fill="${c.shishe()}" stroke="rgba(255,255,255,.6)" stroke-width="1.6"/><path d="M${x - 18} 194H${x + 18}" stroke="rgba(255,255,255,.4)" stroke-width="6"/>`;
-    for(let k = 1; k <= 2; k++) s += `<path d="M${x + 12} ${top + 14 * k + 10}H${x + 19}" stroke="#fff" stroke-opacity=".5"/>`;
-  }
-  s += daneHayeAtraf(c, c.sahih(3, 6), 60, 92, CX, 206);
-  return s;
-});
-
+function shotRizi(joft){
+  return c => {
+    let s = pasZamine(c);
+    const steel = '#b8bec6';
+    s += `<rect x="0" y="196" width="200" height="44" fill="${c.khatti([[0, '#6a7078'], [1, '#2a2e34']])}"/>`;
+    for(let x = 8; x < 200; x += 12) s += `<rect x="${x}" y="202" width="6" height="30" rx="3" fill="#1a1c20" opacity=".7"/>`;
+    s += `<path d="M0 196H200" stroke="#fff" stroke-opacity=".25"/>`;
+    s += `<rect x="20" y="-10" width="160" height="32" rx="6" fill="${c.ostovane(steel)}"/><rect x="66" y="22" width="68" height="14" rx="3" fill="${c.ostovane('#9aa0a8')}"/>`;
+    s += `<path d="M62 36H138L134 58Q132 66 122 66H78Q68 66 66 58Z" fill="${c.ostovane('#8a9098')}"/><path d="M138 44H176Q186 44 186 52Q186 60 176 60H136Z" fill="${c.ostovane('#1a1a1a')}"/><circle cx="174" cy="52" r="3" fill="#555"/>`;
+    const spX = [-12, 12];
+    spX.forEach(dx => { s += `<path d="M${CX + dx - 6} 66H${CX + dx + 6}L${CX + dx + 3} 76H${CX + dx - 3}Z" fill="${c.ostovane(steel)}"/>`; });
+    const livanha = joft ? [CX - 26, CX + 26] : [CX];
+    const sathe = [];
+    livanha.forEach((gx, k) => {
+      const top = 142, bot = 196, w = joft ? 18 : 22;
+      const lvl = top + c.sahih(16, 24);
+      const p = `M${gx - w} ${top}H${gx + w}L${gx + w - 3} ${bot}H${gx - w + 3}Z`;
+      const cl = c.boresh(`<path d="${p}"/>`);
+      let crema = '';
+      for(let i = 0; i < 10; i++) crema += `<ellipse cx="${gerd(gx + c.bein(-w + 3, w - 3))}" cy="${gerd(lvl + c.bein(0, 6))}" rx="${gerd(c.bein(1.5, 4))}" ry="1" fill="${c.yeki(['#8a4a1c', '#f0c48c'])}" opacity=".6"/>`;
+      s += saye(c, gx + 2, bot + 2, w + 8, 4, .6);
+      s += `<g clip-path="${cl}"><rect x="${gx - w - 2}" y="${lvl}" width="${w * 2 + 4}" height="60" fill="${c.khatti([[0, '#e2a868'], [.22, '#b8763a'], [.35, '#5a2c10'], [1, '#1e0c04']])}"/>${crema}</g>`;
+      s += `<path d="${p}" fill="${c.shishe()}" stroke="rgba(255,255,255,.6)" stroke-width="1.6"/><path d="M${gx - w + 5} ${bot - 4}H${gx + w - 5}" stroke="rgba(255,255,255,.4)" stroke-width="7"/><path d="M${gx - w + 5} ${top + 6}L${gx - w + 7} ${bot - 12}" stroke="#fff" stroke-opacity=".4" stroke-width="2.4" stroke-linecap="round"/>`;
+      sathe.push([gx, lvl]);
+    });
+    const jaryan = c.khatti([[0, '#4a220a'], [.5, '#8a4a1c'], [1, '#c98a4a']]);
+    spX.forEach((dx, k) => {
+      const [gx, lvl] = joft ? sathe[k] : [CX + dx * .3, sathe[0][1]];
+      s += `<path d="M${CX + dx} 76Q${CX + dx} ${gerd((76 + lvl) / 2)} ${gerd(gx)} ${lvl}" stroke="${jaryan}" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M${CX + dx} 78Q${CX + dx} ${gerd((76 + lvl) / 2)} ${gerd(gx)} ${lvl}" stroke="#e8b070" stroke-width="1" fill="none" opacity=".6"/>`;
+    });
+    s += bokhar(c, CX, 138, joft ? 3 : 2, joft ? 26 : 14, .6);
+    return s;
+  };
+}
+sabt('shot', 'افزودنی', 'شات اسپرسو (ریزش از پرتافیلتر)', shotRizi(false));
+sabt('shot-double', 'افزودنی', 'شات اسپرسو دوتایی (دو لیوان)', shotRizi(true));
 sabt('icecream', 'افزودنی', 'بستنی', c => {
   let s = pasZamine(c) + rooyeMiz(c);
   const bowl = c.yeki(['#f3ece1', '#2d5f9a', '#232120', '#1f6f78', '#e7b6ae', '#efe0c2']);
@@ -1595,31 +1630,40 @@ sabt('icecream', 'افزودنی', 'بستنی', c => {
 });
 
 sabt('nabat', 'افزودنی', 'نبات زعفرانی', c => {
-  let s = pasZamine(c, c.yeki(['#5a3a12', '#402b1e', '#3e1f15', '#1c3a5e', '#1f4e8c'])) + rooyeMiz(c);
+  let s = pasZamine(c, c.yeki(['#1f4e8c', '#12325e', '#5a3a12', '#402b1e', '#1c3a5e']));
+  s += boshghabAzBala(c, CX, CY, 90);
   const bolur = (x, y, r, rot) => {
     let d = '';
-    for(let i = 0; i < 6; i++){ const a = (i / 6 * 360 + rot) * Math.PI / 180, rr = r * c.bein(.75, 1.15); d += (i ? 'L' : 'M') + gerd(x + Math.cos(a) * rr) + ' ' + gerd(y + Math.sin(a) * rr); }
-    const col = c.yeki(['#f7c040', '#f2a20a', '#ffd06a', '#e8900a', '#f8b830']);
-    return `<path d="${d}Z" fill="${c.khatti([[0, roshanTar(col, .35)], [1, tireTar(col, .2)]], 0, 0, 1, 1)}" fill-opacity=".92" stroke="#fff3c0" stroke-opacity=".6" stroke-width=".6"/><path d="M${gerd(x - r * .4)} ${gerd(y - r * .3)}l${gerd(r * .5)} ${gerd(-r * .2)}" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/>`;
+    for(let i = 0; i < 6; i++){ const a = (i / 6 * 360 + rot) * Math.PI / 180, rr = r * c.bein(.8, 1.12); d += (i ? 'L' : 'M') + gerd(x + Math.cos(a) * rr) + ' ' + gerd(y + Math.sin(a) * rr); }
+    const col = c.yeki(['#f7c85a', '#f2b438', '#fbd77a', '#eea62a']);
+    return `<path d="${d}Z" fill="${col}" fill-opacity=".78" stroke="#fff6d8" stroke-opacity=".75" stroke-width=".5"/>`;
   };
-  const n = c.sahih(3, 4);
-  let sticks = '';
-  for(let i = 0; i < n; i++){
-    const off = i - (n - 1) / 2, x = CX + off * 15 + c.bein(-3, 3), rot = off * 9 + c.bein(-3, 3);
-    let g = `<rect x="-1.8" y="-128" width="3.6" height="130" rx="1.8" fill="#9a6a3a"/>`;
-    const y0 = -118 + c.bein(-6, 6), y1 = -52 + c.bein(-6, 6);
-    for(let y = y0; y < y1; y += 5.5){
-      const t = (y - y0) / (y1 - y0), w = 4 + 11 * Math.sin(t * Math.PI);
-      const k = w > 10 ? 3 : 2;
-      for(let j = 0; j < k; j++) g += bolur(-w + (j + .5) * (2 * w / k) + c.bein(-2, 2), y + c.bein(-2, 2), c.bein(4, 6.5), c.bein(0, 60));
+  const chub = (x, y, rot, L) => {
+    let g = saye(c, 3, 5, L / 2 + 6, 9, .3) + `<rect x="${-L / 2}" y="-1.4" width="${L}" height="2.8" rx="1.4" fill="#a8743f"/>`;
+    const a0 = -L / 2 + 8, a1 = L * .22;
+    for(let t = a0; t < a1; t += 2.6){
+      const u = (t - a0) / (a1 - a0), w = 2 + 7 * Math.pow(Math.sin(u * Math.PI), .7);
+      const k = w > 6 ? 3 : 2;
+      for(let j = 0; j < k; j++) g += bolur(t + c.bein(-1, 1), -w + (j + .5) * (2 * w / k) + c.bein(-1, 1), c.bein(2.2, 3.6), c.bein(0, 60));
     }
-    sticks += `<g transform="translate(${gerd(x)} 198) rotate(${gerd(rot)})">${g}</g>`;
+    g += `<path d="M${a0} -3L${a1 - 6} -4" stroke="#fff" stroke-opacity=".5" stroke-width=".8" stroke-linecap="round"/>`;
+    return `<g transform="translate(${gerd(x)} ${gerd(y)}) rotate(${gerd(rot)})">${g}</g>`;
+  };
+  const r0 = c.bein(-40, -20), n = c.sahih(2, 3);
+  for(let i = 0; i < n; i++){
+    const off = (i - (n - 1) / 2) * 26;
+    const nx = Math.cos((r0 + 90) * Math.PI / 180) * off, ny = Math.sin((r0 + 90) * Math.PI / 180) * off;
+    s += chub(CX + nx + c.bein(-4, 4), CY + ny, r0 + c.bein(-6, 6), c.bein(130, 150));
   }
-  s += saye(c, CX + 4, 202, 50, 8, .55);
-  s += sticks;
-  const p = `M${CX - 36} 150H${CX + 36}L${CX + 30} 200H${CX - 30}Z`;
-  s += `<path d="${p}" fill="${c.shishe()}" stroke="rgba(255,255,255,.6)" stroke-width="1.8"/><ellipse cx="${CX}" cy="150" rx="36" ry="4" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.4"/><path d="M${CX - 28} 158L${CX - 24} 194" stroke="#fff" stroke-opacity=".4" stroke-width="3" stroke-linecap="round"/>`;
-  for(let i = 0; i < 6; i++){ const x = c.yeki([30, 42, 158, 170]) + c.bein(-8, 8), y = 212 + c.bein(-6, 10); s += bolur(x, y, c.bein(4, 7), c.bein(0, 60)); }
+  for(let i = 0; i < 16; i++){
+    const a = c.bein(0, Math.PI * 2), d = c.bein(20, 74), x = CX + Math.cos(a) * d, y = CY + Math.sin(a) * d;
+    s += `<path transform="translate(${gerd(x)} ${gerd(y)}) rotate(${c.sahih(0, 180)})" d="M-5 0Q0 ${gerd(c.bein(-3, 3))} 5 0" stroke="${c.yeki(['#d8401a', '#e8601a', '#c02a10'])}" stroke-width="1.1" fill="none" stroke-linecap="round"/>`;
+  }
+  for(let i = 0; i < 4; i++){
+    const a = c.bein(0, Math.PI * 2), d = c.bein(40, 70);
+    const x = CX + Math.cos(a) * d, y = CY + Math.sin(a) * d;
+    for(let j = 0; j < 4; j++) s += bolur(x + c.bein(-4, 4), y + c.bein(-4, 4), c.bein(2.2, 3.4), c.bein(0, 60));
+  }
   return s;
 });
 sabt('medallion', 'نقش کلی', 'نقش کاشی ایرانی', c => {
@@ -1647,7 +1691,7 @@ const PISHFARZ_DASTE = {
   shake: ['shake-strawberry', 'shake-oreo', 'shake-biscuit', 'shake-peanut', 'shake-mint', 'shake-hazelnut', 'shake-coffee', 'shake-vanilla', 'smoothie-mango'],
   cake: ['croissant', 'croissant-chocolate', 'croissant-almond', 'kouign-amann', 'choco-twist', 'cookie-double', 'cookie-ny', 'cookie-lemon', 'cinnamon-roll', 'pastel-nata', 'cheesecake', 'cake-mocha', 'cake-redvelvet', 'cake-tresleches', 'cake-walnut', 'cake-apple', 'brownie', 'dessert-cup'],
   toast: ['toast', 'egg-skillet', 'focaccia'],
-  drop: ['syrup', 'honey', 'sauce-chocolate', 'sauce-caramel', 'water', 'shot', 'icecream', 'nabat']
+  drop: ['syrup', 'honey', 'sauce-chocolate', 'sauce-caramel', 'water', 'shot', 'shot-double', 'icecream', 'nabat']
 };
 
 function sabkeMonaseb(item, ikon){
