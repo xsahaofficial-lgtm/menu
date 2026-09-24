@@ -207,8 +207,6 @@
   .chips{
     flex:1;min-width:0;height:100%;
     overflow-x:auto;scrollbar-width:none;
-    -webkit-mask:linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
-            mask:linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
   }
   .chips::-webkit-scrollbar{display:none;}
   .rail{position:relative;display:flex;align-items:center;gap:2px;height:100%;width:max-content;padding:0 12px;margin-inline:auto;}
@@ -301,6 +299,8 @@
     transition:transform .5s var(--ease), box-shadow .5s ease;
     isolation:isolate;
   }
+  .frame img.az-art{opacity:0;transition:opacity .35s ease;}
+  .frame img.az-art.ok{opacity:1;}
   .frame .az-art{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;transition:transform 1.2s var(--ease), filter .6s ease;}
   .frame::after{
     content:"";position:absolute;inset:0;pointer-events:none;
@@ -520,20 +520,20 @@
 
 <script>
 const $ = s => document.querySelector(s);
-const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const PLACEHOLDER = 'assets/place-holder.jpg';
-const FA = '۰۱۲۳۴۵۶۷۸۹';
-const faNum = s => String(s).replace(/\d/g, d => FA[d]);
-const price = n => Number(n || 0).toLocaleString('fa-IR');
-const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function roman(n){
+const KAHESH_HARKAT = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const AKS_KHALI = 'assets/place-holder.jpg';
+const ARGHAM = '۰۱۲۳۴۵۶۷۸۹';
+const adadFarsi = s => String(s).replace(/\d/g, d => ARGHAM[d]);
+const gheymat = n => Number(n || 0).toLocaleString('fa-IR');
+const amnKardan = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function adadRomi(n){
   const m = [[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];
   let s = '';
   m.forEach(([v, r]) => { while(n >= v){ s += r; n -= v; } });
   return s;
 }
 
-function laurel(){
+function tajBarg(){
   let leaves = '', stems = '', k = 0;
   [-1, 1].forEach(side => {
     let stem = '';
@@ -556,9 +556,9 @@ function laurel(){
   const bow = `<path d="M50 88c-4 0-8-3-10-1s2 5 10 1c8 4 12 1 10-1s-6 1-10 1M50 88l-6 9M50 88l6 9" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>`;
   return `<svg viewBox="0 0 100 100">${stems}${leaves}${bow}</svg>`;
 }
-function wreathHTML(letter){ return laurel() + `<div class="mono">${esc(letter)}</div>`; }
+function tajHtml(letter){ return tajBarg() + `<div class="mono">${amnKardan(letter)}</div>`; }
 
-function columnSVG(id, H){
+function sotun(id, H){
   const b = H - 28;
   let s = `<defs><linearGradient id="${id}" x1="0" x2="1"><stop offset="0" stop-color="#e2dccf"/><stop offset=".35" stop-color="#ffffff"/><stop offset="1" stop-color="#d6cfc0"/></linearGradient></defs>`;
   s += `<g stroke="currentColor" stroke-width="1" fill="url(#${id})">`;
@@ -573,7 +573,7 @@ function columnSVG(id, H){
   return s;
 }
 
-function archSVG(w, h){
+function taagh(w, h){
   const f = v => v.toFixed(1);
   const pad = Math.max(10, w * .045);
   const x0 = pad, x1 = w - pad, r = (x1 - x0) / 2, cx = w / 2, cy = pad + r;
@@ -591,12 +591,12 @@ function archSVG(w, h){
   return { svg: s, pad, r, x0, x1, d };
 }
 
-let coverW = 0, coverH = 0;
-function layoutCover(force){
+let arzJeld = 0, tulJeld = 0;
+function chidemanJeld(force){
   const vw = document.documentElement.clientWidth;
   const vh = Math.round(Math.min(window.visualViewport ? visualViewport.height : innerHeight, innerHeight, document.documentElement.clientHeight || innerHeight));
-  if(!force && vw === coverW && Math.abs(vh - coverH) < 140) return;
-  coverW = vw; coverH = vh;
+  if(!force && vw === arzJeld && Math.abs(vh - tulJeld) < 140) return;
+  arzJeld = vw; tulJeld = vh;
   const cols = vw >= 340;
   const colW = cols ? Math.round(Math.min(44, Math.max(28, vw * .085))) : 0;
   const w = Math.round(Math.min(420, vw - 24 - (cols ? colW * 2 + 8 : 0)));
@@ -605,7 +605,7 @@ function layoutCover(force){
   const arch = $('.arch');
   arch.style.width = w + 'px';
   arch.style.height = h + 'px';
-  const a = archSVG(w, h);
+  const a = taagh(w, h);
   const fr = $('#archFrame');
   fr.setAttribute('viewBox', `0 0 ${w} ${h}`);
   fr.innerHTML = a.svg;
@@ -622,17 +622,17 @@ function layoutCover(force){
     el.setAttribute('viewBox', `0 0 44 ${H}`);
     el.style.width = colW + 'px';
     el.style.height = h + 'px';
-    el.innerHTML = columnSVG('colg' + i, H);
+    el.innerHTML = sotun('colg' + i, H);
   });
 }
-layoutCover(true);
-requestAnimationFrame(() => layoutCover(true));
+chidemanJeld(true);
+requestAnimationFrame(() => chidemanJeld(true));
 if('IntersectionObserver' in window) new IntersectionObserver(es => document.body.classList.toggle('away', !es[0].isIntersecting)).observe($('#cover'));
-addEventListener('load', () => layoutCover(true));
-addEventListener('resize', () => layoutCover(false));
-addEventListener('orientationchange', () => setTimeout(() => layoutCover(true), 300));
+addEventListener('load', () => chidemanJeld(true));
+addEventListener('resize', () => chidemanJeld(false));
+addEventListener('orientationchange', () => setTimeout(() => chidemanJeld(true), 300));
 
-function skylineSVG(){
+function manzareRom(){
   let s = `<g fill="currentColor">`;
   s += `<path d="M0 70V58Q30 54 60 57T120 55T200 58V70Z" opacity=".12"/>`;
   s += `<path d="M16 64V41Q40 33 68 37V64Z" opacity=".3"/>`;
@@ -648,49 +648,49 @@ function skylineSVG(){
   return s;
 }
 
-$('#skyline').innerHTML = skylineSVG();
-$('#wreathTop').innerHTML = wreathHTML('A');
-$('#wreathFoot').innerHTML = wreathHTML('A');
+$('#skyline').innerHTML = manzareRom();
+$('#wreathTop').innerHTML = tajHtml('A');
+$('#wreathFoot').innerHTML = tajHtml('A');
 requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('ready')));
 
 if('scrollRestoration' in history) history.scrollRestoration = 'manual';
 scrollTo(0, 0);
 
-function sectionY(idx){
-  const sec = SECTIONS[idx];
+function yBakhsh(idx){
+  const sec = BAKHSHHA[idx];
   if(!sec) return $('#topbar').getBoundingClientRect().top + scrollY;
   const h2 = sec.querySelector('h2');
   const bar = $('#topbar').offsetHeight;
   return Math.max(0, h2.getBoundingClientRect().top + scrollY - bar - 22);
 }
-function goTo(idx){
-  scrollTo({top: sectionY(idx), behavior: REDUCED ? 'auto' : 'smooth'});
+function boroBe(idx){
+  scrollTo({top: yBakhsh(idx), behavior: KAHESH_HARKAT ? 'auto' : 'smooth'});
 }
 $('#openBtn').addEventListener('click', () => {
   if(navigator.vibrate) navigator.vibrate(8);
-  goTo(0);
+  boroBe(0);
 });
 
-let DATA = null, CATS = [], SECTIONS = [], CHIPS = [], ORDER = [], activeIdx = -1;
-let view = 'grid';
-try { view = localStorage.getItem('az-view') || 'grid'; } catch(e){}
+let DADE = null, DASTEHA = [], BAKHSHHA = [], DOKMEHA = [], TARTIB = [], shomareFaal = -1;
+let halatNamayesh = 'grid';
+try { halatNamayesh = localStorage.getItem('az-view') || 'grid'; } catch(e){}
 
-const ICON_GRID = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>';
-const ICON_LIST = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>';
-function applyView(){
-  $('#menu').classList.toggle('list', view === 'list');
-  $('#viewBtn').innerHTML = view === 'list' ? ICON_GRID : ICON_LIST;
-  $('#viewBtn').setAttribute('aria-label', view === 'list' ? 'نمایش شبکه‌ای' : 'نمایش فهرستی');
+const IKON_SHABAKE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>';
+const IKON_FEHREST = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>';
+function emalNamayesh(){
+  $('#menu').classList.toggle('list', halatNamayesh === 'list');
+  $('#viewBtn').innerHTML = halatNamayesh === 'list' ? IKON_SHABAKE : IKON_FEHREST;
+  $('#viewBtn').setAttribute('aria-label', halatNamayesh === 'list' ? 'نمایش شبکه‌ای' : 'نمایش فهرستی');
 }
 $('#viewBtn').addEventListener('click', () => {
-  view = view === 'list' ? 'grid' : 'list';
-  try { localStorage.setItem('az-view', view); } catch(e){}
-  applyView();
-  requestAnimationFrame(onScroll);
+  halatNamayesh = halatNamayesh === 'list' ? 'grid' : 'list';
+  try { localStorage.setItem('az-view', halatNamayesh); } catch(e){}
+  emalNamayesh();
+  requestAnimationFrame(vaghtScroll);
 });
-applyView();
+emalNamayesh();
 
-function normCats(data){
+function morattabDaste(data){
   const out = [], seen = new Set();
   (data.categories || []).forEach(c => {
     const o = typeof c === 'string' ? {name: c} : Object.assign({}, c);
@@ -704,8 +704,8 @@ function normCats(data){
   return out;
 }
 
-function render(data){
-  DATA = data;
+function sakhtMenu(data){
+  DADE = data;
   const name = data.restaurant || 'کافه';
   const latin = data.latin || '';
   const cur = data.currency || 'تومان';
@@ -720,111 +720,154 @@ function render(data){
   const mono = (latin.replace(/^caff[eèé]\s+/i, '').trim()[0] || 'A').toUpperCase();
   document.querySelectorAll('.wreath .mono').forEach(m => m.textContent = mono);
 
-  CATS = normCats(data);
+  DASTEHA = morattabDaste(data);
   const byCat = {};
-  CATS.forEach(c => byCat[c.name] = []);
+  DASTEHA.forEach(c => byCat[c.name] = []);
   (data.items || []).forEach(it => byCat[it.category] && byCat[it.category].push(it));
 
   const rail = $('#rail');
   rail.querySelectorAll('.chip').forEach(b => b.remove());
   const main = $('#menu');
   main.innerHTML = '';
-  SECTIONS = []; CHIPS = []; ORDER = [];
+  BAKHSHHA = []; DOKMEHA = []; TARTIB = [];
 
   let n = 0;
-  CATS.forEach(cat => {
+  DASTEHA.forEach(cat => {
     const items = byCat[cat.name];
     if(!items.length) return;
     const idx = n++;
     const chip = document.createElement('button');
     chip.type = 'button';
     chip.className = 'chip';
-    chip.innerHTML = AzArt.icon(cat.icon) + `<span>${esc(cat.name)}</span>`;
+    chip.innerHTML = Naghsh.ikon(cat.icon) + `<span>${amnKardan(cat.name)}</span>`;
     chip.addEventListener('click', () => {
-      goTo(idx);
+      boroBe(idx);
     });
     rail.appendChild(chip);
-    CHIPS.push(chip);
+    DOKMEHA.push(chip);
 
     const sec = document.createElement('section');
     sec.className = 'cat';
     sec.style.setProperty('--accent', cat.color);
     sec.innerHTML = `<div class="cat-head">
-        <div class="num">${roman(idx + 1)}</div>
-        <div class="medal">${AzArt.icon(cat.icon)}</div>
-        <h2>${esc(cat.name)}</h2>
+        <div class="num">${adadRomi(idx + 1)}</div>
+        <div class="medal">${Naghsh.ikon(cat.icon)}</div>
+        <h2>${amnKardan(cat.name)}</h2>
         <div class="tiles"></div>
       </div>`;
     const grid = document.createElement('div');
     grid.className = 'items';
     items.forEach((it, j) => {
-      const pos = ORDER.length;
-      ORDER.push({item: it, cat});
+      const pos = TARTIB.length;
+      TARTIB.push({item: it, cat});
       const card = document.createElement('button');
       card.type = 'button';
       card.className = 'card' + (it.available ? '' : ' off');
       card.dataset.pos = pos;
       card.dataset.q = it.title + ' ' + (it.description || '') + ' ' + cat.name;
       card.style.setProperty('--d', ((j % 2) * .07).toFixed(2) + 's');
-      card.setAttribute('aria-label', it.title + (it.available ? '، ' + price(it.price) + ' ' + cur : '، ناموجود'));
-      card.innerHTML = `<div class="card-wrap"><span class="keystone"></span><div class="frame"><img class="az-art" src="${AzArt.renderURL(it, {icon: cat.icon})}" alt="" loading="lazy" decoding="async" draggable="false">${it.available ? '' : '<span class="badge">تمام شد</span>'}</div></div>
-        <div class="label"><h3>${esc(faNum(it.title))}</h3><div class="price"><b>${price(it.price)}</b><small>${esc(cur)}</small></div><span class="soldout">ناموجود</span></div>`;
-      card.addEventListener('click', () => openSheet(pos));
+      card.setAttribute('aria-label', it.title + (it.available ? '، ' + gheymat(it.price) + ' ' + cur : '، ناموجود'));
+      card.innerHTML = `<div class="card-wrap"><span class="keystone"></span><div class="frame"><img class="az-art" alt="" decoding="async" draggable="false">${it.available ? '' : '<span class="badge">تمام شد</span>'}</div></div>
+        <div class="label"><h3>${amnKardan(adadFarsi(it.title))}</h3><div class="price"><b>${gheymat(it.price)}</b><small>${amnKardan(cur)}</small></div><span class="soldout">ناموجود</span></div>`;
+      card.addEventListener('click', () => bazKardanBarge(pos));
       grid.appendChild(card);
     });
     sec.appendChild(grid);
     main.appendChild(sec);
-    SECTIONS.push(sec);
+    BAKHSHHA.push(sec);
   });
 
-  if(!SECTIONS.length) main.innerHTML = '<div class="state"><div class="big">منو خالی است</div>هنوز آیتمی در items.json ثبت نشده.</div>';
-  observe();
-  activeIdx = -1;
-  onScroll();
-  requestAnimationFrame(movePill);
+  if(!BAKHSHHA.length) main.innerHTML = '<div class="state"><div class="big">منو خالی است</div>هنوز آیتمی در items.json ثبت نشده.</div>';
+  negahbani();
+  shomareFaal = -1;
+  vaghtScroll();
+  requestAnimationFrame(jabejaNeshangar);
 }
 
-let revealIO;
-function observe(){
+let didbanZohur;
+function negahbani(){
   const cards = document.querySelectorAll('.card');
-  if(revealIO) revealIO.disconnect();
-  if(!('IntersectionObserver' in window) || REDUCED){
-    cards.forEach(c => c.classList.add('in'));
-    SECTIONS.forEach(s => s.classList.add('seen'));
+  if(didbanZohur) didbanZohur.disconnect();
+  if(didbanNaghsh) didbanNaghsh.disconnect();
+  safNaghsh.length = 0;
+  const fw = cards[0] ? cards[0].querySelector('.frame').clientWidth : 200;
+  arzNaghsh = Math.round(Math.max(200, fw) * Math.min(window.devicePixelRatio || 1, 2));
+  if(!('IntersectionObserver' in window) || KAHESH_HARKAT){
+    cards.forEach(c => { c.classList.add('in'); niyazBeNaghsh(c); });
+    BAKHSHHA.forEach(s => s.classList.add('seen'));
     return;
   }
-  revealIO = new IntersectionObserver(es => es.forEach(e => {
-    if(e.isIntersecting){ e.target.classList.add(e.target.classList.contains('card') ? 'in' : 'seen'); revealIO.unobserve(e.target); }
+  didbanZohur = new IntersectionObserver(es => es.forEach(e => {
+    if(e.isIntersecting){ e.target.classList.add(e.target.classList.contains('card') ? 'in' : 'seen'); didbanZohur.unobserve(e.target); }
   }), {threshold:.1, rootMargin:'0px 0px -20px 0px'});
-  cards.forEach(c => revealIO.observe(c));
-  SECTIONS.forEach(s => revealIO.observe(s));
+  didbanNaghsh = new IntersectionObserver(es => es.forEach(e => {
+    if(e.isIntersecting){ niyazBeNaghsh(e.target); didbanNaghsh.unobserve(e.target); }
+  }), {rootMargin:'700px 0px'});
+  cards.forEach(c => { didbanZohur.observe(c); didbanNaghsh.observe(c); });
+  BAKHSHHA.forEach(s => didbanZohur.observe(s));
+  setTimeout(amadeSaziNaghsh, 600);
 }
 
-function movePill(){
-  const chip = CHIPS[Math.max(activeIdx, 0)];
+let didbanNaghsh, arzNaghsh = 400, mashghulNaghsh = false;
+const safNaghsh = [];
+function niyazBeNaghsh(card){
+  if(card.dataset.art) return;
+  card.dataset.art = '1';
+  safNaghsh.push(card);
+  pishbordNaghsh();
+}
+async function pishbordNaghsh(){
+  if(mashghulNaghsh) return;
+  mashghulNaghsh = true;
+  while(safNaghsh.length){
+    const mid = innerHeight / 2;
+    let best = 0, bestD = Infinity;
+    safNaghsh.forEach((c, k) => { const r = c.getBoundingClientRect(), d = Math.abs(r.top + r.height / 2 - mid); if(d < bestD){ bestD = d; best = k; } });
+    const card = safNaghsh.splice(best, 1)[0];
+    const rec = TARTIB[+card.dataset.pos];
+    if(!rec) continue;
+    const t0 = performance.now();
+    const url = await Naghsh.tasvirJpg(rec.item, {icon: rec.cat.icon}, arzNaghsh);
+    const img = card.querySelector('img.az-art');
+    if(img){
+      img.onload = () => img.classList.add('ok');
+      img.src = url;
+    }
+    if(performance.now() - t0 > 12) await new Promise(r => window.requestIdleCallback ? requestIdleCallback(r, {timeout: 120}) : setTimeout(r, 16));
+  }
+  mashghulNaghsh = false;
+}
+function amadeSaziNaghsh(){
+  const rest = [...document.querySelectorAll('.card')].filter(c => !c.dataset.art);
+  rest.forEach(c => { c.dataset.art = '1'; safNaghsh.push(c); });
+  pishbordNaghsh();
+}
+
+function jabejaNeshangar(){
+  const chip = DOKMEHA[Math.max(shomareFaal, 0)];
   if(!chip) return;
   const pill = $('#pill');
   pill.style.left = chip.offsetLeft + 'px';
   pill.style.width = chip.offsetWidth + 'px';
 }
-function setActive(i){
-  if(i === activeIdx) return;
-  activeIdx = i;
-  CHIPS.forEach((c, k) => c.classList.toggle('active', k === i));
-  movePill();
-  const chip = CHIPS[i], box = $('#chips');
+function faalKardan(i){
+  if(i === shomareFaal) return;
+  shomareFaal = i;
+  DOKMEHA.forEach((c, k) => c.classList.toggle('active', k === i));
+  jabejaNeshangar();
+  const chip = DOKMEHA[i], box = $('#chips');
   if(chip){
     const a = chip.getBoundingClientRect(), b = box.getBoundingClientRect();
-    box.scrollBy({left:(a.left + a.width / 2) - (b.left + b.width / 2), behavior: REDUCED ? 'auto' : 'smooth'});
+    box.scrollBy({left:(a.left + a.width / 2) - (b.left + b.width / 2), behavior: KAHESH_HARKAT ? 'auto' : 'smooth'});
   }
 }
-let ticking = false;
-function onScroll(){
-  ticking = false;
+let darHalScroll = false;
+function vaghtScroll(){
+  darHalScroll = false;
   const off = $('#topbar').offsetHeight + 60;
   let cur = 0;
-  SECTIONS.forEach((s, i) => { if(!s.hidden && s.querySelector('h2').getBoundingClientRect().top - off <= 0) cur = i; });
-  setActive(cur);
+  BAKHSHHA.forEach((s, i) => { if(!s.hidden && s.querySelector('h2').getBoundingClientRect().top - off <= 0) cur = i; });
+  faalKardan(cur);
   const max = document.documentElement.scrollHeight - innerHeight;
   const p = max > 0 ? Math.min(1, scrollY / max) : 0;
   $('#progress').style.setProperty('--p', p.toFixed(4));
@@ -832,30 +875,30 @@ function onScroll(){
   tt.style.setProperty('--p', p.toFixed(4));
   tt.classList.toggle('show', scrollY > innerHeight * 1.3);
 }
-addEventListener('scroll', () => { if(!ticking){ ticking = true; requestAnimationFrame(onScroll); } }, {passive:true});
-addEventListener('resize', () => requestAnimationFrame(movePill));
-if(document.fonts) document.fonts.ready.then(movePill);
-$('#toTop').addEventListener('click', () => scrollTo({top: 0, behavior: REDUCED ? 'auto' : 'smooth'}));
+addEventListener('scroll', () => { if(!darHalScroll){ darHalScroll = true; requestAnimationFrame(vaghtScroll); } }, {passive:true});
+addEventListener('resize', () => requestAnimationFrame(jabejaNeshangar));
+if(document.fonts) document.fonts.ready.then(jabejaNeshangar);
+$('#toTop').addEventListener('click', () => scrollTo({top: 0, behavior: KAHESH_HARKAT ? 'auto' : 'smooth'}));
 
-const topbar = $('#topbar'), q = $('#q');
+const navarBala = $('#topbar'), q = $('#q');
 $('#searchBtn').addEventListener('click', () => {
-  topbar.classList.add('searching');
+  navarBala.classList.add('searching');
   document.body.classList.add('searching');
   const y = $('#cover').offsetHeight;
   if(scrollY < y) scrollTo({top: y});
   q.focus();
 });
-$('#closeSearch').addEventListener('click', () => { q.value = ''; filter(''); topbar.classList.remove('searching'); document.body.classList.remove('searching'); });
-q.addEventListener('input', () => filter(q.value));
+$('#closeSearch').addEventListener('click', () => { q.value = ''; palayesh(''); navarBala.classList.remove('searching'); document.body.classList.remove('searching'); });
+q.addEventListener('input', () => palayesh(q.value));
 q.addEventListener('keydown', e => { if(e.key === 'Enter') q.blur(); if(e.key === 'Escape') $('#closeSearch').click(); });
-function norm(s){ return String(s).toLowerCase().replace(/[۰-۹]/g, d => FA.indexOf(d)).replace(/ي/g, 'ی').replace(/ك/g, 'ک').replace(/[‌\s]+/g, ' ').trim(); }
-function filter(v){
-  const t = norm(v);
+function yeksanSazi(s){ return String(s).toLowerCase().replace(/[۰-۹]/g, d => ARGHAM.indexOf(d)).replace(/ي/g, 'ی').replace(/ك/g, 'ک').replace(/[‌\s]+/g, ' ').trim(); }
+function palayesh(v){
+  const t = yeksanSazi(v);
   let any = false;
-  SECTIONS.forEach(sec => {
+  BAKHSHHA.forEach(sec => {
     let vis = 0;
     sec.querySelectorAll('.card').forEach(c => {
-      const ok = !t || norm(c.dataset.q).includes(t);
+      const ok = !t || yeksanSazi(c.dataset.q).includes(t);
       c.hidden = !ok;
       if(ok){ vis++; c.classList.add('in'); }
     });
@@ -864,49 +907,49 @@ function filter(v){
   });
   $('#empty').classList.toggle('show', !any);
   if(document.body.classList.contains('searching')) requestAnimationFrame(() => scrollTo({top: $('#cover').offsetHeight}));
-  activeIdx = -1;
-  requestAnimationFrame(onScroll);
+  shomareFaal = -1;
+  requestAnimationFrame(vaghtScroll);
 }
 
-const sheet = $('#sheet'), panel = $('#panel');
-let sheetOpen = false, curPos = -1, mode = 'photo', lastFocus = null;
-const hasPhoto = it => !!it.image && it.image !== PLACEHOLDER;
-function paintMedia(){
-  const {item, cat} = ORDER[curPos];
+const barge = $('#sheet'), safhe = $('#panel');
+let bargeBaz = false, jaygahFeli = -1, halatTasvir = 'photo', akharinFocus = null;
+const aksDarad = it => !!it.image && it.image !== AKS_KHALI;
+function namayeshTasvir(){
+  const {item, cat} = TARTIB[jaygahFeli];
   const box = $('#vmedia');
-  box.innerHTML = AzArt.render(item, {icon: cat.icon});
+  box.innerHTML = Naghsh.keshidan(item, {icon: cat.icon});
   if(!item.available) box.firstElementChild.style.filter = 'grayscale(.85)';
-  if(mode === 'photo' && hasPhoto(item)){
+  if(halatTasvir === 'photo' && aksDarad(item)){
     const img = new Image();
     img.alt = item.title;
     img.onload = () => {
-      if(ORDER[curPos] && ORDER[curPos].item === item && mode === 'photo'){
+      if(TARTIB[jaygahFeli] && TARTIB[jaygahFeli].item === item && halatTasvir === 'photo'){
         if(!item.available) img.style.filter = 'grayscale(.85)';
         box.innerHTML = '';
         box.appendChild(img);
       }
     };
-    img.onerror = () => { if(ORDER[curPos] && ORDER[curPos].item === item) $('#vtoggle').hidden = true; };
+    img.onerror = () => { if(TARTIB[jaygahFeli] && TARTIB[jaygahFeli].item === item) $('#vtoggle').hidden = true; };
     img.src = item.image;
   }
 }
-function visibleOrder(){ return [...document.querySelectorAll('.card')].filter(c => !c.hidden).map(c => +c.dataset.pos); }
-function fillSheet(){
-  const {item, cat} = ORDER[curPos];
-  const cur = DATA.currency || 'تومان';
-  sheet.style.setProperty('--accent', cat.color);
-  mode = hasPhoto(item) ? 'photo' : 'art';
-  $('#vtoggle').hidden = !hasPhoto(item);
-  $('#vtoggle').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.m === mode));
-  paintMedia();
-  $('#vcat').innerHTML = AzArt.icon(cat.icon) + esc(cat.name);
-  $('#vtitle').innerHTML = esc(faNum(item.title)).replace(/[۰-۹]+(?:[\/٫.][۰-۹]+)*/g, m => `<span class="dg">${m}</span>`);
+function tartibePeyda(){ return [...document.querySelectorAll('.card')].filter(c => !c.hidden).map(c => +c.dataset.pos); }
+function porKardanBarge(){
+  const {item, cat} = TARTIB[jaygahFeli];
+  const cur = DADE.currency || 'تومان';
+  barge.style.setProperty('--accent', cat.color);
+  halatTasvir = aksDarad(item) ? 'photo' : 'art';
+  $('#vtoggle').hidden = !aksDarad(item);
+  $('#vtoggle').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.m === halatTasvir));
+  namayeshTasvir();
+  $('#vcat').innerHTML = Naghsh.ikon(cat.icon) + amnKardan(cat.name);
+  $('#vtitle').innerHTML = amnKardan(adadFarsi(item.title)).replace(/[۰-۹]+(?:[\/٫.][۰-۹]+)*/g, m => `<span class="dg">${m}</span>`);
   $('#vdesc').textContent = item.description || '';
   $('#vdesc').hidden = !item.description;
   const vp = $('#vprice');
-  if(item.available){ vp.className = 'vprice'; vp.innerHTML = `<b>${price(item.price)}</b><small>${esc(cur)}</small>`; }
+  if(item.available){ vp.className = 'vprice'; vp.innerHTML = `<b>${gheymat(item.price)}</b><small>${amnKardan(cur)}</small>`; }
   else { vp.className = 'vprice off'; vp.innerHTML = '<b>فعلاً ناموجود</b>'; }
-  const list = visibleOrder(), k = list.indexOf(curPos);
+  const list = tartibePeyda(), k = list.indexOf(jaygahFeli);
   $('#vprev').disabled = k <= 0;
   $('#vnext').disabled = k >= list.length - 1;
   $('#vprev').style.opacity = k <= 0 ? .35 : 1;
@@ -915,78 +958,78 @@ function fillSheet(){
 $('#vtoggle').addEventListener('click', e => {
   const b = e.target.closest('button');
   if(!b) return;
-  mode = b.dataset.m;
+  halatTasvir = b.dataset.m;
   $('#vtoggle').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
-  paintMedia();
+  namayeshTasvir();
 });
-function openSheet(pos){
-  curPos = pos;
-  lastFocus = document.activeElement;
-  fillSheet();
-  sheet.hidden = false;
-  panel.scrollTop = 0;
+function bazKardanBarge(pos){
+  jaygahFeli = pos;
+  akharinFocus = document.activeElement;
+  porKardanBarge();
+  barge.hidden = false;
+  safhe.scrollTop = 0;
   document.body.classList.add('locked');
-  void sheet.offsetWidth;
-  sheet.classList.add('open');
-  sheetOpen = true;
+  void barge.offsetWidth;
+  barge.classList.add('open');
+  bargeBaz = true;
   history.pushState({sheet:true}, '');
 }
-function closeSheet(fromPop){
-  if(!sheetOpen) return;
-  sheetOpen = false;
-  sheet.classList.remove('open');
-  sheet.style.removeProperty('--drag');
+function bastanBarge(fromPop){
+  if(!bargeBaz) return;
+  bargeBaz = false;
+  barge.classList.remove('open');
+  barge.style.removeProperty('--drag');
   document.body.classList.remove('locked');
-  setTimeout(() => { if(!sheetOpen) sheet.hidden = true; }, REDUCED ? 0 : 450);
+  setTimeout(() => { if(!bargeBaz) barge.hidden = true; }, KAHESH_HARKAT ? 0 : 450);
   if(!fromPop && history.state && history.state.sheet) history.back();
-  if(lastFocus && lastFocus.focus) lastFocus.focus({preventScroll:true});
+  if(akharinFocus && akharinFocus.focus) akharinFocus.focus({preventScroll:true});
 }
-function step(d){
-  const list = visibleOrder(), k = list.indexOf(curPos) + d;
+function ghadam(d){
+  const list = tartibePeyda(), k = list.indexOf(jaygahFeli) + d;
   if(k < 0 || k >= list.length) return;
-  curPos = list[k];
-  fillSheet();
-  if(!REDUCED) $('#vmedia').animate([{opacity:0, transform:`translateX(${d > 0 ? 28 : -28}px)`}, {opacity:1, transform:'none'}], {duration:380, easing:'cubic-bezier(.22,1,.36,1)'});
+  jaygahFeli = list[k];
+  porKardanBarge();
+  if(!KAHESH_HARKAT) $('#vmedia').animate([{opacity:0, transform:`translateX(${d > 0 ? 28 : -28}px)`}, {opacity:1, transform:'none'}], {duration:380, easing:'cubic-bezier(.22,1,.36,1)'});
 }
-$('#vclose').addEventListener('click', () => closeSheet());
-$('#scrim').addEventListener('click', () => closeSheet());
-$('#vprev').addEventListener('click', () => step(-1));
-$('#vnext').addEventListener('click', () => step(1));
-addEventListener('popstate', () => closeSheet(true));
+$('#vclose').addEventListener('click', () => bastanBarge());
+$('#scrim').addEventListener('click', () => bastanBarge());
+$('#vprev').addEventListener('click', () => ghadam(-1));
+$('#vnext').addEventListener('click', () => ghadam(1));
+addEventListener('popstate', () => bastanBarge(true));
 addEventListener('keydown', e => {
-  if(!sheetOpen) return;
-  if(e.key === 'Escape') closeSheet();
-  if(e.key === 'ArrowRight') step(1);
-  if(e.key === 'ArrowLeft') step(-1);
+  if(!bargeBaz) return;
+  if(e.key === 'Escape') bastanBarge();
+  if(e.key === 'ArrowRight') ghadam(1);
+  if(e.key === 'ArrowLeft') ghadam(-1);
 });
 
-let sx = 0, sy = 0, dragging = false, axis = null;
-panel.addEventListener('touchstart', e => {
+let shoruX = 0, shoruY = 0, dargKardan = false, mehvar = null;
+safhe.addEventListener('touchstart', e => {
   const t = e.touches[0];
-  sx = t.clientX; sy = t.clientY; axis = null; dragging = true;
+  shoruX = t.clientX; shoruY = t.clientY; mehvar = null; dargKardan = true;
 }, {passive:true});
-panel.addEventListener('touchmove', e => {
-  if(!dragging) return;
-  const t = e.touches[0], dx = t.clientX - sx, dy = t.clientY - sy;
-  if(!axis && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
-  if(axis === 'y' && dy > 0 && panel.scrollTop <= 0){
-    sheet.classList.add('dragging');
-    sheet.style.setProperty('--drag', dy + 'px');
+safhe.addEventListener('touchmove', e => {
+  if(!dargKardan) return;
+  const t = e.touches[0], dx = t.clientX - shoruX, dy = t.clientY - shoruY;
+  if(!mehvar && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) mehvar = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+  if(mehvar === 'y' && dy > 0 && safhe.scrollTop <= 0){
+    barge.classList.add('dragging');
+    barge.style.setProperty('--drag', dy + 'px');
   }
 }, {passive:true});
-panel.addEventListener('touchend', e => {
-  if(!dragging) return;
-  dragging = false;
-  const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
-  sheet.classList.remove('dragging');
-  if(axis === 'y' && dy > 110 && panel.scrollTop <= 0){ closeSheet(); return; }
-  sheet.style.setProperty('--drag', '0px');
-  if(axis === "x" && Math.abs(dx) > 60) step(dx < 0 ? 1 : -1);
+safhe.addEventListener('touchend', e => {
+  if(!dargKardan) return;
+  dargKardan = false;
+  const t = e.changedTouches[0], dx = t.clientX - shoruX, dy = t.clientY - shoruY;
+  barge.classList.remove('dragging');
+  if(mehvar === 'y' && dy > 110 && safhe.scrollTop <= 0){ bastanBarge(); return; }
+  barge.style.setProperty('--drag', '0px');
+  if(mehvar === "x" && Math.abs(dx) > 60) ghadam(dx < 0 ? 1 : -1);
 });
 
 fetch('items.json', {cache:'no-cache'})
   .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
-  .then(render)
+  .then(sakhtMenu)
   .catch(() => {
     $('#menu').innerHTML = '<div class="state"><div class="big">منو بارگذاری نشد</div>فایل <code>items.json</code> خوانده نشد.<br>صفحه را از طریق وب‌سرور باز کنید (نه مستقیم از روی فایل).</div>';
   });

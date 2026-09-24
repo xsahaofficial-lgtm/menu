@@ -283,26 +283,26 @@
 
 <script>
 const $ = s => document.querySelector(s);
-const FA = '۰۱۲۳۴۵۶۷۸۹';
-const faNum = s => String(s).replace(/\d/g, d => FA[d]);
-const toEn = s => String(s).replace(/[۰-۹]/g, d => FA.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
-const price = n => Number(n || 0).toLocaleString('fa-IR');
-const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const PLACEHOLDER = 'assets/place-holder.jpg';
-const DRAFT_KEY = 'az-designer-draft';
-const ICON_KEYS = ['espresso', 'iced', 'mug', 'tea', 'cocktail', 'shake', 'cake', 'toast', 'drop', 'star', 'leaf'];
-const SWATCHES = ['#2a8ad6', '#d61f4a', '#12a05a', '#ff5a2a', '#f6be45', '#8a5ad0', '#0f8f8a', '#f7a9c0', '#e8dcc4'];
+const ARGHAM = '۰۱۲۳۴۵۶۷۸۹';
+const adadFarsi = s => String(s).replace(/\d/g, d => ARGHAM[d]);
+const adadLatin = s => String(s).replace(/[۰-۹]/g, d => ARGHAM.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+const gheymat = n => Number(n || 0).toLocaleString('fa-IR');
+const amnKardan = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const AKS_KHALI = 'assets/place-holder.jpg';
+const KELID_PISHNEVIS = 'az-designer-draft';
+const KELID_IKONHA = ['espresso', 'iced', 'mug', 'tea', 'cocktail', 'shake', 'cake', 'toast', 'drop', 'star', 'leaf'];
+const NEMUNE_RANGHA = ['#2a8ad6', '#d61f4a', '#12a05a', '#ff5a2a', '#f6be45', '#8a5ad0', '#0f8f8a', '#f7a9c0', '#e8dcc4'];
 
-let data = null, fileHandle = null, dirty = false, savedText = '';
+let dade = null, dasteFile = null, taghirDarad = false, matnZakhire = '';
 
-function toast(msg){
+function payam(msg){
   const t = $('#toast');
   t.textContent = msg;
   t.classList.add('show');
-  clearTimeout(toast.t);
-  toast.t = setTimeout(() => t.classList.remove('show'), 2200);
+  clearTimeout(payam.t);
+  payam.t = setTimeout(() => t.classList.remove('show'), 2200);
 }
-function ask(title, text, buttons, extra){
+function porsidan(title, text, buttons, extra){
   return new Promise(res => {
     const d = $('#dlg');
     $('#dlgTitle').textContent = title;
@@ -324,7 +324,7 @@ function ask(title, text, buttons, extra){
   });
 }
 
-function normalize(raw){
+function morattabSazi(raw){
   const d = raw && typeof raw === 'object' ? raw : {};
   const out = {
     restaurant: d.restaurant || 'کافه',
@@ -340,7 +340,7 @@ function normalize(raw){
     const o = typeof c === 'string' ? {name: c} : Object.assign({}, c);
     if(!o.name || seen.has(o.name)) return;
     seen.add(o.name);
-    out.categories.push({name: o.name, icon: o.icon || ICON_KEYS[i % 9], color: o.color || '#1f5fa8'});
+    out.categories.push({name: o.name, icon: o.icon || KELID_IKONHA[i % 9], color: o.color || '#1f5fa8'});
   });
   (d.items || []).forEach(it => {
     if(it.category && !seen.has(it.category)){ seen.add(it.category); out.categories.push({name: it.category, icon: 'star', color: '#1f5fa8'}); }
@@ -362,12 +362,12 @@ function normalize(raw){
   out.items.forEach(it => { if(it.id == null || ids.has(it.id)) it.id = ++max; ids.add(it.id); });
   return out;
 }
-function serialize(){
+function reshteSazi(){
   const o = {
-    restaurant: data.restaurant, latin: data.latin, tagline: data.tagline, address: data.address, currency: data.currency,
-    categories: data.categories.map(c => ({name: c.name, icon: c.icon, color: c.color})),
-    items: data.items.map(it => {
-      const x = {id: it.id, category: it.category, title: it.title, description: it.description, price: it.price, image: it.image || PLACEHOLDER, available: it.available, art: it.art || ''};
+    restaurant: dade.restaurant, latin: dade.latin, tagline: dade.tagline, address: dade.address, currency: dade.currency,
+    categories: dade.categories.map(c => ({name: c.name, icon: c.icon, color: c.color})),
+    items: dade.items.map(it => {
+      const x = {id: it.id, category: it.category, title: it.title, description: it.description, price: it.price, image: it.image || AKS_KHALI, available: it.available, art: it.art || ''};
       if(it.artSeed) x.artSeed = it.artSeed;
       if(it.artColor) x.artColor = it.artColor;
       return x;
@@ -375,74 +375,74 @@ function serialize(){
   };
   return JSON.stringify(o, null, 2) + '\n';
 }
-function setDirty(v){
-  dirty = v;
+function taghirVaziat(v){
+  taghirDarad = v;
   const el = $('#dirty');
   el.classList.toggle('on', v);
   el.querySelector('span').textContent = v ? 'تغییرات ذخیره نشده' : 'ذخیره شده';
 }
-function changed(){
-  const text = serialize();
-  setDirty(text !== savedText);
-  try { if(dirty) localStorage.setItem(DRAFT_KEY, text); else localStorage.removeItem(DRAFT_KEY); } catch(e){}
+function taghirKard(){
+  const text = reshteSazi();
+  taghirVaziat(text !== matnZakhire);
+  try { if(taghirDarad) localStorage.setItem(KELID_PISHNEVIS, text); else localStorage.removeItem(KELID_PISHNEVIS); } catch(e){}
 }
-function load(raw, from){
-  data = normalize(raw);
-  savedText = serialize();
-  setDirty(false);
-  renderAll();
-  if(from) toast(from);
-}
-
-function catOf(name){ return data.categories.find(c => c.name === name) || {name, icon: 'star', color: '#1f5fa8'}; }
-function art(it, style){ return AzArt.render(it, {icon: catOf(it.category).icon, style: style || undefined}); }
-function hasPhoto(it){ return it.image && it.image !== PLACEHOLDER; }
-
-function renderAll(){
-  renderFilter();
-  renderItems();
-  renderCats();
-  document.querySelectorAll('[data-info]').forEach(i => i.value = data[i.dataset.info] || '');
+function bargozari(raw, from){
+  dade = morattabSazi(raw);
+  matnZakhire = reshteSazi();
+  taghirVaziat(false);
+  hameRaBesaz();
+  if(from) payam(from);
 }
 
-function renderFilter(){
+function dasteYe(name){ return dade.categories.find(c => c.name === name) || {name, icon: 'star', color: '#1f5fa8'}; }
+function naghsh(it, style){ return Naghsh.keshidan(it, {icon: dasteYe(it.category).icon, style: style || undefined}); }
+function aksDarad(it){ return it.image && it.image !== AKS_KHALI; }
+
+function hameRaBesaz(){
+  sakhtPalayesh();
+  sakhtAitemha();
+  sakhtDasteha();
+  document.querySelectorAll('[data-info]').forEach(i => i.value = dade[i.dataset.info] || '');
+}
+
+function sakhtPalayesh(){
   const sel = $('#catFilter'), v = sel.value;
-  sel.innerHTML = '<option value="">همه دسته‌ها</option>' + data.categories.map(c => `<option>${esc(c.name)}</option>`).join('');
-  sel.value = data.categories.some(c => c.name === v) ? v : '';
+  sel.innerHTML = '<option value="">همه دسته‌ها</option>' + dade.categories.map(c => `<option>${amnKardan(c.name)}</option>`).join('');
+  sel.value = dade.categories.some(c => c.name === v) ? v : '';
 }
 
-function renderItems(){
-  const q = toEn($('#search').value.trim()).toLowerCase();
+function sakhtAitemha(){
+  const q = adadLatin($('#search').value.trim()).toLowerCase();
   const cf = $('#catFilter').value;
   const box = $('#itemList');
   box.innerHTML = '';
   let total = 0;
-  data.categories.forEach(cat => {
+  dade.categories.forEach(cat => {
     if(cf && cat.name !== cf) return;
-    const list = data.items.filter(it => it.category === cat.name && (!q || toEn(it.title).toLowerCase().includes(q)));
+    const list = dade.items.filter(it => it.category === cat.name && (!q || adadLatin(it.title).toLowerCase().includes(q)));
     if(!list.length && q) return;
     total += list.length;
     const g = document.createElement('div');
     g.className = 'group';
     g.style.setProperty('--c', cat.color);
-    g.innerHTML = `<h3>${AzArt.icon(cat.icon)}${esc(cat.name)} <span class="n">${faNum(list.length)} آیتم</span></h3>`;
+    g.innerHTML = `<h3>${Naghsh.ikon(cat.icon)}${amnKardan(cat.name)} <span class="n">${adadFarsi(list.length)} آیتم</span></h3>`;
     const rows = document.createElement('div');
     rows.className = 'rows';
     if(!list.length) rows.innerHTML = '<div class="empty">هنوز آیتمی در این دسته نیست.</div>';
-    list.forEach(it => rows.appendChild(itemRow(it)));
+    list.forEach(it => rows.appendChild(radifAitem(it)));
     g.appendChild(rows);
     box.appendChild(g);
   });
   if(!total && q) box.innerHTML = '<div class="empty">چیزی پیدا نشد.</div>';
 }
 
-function itemRow(it){
+function radifAitem(it){
   const r = document.createElement('div');
   r.className = 'row' + (it.available ? '' : ' off');
-  const styleKey = AzArt.resolveStyle(it, catOf(it.category).icon);
-  r.innerHTML = `<div class="thumb"><img src="${AzArt.renderURL(it, {icon: catOf(it.category).icon})}" alt="" loading="lazy" decoding="async"></div>
-    <div class="meta"><b>${esc(faNum(it.title) || 'بدون نام')}</b>
-      <span><span class="p">${price(it.price)} ${esc(data.currency)}</span><span class="tag">${esc(AzArt.label(styleKey))}${it.art ? '' : ' · خودکار'}</span>${hasPhoto(it) ? '<span class="tag photo">عکس دارد</span>' : ''}</span></div>
+  const styleKey = Naghsh.sabkeMonaseb(it, dasteYe(it.category).icon);
+  r.innerHTML = `<div class="thumb"><img src="${Naghsh.adresTasvir(it, {icon: dasteYe(it.category).icon})}" alt="" loading="lazy" decoding="async"></div>
+    <div class="meta"><b>${amnKardan(adadFarsi(it.title) || 'بدون نام')}</b>
+      <span><span class="p">${gheymat(it.price)} ${amnKardan(dade.currency)}</span><span class="tag">${amnKardan(Naghsh.onvan(styleKey))}${it.art ? '' : ' · خودکار'}</span>${aksDarad(it) ? '<span class="tag photo">عکس دارد</span>' : ''}</span></div>
     <div class="ops">
       <button type="button" class="switch ${it.available ? 'on' : ''}" title="موجود / ناموجود" aria-label="موجود"></button>
       <button type="button" class="btn sm" data-a="edit">ویرایش</button>
@@ -455,55 +455,55 @@ function itemRow(it){
         </div>
       </div>
     </div>`;
-  r.querySelector('.thumb').onclick = r.querySelector('.meta').onclick = () => openEditor(it);
-  r.querySelector('.switch').onclick = e => { it.available = !it.available; e.currentTarget.classList.toggle('on', it.available); r.classList.toggle('off', !it.available); changed(); };
-  r.querySelector('[data-a=edit]').onclick = () => openEditor(it);
+  r.querySelector('.thumb').onclick = r.querySelector('.meta').onclick = () => bazKardanVirayeshgar(it);
+  r.querySelector('.switch').onclick = e => { it.available = !it.available; e.currentTarget.classList.toggle('on', it.available); r.classList.toggle('off', !it.available); taghirKard(); };
+  r.querySelector('[data-a=edit]').onclick = () => bazKardanVirayeshgar(it);
   const menu = r.querySelector('.menu');
   r.querySelector('[data-a=more]').onclick = e => { e.stopPropagation(); document.querySelectorAll('.menu.open').forEach(m => m !== menu && m.classList.remove('open')); menu.classList.toggle('open'); };
   menu.onclick = async e => {
     const a = e.target.closest('button') && e.target.closest('button').dataset.a;
     menu.classList.remove('open');
-    if(a === 'up' || a === 'down') move(it, a === 'up' ? -1 : 1);
+    if(a === 'up' || a === 'down') jabeja(it, a === 'up' ? -1 : 1);
     if(a === 'dup'){
-      const c = Object.assign({}, it, {id: nextId(), title: it.title + ' (کپی)', artSeed: (it.artSeed || 0) + 1});
-      data.items.splice(data.items.indexOf(it) + 1, 0, c);
-      changed(); renderItems(); toast('کپی ساخته شد');
+      const c = Object.assign({}, it, {id: shenaseBadi(), title: it.title + ' (کپی)', artSeed: (it.artSeed || 0) + 1});
+      dade.items.splice(dade.items.indexOf(it) + 1, 0, c);
+      taghirKard(); sakhtAitemha(); payam('کپی ساخته شد');
     }
     if(a === 'del'){
-      const ok = await ask('حذف آیتم', `«${it.title}» حذف شود؟`, [{label:'حذف', value:true, cls:'danger'}, {label:'انصراف', value:false}]);
-      if(ok){ data.items.splice(data.items.indexOf(it), 1); changed(); renderItems(); toast('حذف شد'); }
+      const ok = await porsidan('حذف آیتم', `«${it.title}» حذف شود؟`, [{label:'حذف', value:true, cls:'danger'}, {label:'انصراف', value:false}]);
+      if(ok){ dade.items.splice(dade.items.indexOf(it), 1); taghirKard(); sakhtAitemha(); payam('حذف شد'); }
     }
   };
   return r;
 }
 document.addEventListener('click', () => document.querySelectorAll('.menu.open').forEach(m => m.classList.remove('open')));
 
-function move(it, d){
-  const same = data.items.filter(x => x.category === it.category);
+function jabeja(it, d){
+  const same = dade.items.filter(x => x.category === it.category);
   const k = same.indexOf(it), other = same[k + d];
   if(!other) return;
-  const a = data.items.indexOf(it), b = data.items.indexOf(other);
-  data.items[a] = other; data.items[b] = it;
-  changed(); renderItems();
+  const a = dade.items.indexOf(it), b = dade.items.indexOf(other);
+  dade.items[a] = other; dade.items[b] = it;
+  taghirKard(); sakhtAitemha();
 }
-function nextId(){ return data.items.reduce((m, it) => Math.max(m, Number(it.id) || 0), 0) + 1; }
+function shenaseBadi(){ return dade.items.reduce((m, it) => Math.max(m, Number(it.id) || 0), 0) + 1; }
 
-function renderCats(){
+function sakhtDasteha(){
   const box = $('#catList');
   box.innerHTML = '';
-  data.categories.forEach((cat, i) => {
-    const count = data.items.filter(it => it.category === cat.name).length;
+  dade.categories.forEach((cat, i) => {
+    const count = dade.items.filter(it => it.category === cat.name).length;
     const r = document.createElement('div');
     r.className = 'catrow';
     r.style.setProperty('--c', cat.color);
-    r.innerHTML = `<div class="ic">${AzArt.icon(cat.icon)}</div>
+    r.innerHTML = `<div class="ic">${Naghsh.ikon(cat.icon)}</div>
       <div class="fields">
-        <input type="text" value="${esc(cat.name)}" aria-label="نام دسته">
-        <select aria-label="آیکون">${ICON_KEYS.map(k => `<option value="${k}" ${k === cat.icon ? 'selected' : ''}>${esc(AzArt.icons[k][0])}</option>`).join('')}</select>
-        <input type="color" value="${esc(cat.color)}" aria-label="رنگ">
+        <input type="text" value="${amnKardan(cat.name)}" aria-label="نام دسته">
+        <select aria-label="آیکون">${KELID_IKONHA.map(k => `<option value="${k}" ${k === cat.icon ? 'selected' : ''}>${amnKardan(Naghsh.ikonha[k][0])}</option>`).join('')}</select>
+        <input type="color" value="${amnKardan(cat.color)}" aria-label="رنگ">
       </div>
       <div class="ops">
-        <span class="dirty">${faNum(count)} آیتم</span>
+        <span class="dirty">${adadFarsi(count)} آیتم</span>
         <button type="button" class="btn icon ghost" data-a="up" aria-label="بالا">⬆</button>
         <button type="button" class="btn icon ghost" data-a="down" aria-label="پایین">⬇</button>
         <button type="button" class="btn icon ghost danger" data-a="del" aria-label="حذف">🗑</button>
@@ -511,110 +511,110 @@ function renderCats(){
     const [nameI, iconS, colorI] = r.querySelectorAll('input[type=text], select, input[type=color]');
     nameI.onchange = () => {
       const v = nameI.value.trim();
-      if(!v || (v !== cat.name && data.categories.some(c => c.name === v))){ nameI.value = cat.name; toast('نام تکراری یا خالی است'); return; }
-      data.items.forEach(it => { if(it.category === cat.name) it.category = v; });
+      if(!v || (v !== cat.name && dade.categories.some(c => c.name === v))){ nameI.value = cat.name; payam('نام تکراری یا خالی است'); return; }
+      dade.items.forEach(it => { if(it.category === cat.name) it.category = v; });
       cat.name = v;
-      changed(); renderFilter(); renderItems();
+      taghirKard(); sakhtPalayesh(); sakhtAitemha();
     };
-    iconS.onchange = () => { cat.icon = iconS.value; r.querySelector('.ic').innerHTML = AzArt.icon(cat.icon); changed(); renderItems(); };
-    colorI.oninput = () => { cat.color = colorI.value; r.style.setProperty('--c', cat.color); changed(); };
-    colorI.onchange = () => renderItems();
-    r.querySelector('[data-a=up]').onclick = () => { if(i > 0){ [data.categories[i - 1], data.categories[i]] = [data.categories[i], data.categories[i - 1]]; changed(); renderAll(); } };
-    r.querySelector('[data-a=down]').onclick = () => { if(i < data.categories.length - 1){ [data.categories[i + 1], data.categories[i]] = [data.categories[i], data.categories[i + 1]]; changed(); renderAll(); } };
+    iconS.onchange = () => { cat.icon = iconS.value; r.querySelector('.ic').innerHTML = Naghsh.ikon(cat.icon); taghirKard(); sakhtAitemha(); };
+    colorI.oninput = () => { cat.color = colorI.value; r.style.setProperty('--c', cat.color); taghirKard(); };
+    colorI.onchange = () => sakhtAitemha();
+    r.querySelector('[data-a=up]').onclick = () => { if(i > 0){ [dade.categories[i - 1], dade.categories[i]] = [dade.categories[i], dade.categories[i - 1]]; taghirKard(); hameRaBesaz(); } };
+    r.querySelector('[data-a=down]').onclick = () => { if(i < dade.categories.length - 1){ [dade.categories[i + 1], dade.categories[i]] = [dade.categories[i], dade.categories[i + 1]]; taghirKard(); hameRaBesaz(); } };
     r.querySelector('[data-a=del]').onclick = async () => {
       if(!count){
-        if(await ask('حذف دسته‌بندی', `دسته «${cat.name}» حذف شود؟`, [{label:'حذف', value:true, cls:'danger'}, {label:'انصراف', value:false}])){ data.categories.splice(i, 1); changed(); renderAll(); }
+        if(await porsidan('حذف دسته‌بندی', `دسته «${cat.name}» حذف شود؟`, [{label:'حذف', value:true, cls:'danger'}, {label:'انصراف', value:false}])){ dade.categories.splice(i, 1); taghirKard(); hameRaBesaz(); }
         return;
       }
-      const others = data.categories.filter(c => c !== cat);
+      const others = dade.categories.filter(c => c !== cat);
       const sel = document.createElement('select');
       sel.style.width = '100%';
-      sel.innerHTML = others.map(c => `<option>${esc(c.name)}</option>`).join('');
-      const act = await ask('حذف دسته‌بندی', `این دسته ${faNum(count)} آیتم دارد. آیتم‌ها به کدام دسته منتقل شوند؟`, [
+      sel.innerHTML = others.map(c => `<option>${amnKardan(c.name)}</option>`).join('');
+      const act = await porsidan('حذف دسته‌بندی', `این دسته ${adadFarsi(count)} آیتم دارد. آیتم‌ها به کدام دسته منتقل شوند؟`, [
         ...(others.length ? [{label:'انتقال و حذف دسته', value:'move', cls:'primary'}] : []),
         {label:'حذف همراه آیتم‌ها', value:'all', cls:'danger'},
         {label:'انصراف', value:null}
       ], others.length ? sel : null);
-      if(act === 'move'){ data.items.forEach(it => { if(it.category === cat.name) it.category = sel.value; }); }
-      if(act === 'all'){ data.items = data.items.filter(it => it.category !== cat.name); }
-      if(act === 'move' || act === 'all'){ data.categories.splice(data.categories.indexOf(cat), 1); changed(); renderAll(); }
+      if(act === 'move'){ dade.items.forEach(it => { if(it.category === cat.name) it.category = sel.value; }); }
+      if(act === 'all'){ dade.items = dade.items.filter(it => it.category !== cat.name); }
+      if(act === 'move' || act === 'all'){ dade.categories.splice(dade.categories.indexOf(cat), 1); taghirKard(); hameRaBesaz(); }
     };
     box.appendChild(r);
   });
 }
 $('#addCat').onclick = () => {
   let n = 'دسته جدید', k = 2;
-  while(data.categories.some(c => c.name === n)) n = 'دسته جدید ' + faNum(k++);
-  data.categories.push({name: n, icon: 'star', color: '#1f5fa8'});
-  changed(); renderAll();
+  while(dade.categories.some(c => c.name === n)) n = 'دسته جدید ' + adadFarsi(k++);
+  dade.categories.push({name: n, icon: 'star', color: '#1f5fa8'});
+  taghirKard(); hameRaBesaz();
   const inputs = document.querySelectorAll('#catList input[type=text]');
   const last = inputs[inputs.length - 1];
   last.focus(); last.select();
 };
-document.querySelectorAll('[data-info]').forEach(inp => inp.addEventListener('input', () => { data[inp.dataset.info] = inp.value; changed(); }));
+document.querySelectorAll('[data-info]').forEach(inp => inp.addEventListener('input', () => { dade[inp.dataset.info] = inp.value; taghirKard(); }));
 
-let editing = null, draft = null, isNew = false;
-function openEditor(it, fresh){
-  editing = it; isNew = !!fresh;
-  draft = Object.assign({}, it);
-  $('#dtitle').textContent = isNew ? 'آیتم جدید' : 'ویرایش آیتم';
-  $('#dId').textContent = 'شناسه ' + faNum(draft.id);
-  $('#fTitle').value = draft.title;
-  $('#fCat').innerHTML = data.categories.map(c => `<option>${esc(c.name)}</option>`).join('');
-  $('#fCat').value = draft.category;
-  $('#fPrice').value = draft.price ? String(draft.price) : '';
-  $('#fDesc').value = draft.description;
-  $('#fImage').value = hasPhoto(draft) ? draft.image : '';
-  setAvail();
-  $('#fColor').value = draft.artColor || '#2a8ad6';
-  paintPrice(); paintImg(); paintPreview(); paintPicker();
+let darVirayesh = null, pishnevis = null, jadidAst = false;
+function bazKardanVirayeshgar(it, fresh){
+  darVirayesh = it; jadidAst = !!fresh;
+  pishnevis = Object.assign({}, it);
+  $('#dtitle').textContent = jadidAst ? 'آیتم جدید' : 'ویرایش آیتم';
+  $('#dId').textContent = 'شناسه ' + adadFarsi(pishnevis.id);
+  $('#fTitle').value = pishnevis.title;
+  $('#fCat').innerHTML = dade.categories.map(c => `<option>${amnKardan(c.name)}</option>`).join('');
+  $('#fCat').value = pishnevis.category;
+  $('#fPrice').value = pishnevis.price ? String(pishnevis.price) : '';
+  $('#fDesc').value = pishnevis.description;
+  $('#fImage').value = aksDarad(pishnevis) ? pishnevis.image : '';
+  vaziatMojudi();
+  $('#fColor').value = pishnevis.artColor || '#2a8ad6';
+  namayeshGheymat(); namayeshAks(); namayeshPishnamayesh(); namayeshEntekhab();
   const dr = $('#drawer');
   dr.hidden = false;
   document.body.classList.add('locked');
   requestAnimationFrame(() => dr.classList.add('open'));
-  setTimeout(() => { if(isNew) $('#fTitle').focus(); }, 300);
+  setTimeout(() => { if(jadidAst) $('#fTitle').focus(); }, 300);
 }
-function closeEditor(){
+function bastanVirayeshgar(){
   const dr = $('#drawer');
   dr.classList.remove('open');
   document.body.classList.remove('locked');
   setTimeout(() => dr.hidden = true, 400);
-  editing = null; draft = null;
+  darVirayesh = null; pishnevis = null;
 }
-function setAvail(){
-  $('#fAvail').classList.toggle('on', draft.available);
-  $('#fAvailTxt').textContent = draft.available ? 'موجود' : 'ناموجود';
+function vaziatMojudi(){
+  $('#fAvail').classList.toggle('on', pishnevis.available);
+  $('#fAvailTxt').textContent = pishnevis.available ? 'موجود' : 'ناموجود';
 }
-function paintPrice(){
-  const n = Number(toEn($('#fPrice').value).replace(/[^\d]/g, '')) || 0;
-  $('#fPriceFa').textContent = n ? price(n) + ' ' + data.currency : 'قیمت را به عدد وارد کنید';
+function namayeshGheymat(){
+  const n = Number(adadLatin($('#fPrice').value).replace(/[^\d]/g, '')) || 0;
+  $('#fPriceFa').textContent = n ? gheymat(n) + ' ' + dade.currency : 'قیمت را به عدد وارد کنید';
 }
-function paintImg(){
+function namayeshAks(){
   const v = $('#fImage').value.trim();
   const box = $('#imgPrev');
-  if(!v){ box.innerHTML = '<span>بدون عکس — فقط طرح نمایش داده می‌شود.</span>'; return; }
+  if(!v){ box.innerHTML = '<span>بدون عکس؛ فقط طرح نمایش داده می‌شود.</span>'; return; }
   box.innerHTML = '<span>در حال بررسی…</span>';
   const img = new Image();
   img.onload = () => { box.innerHTML = ''; box.appendChild(img); box.insertAdjacentHTML('beforeend', '<span>عکس پیدا شد ✓</span>'); };
   img.onerror = () => { box.innerHTML = '<span style="color:var(--terra)">عکس در این مسیر پیدا نشد. نام و مسیر فایل را بررسی کنید.</span>'; };
   img.src = v;
 }
-function paintPreview(){
-  const key = AzArt.resolveStyle(draft, catOf(draft.category).icon);
-  $('#bigPrev').innerHTML = art(draft);
-  $('#styleName').textContent = AzArt.label(key) + (draft.art ? '' : ' (خودکار)');
+function namayeshPishnamayesh(){
+  const key = Naghsh.sabkeMonaseb(pishnevis, dasteYe(pishnevis.category).icon);
+  $('#bigPrev').innerHTML = naghsh(pishnevis);
+  $('#styleName').textContent = Naghsh.onvan(key) + (pishnevis.art ? '' : ' (خودکار)');
 }
-function paintPicker(){
+function namayeshEntekhab(){
   const box = $('#picker');
   box.innerHTML = '';
   const autoWrap = document.createElement('div');
   autoWrap.className = 'grid';
-  autoWrap.innerHTML = `<button type="button" class="opt auto ${draft.art ? '' : 'on'}" data-k=""><div class="t">✦</div>خودکار</button>`;
+  autoWrap.innerHTML = `<button type="button" class="opt auto ${pishnevis.art ? '' : 'on'}" data-k=""><div class="t">✦</div>خودکار</button>`;
   box.appendChild(autoWrap);
-  const icon = catOf(draft.category).icon;
-  const prefer = AzArt.categoryDefaults[icon] || [];
-  const groups = Object.keys(AzArt.groups).sort((a, b) => {
-    const pa = AzArt.groups[a].some(k => prefer.includes(k)) ? 0 : 1, pb = AzArt.groups[b].some(k => prefer.includes(k)) ? 0 : 1;
+  const icon = dasteYe(pishnevis.category).icon;
+  const prefer = Naghsh.pishfarzDaste[icon] || [];
+  const groups = Object.keys(Naghsh.goruhha).sort((a, b) => {
+    const pa = Naghsh.goruhha[a].some(k => prefer.includes(k)) ? 0 : 1, pb = Naghsh.goruhha[b].some(k => prefer.includes(k)) ? 0 : 1;
     return pa - pb;
   });
   groups.forEach(g => {
@@ -623,79 +623,79 @@ function paintPicker(){
     box.appendChild(h);
     const grid = document.createElement('div');
     grid.className = 'grid';
-    AzArt.groups[g].forEach(k => {
+    Naghsh.goruhha[g].forEach(k => {
       const b = document.createElement('button');
       b.type = 'button';
-      b.className = 'opt' + (draft.art === k ? ' on' : '');
+      b.className = 'opt' + (pishnevis.art === k ? ' on' : '');
       b.dataset.k = k;
-      b.innerHTML = `<div class="t" data-lazy="${k}"></div>${esc(AzArt.label(k))}`;
+      b.innerHTML = `<div class="t" data-lazy="${k}"></div>${amnKardan(Naghsh.onvan(k))}`;
       grid.appendChild(b);
     });
     box.appendChild(grid);
   });
   const io = new IntersectionObserver(es => es.forEach(e => {
-    if(e.isIntersecting){ const k = e.target.dataset.lazy; e.target.innerHTML = `<img src="${AzArt.renderURL(draft, {style: k, icon})}" alt="" decoding="async">`; io.unobserve(e.target); }
+    if(e.isIntersecting){ const k = e.target.dataset.lazy; e.target.innerHTML = `<img src="${Naghsh.adresTasvir(pishnevis, {style: k, icon})}" alt="" decoding="async">`; io.unobserve(e.target); }
   }), {root: document.querySelector('.pane-body'), rootMargin: '200px'});
   box.querySelectorAll('[data-lazy]').forEach(t => io.observe(t));
 }
 $('#picker').addEventListener('click', e => {
   const b = e.target.closest('.opt');
   if(!b) return;
-  draft.art = b.dataset.k;
+  pishnevis.art = b.dataset.k;
   $('#picker').querySelectorAll('.opt').forEach(o => o.classList.toggle('on', o === b));
-  paintPreview();
+  namayeshPishnamayesh();
 });
-$('#fTitle').addEventListener('input', () => draft.title = $('#fTitle').value);
-$('#fCat').addEventListener('change', () => { draft.category = $('#fCat').value; paintPreview(); paintPicker(); });
-$('#fPrice').addEventListener('input', () => { const el = $('#fPrice'); el.value = toEn(el.value).replace(/[^\d]/g, ''); paintPrice(); });
-$('#fDesc').addEventListener('input', () => draft.description = $('#fDesc').value);
-let imgT;
-$('#fImage').addEventListener('input', () => { clearTimeout(imgT); imgT = setTimeout(paintImg, 350); });
-$('#fAvail').addEventListener('click', () => { draft.available = !draft.available; setAvail(); });
-$('#fColor').addEventListener('input', () => { draft.artColor = $('#fColor').value; paintPreview(); });
-$('#fColor').addEventListener('change', paintPicker);
-$('#clearColor').addEventListener('click', () => { draft.artColor = ''; paintPreview(); paintPicker(); });
-SWATCHES.forEach(c => {
+$('#fTitle').addEventListener('input', () => pishnevis.title = $('#fTitle').value);
+$('#fCat').addEventListener('change', () => { pishnevis.category = $('#fCat').value; namayeshPishnamayesh(); namayeshEntekhab(); });
+$('#fPrice').addEventListener('input', () => { const el = $('#fPrice'); el.value = adadLatin(el.value).replace(/[^\d]/g, ''); namayeshGheymat(); });
+$('#fDesc').addEventListener('input', () => pishnevis.description = $('#fDesc').value);
+let zamanAks;
+$('#fImage').addEventListener('input', () => { clearTimeout(zamanAks); zamanAks = setTimeout(namayeshAks, 350); });
+$('#fAvail').addEventListener('click', () => { pishnevis.available = !pishnevis.available; vaziatMojudi(); });
+$('#fColor').addEventListener('input', () => { pishnevis.artColor = $('#fColor').value; namayeshPishnamayesh(); });
+$('#fColor').addEventListener('change', namayeshEntekhab);
+$('#clearColor').addEventListener('click', () => { pishnevis.artColor = ''; namayeshPishnamayesh(); namayeshEntekhab(); });
+NEMUNE_RANGHA.forEach(c => {
   const b = document.createElement('button');
   b.type = 'button'; b.className = 'swatch'; b.style.background = c; b.title = c;
-  b.onclick = () => { draft.artColor = c; $('#fColor').value = c; paintPreview(); paintPicker(); };
+  b.onclick = () => { pishnevis.artColor = c; $('#fColor').value = c; namayeshPishnamayesh(); namayeshEntekhab(); };
   $('#colorRow').insertBefore(b, $('#clearColor'));
 });
-$('#reroll').addEventListener('click', () => { draft.artSeed = (draft.artSeed || 0) + 1; paintPreview(); paintPicker(); });
-$('#resetSeed').addEventListener('click', () => { draft.artSeed = 0; paintPreview(); paintPicker(); });
-$('#dclose').onclick = $('#dcancel').onclick = $('#dscrim').onclick = closeEditor;
+$('#reroll').addEventListener('click', () => { pishnevis.artSeed = (pishnevis.artSeed || 0) + 1; namayeshPishnamayesh(); namayeshEntekhab(); });
+$('#resetSeed').addEventListener('click', () => { pishnevis.artSeed = 0; namayeshPishnamayesh(); namayeshEntekhab(); });
+$('#dclose').onclick = $('#dcancel').onclick = $('#dscrim').onclick = bastanVirayeshgar;
 $('#dsave').onclick = () => {
   const title = $('#fTitle').value.trim();
-  if(!title){ $('#fTitle').focus(); toast('نام آیتم را وارد کنید'); return; }
-  draft.title = title;
-  draft.price = Number($('#fPrice').value) || 0;
-  draft.description = $('#fDesc').value.trim();
-  draft.image = $('#fImage').value.trim() || PLACEHOLDER;
-  if(isNew) data.items.push(draft);
-  else Object.assign(editing, draft);
-  changed();
-  closeEditor();
-  renderItems();
-  toast(isNew ? 'آیتم اضافه شد' : 'تغییرات ثبت شد');
+  if(!title){ $('#fTitle').focus(); payam('نام آیتم را وارد کنید'); return; }
+  pishnevis.title = title;
+  pishnevis.price = Number($('#fPrice').value) || 0;
+  pishnevis.description = $('#fDesc').value.trim();
+  pishnevis.image = $('#fImage').value.trim() || AKS_KHALI;
+  if(jadidAst) dade.items.push(pishnevis);
+  else Object.assign(darVirayesh, pishnevis);
+  taghirKard();
+  bastanVirayeshgar();
+  sakhtAitemha();
+  payam(jadidAst ? 'آیتم اضافه شد' : 'تغییرات ثبت شد');
 };
-addEventListener('keydown', e => { if(e.key === 'Escape' && editing) closeEditor(); });
+addEventListener('keydown', e => { if(e.key === 'Escape' && darVirayesh) bastanVirayeshgar(); });
 $('#addItem').onclick = () => {
-  if(!data.categories.length){ toast('اول یک دسته‌بندی بسازید'); showTab('cats'); return; }
-  const cat = $('#catFilter').value || data.categories[0].name;
-  openEditor({id: nextId(), category: cat, title: '', description: '', price: 0, image: PLACEHOLDER, available: true, art: '', artSeed: 0, artColor: ''}, true);
+  if(!dade.categories.length){ payam('اول یک دسته‌بندی بسازید'); namayeshZabane('cats'); return; }
+  const cat = $('#catFilter').value || dade.categories[0].name;
+  bazKardanVirayeshgar({id: shenaseBadi(), category: cat, title: '', description: '', price: 0, image: AKS_KHALI, available: true, art: '', artSeed: 0, artColor: ''}, true);
 };
 
-$('#search').addEventListener('input', renderItems);
-$('#catFilter').addEventListener('change', renderItems);
-function showTab(t){
+$('#search').addEventListener('input', sakhtAitemha);
+$('#catFilter').addEventListener('change', sakhtAitemha);
+function namayeshZabane(t){
   document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
   ['items', 'cats', 'info'].forEach(k => $('#tab-' + k).hidden = k !== t);
   $('#addItem').hidden = t !== 'items';
 }
-$('#tabs').addEventListener('click', e => { const b = e.target.closest('button'); if(b) showTab(b.dataset.tab); });
+$('#tabs').addEventListener('click', e => { const b = e.target.closest('button'); if(b) namayeshZabane(b.dataset.tab); });
 
-function download(){
-  const blob = new Blob([serialize()], {type: 'application/json'});
+function daryaft(){
+  const blob = new Blob([reshteSazi()], {type: 'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'items.json';
@@ -703,39 +703,39 @@ function download(){
   a.click();
   setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 }
-async function writeHandle(h){
+async function neveshtanFile(h){
   const w = await h.createWritable();
-  await w.write(serialize());
+  await w.write(reshteSazi());
   await w.close();
 }
-function markSaved(){
-  savedText = serialize();
-  setDirty(false);
-  try { localStorage.removeItem(DRAFT_KEY); } catch(e){}
+function zakhireShod(){
+  matnZakhire = reshteSazi();
+  taghirVaziat(false);
+  try { localStorage.removeItem(KELID_PISHNEVIS); } catch(e){}
 }
 $('#saveBtn').onclick = async () => {
   try {
-    if(fileHandle){ await writeHandle(fileHandle); markSaved(); toast('در فایل ذخیره شد ✓'); return; }
+    if(dasteFile){ await neveshtanFile(dasteFile); zakhireShod(); payam('در فایل ذخیره شد ✓'); return; }
     if(window.showSaveFilePicker){
-      fileHandle = await showSaveFilePicker({suggestedName: 'items.json', types: [{description: 'JSON', accept: {'application/json': ['.json']}}]});
-      await writeHandle(fileHandle); markSaved(); toast('در فایل ذخیره شد ✓'); return;
+      dasteFile = await showSaveFilePicker({suggestedName: 'items.json', types: [{description: 'JSON', accept: {'application/json': ['.json']}}]});
+      await neveshtanFile(dasteFile); zakhireShod(); payam('در فایل ذخیره شد ✓'); return;
     }
   } catch(e){
     if(e && e.name === 'AbortError') return;
   }
-  download(); markSaved(); toast('فایل items.json دانلود شد — آن را کنار index.html قرار دهید');
+  daryaft(); zakhireShod(); payam('فایل items.json دانلود شد. آن را کنار index.html قرار دهید');
 };
-$('#downloadBtn').onclick = () => { download(); toast('فایل items.json دانلود شد'); };
+$('#downloadBtn').onclick = () => { daryaft(); payam('فایل items.json دانلود شد'); };
 $('#openBtn').onclick = async () => {
-  if(dirty && !(await ask('تغییرات ذخیره نشده', 'تغییرات فعلی از بین می‌رود. ادامه می‌دهید؟', [{label:'ادامه', value:true, cls:'danger'}, {label:'انصراف', value:false}]))) return;
+  if(taghirDarad && !(await porsidan('تغییرات ذخیره نشده', 'تغییرات فعلی از بین می‌رود. ادامه می‌دهید؟', [{label:'ادامه', value:true, cls:'danger'}, {label:'انصراف', value:false}]))) return;
   if(window.showOpenFilePicker){
     try {
       const [h] = await showOpenFilePicker({types: [{description: 'JSON', accept: {'application/json': ['.json']}}]});
       const f = await h.getFile();
-      load(JSON.parse(await f.text()), 'فایل باز شد: ' + f.name);
-      fileHandle = h;
-      clearBanners();
-    } catch(e){ if(e && e.name !== 'AbortError') toast('فایل معتبر نیست'); }
+      bargozari(JSON.parse(await f.text()), 'فایل باز شد: ' + f.name);
+      dasteFile = h;
+      pakKardanPayamha();
+    } catch(e){ if(e && e.name !== 'AbortError') payam('فایل معتبر نیست'); }
     return;
   }
   $('#fileInput').click();
@@ -743,14 +743,14 @@ $('#openBtn').onclick = async () => {
 $('#fileInput').onchange = async () => {
   const f = $('#fileInput').files[0];
   if(!f) return;
-  try { load(JSON.parse(await f.text()), 'فایل باز شد: ' + f.name); fileHandle = null; clearBanners(); }
-  catch(e){ toast('فایل معتبر نیست'); }
+  try { bargozari(JSON.parse(await f.text()), 'فایل باز شد: ' + f.name); dasteFile = null; pakKardanPayamha(); }
+  catch(e){ payam('فایل معتبر نیست'); }
   $('#fileInput').value = '';
 };
-addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.returnValue = ''; } });
+addEventListener('beforeunload', e => { if(taghirDarad){ e.preventDefault(); e.returnValue = ''; } });
 
-function clearBanners(){ $('#banners').innerHTML = ''; }
-function banner(html, cls, actions){
+function pakKardanPayamha(){ $('#banners').innerHTML = ''; }
+function payamBala(html, cls, actions){
   const b = document.createElement('div');
   b.className = 'banner ' + (cls || '');
   b.innerHTML = `<div class="grow">${html}</div>`;
@@ -763,23 +763,23 @@ function banner(html, cls, actions){
   $('#banners').appendChild(b);
 }
 
-function start(raw, note){
-  load(raw);
+function shoru(raw, note){
+  bargozari(raw);
   let d = null;
-  try { d = localStorage.getItem(DRAFT_KEY); } catch(e){}
-  if(d && d !== savedText){
-    banner('یک پیش‌نویس ذخیره‌نشده از دفعه قبل پیدا شد.', '', [
-      {label: 'بازیابی پیش‌نویس', cls: 'primary', fn: () => { const keep = savedText; data = normalize(JSON.parse(d)); renderAll(); savedText = keep; changed(); toast('پیش‌نویس بازیابی شد'); }},
-      {label: 'نادیده گرفتن', fn: () => { try { localStorage.removeItem(DRAFT_KEY); } catch(e){} }}
+  try { d = localStorage.getItem(KELID_PISHNEVIS); } catch(e){}
+  if(d && d !== matnZakhire){
+    payamBala('یک پیش‌نویس ذخیره‌نشده از دفعه قبل پیدا شد.', '', [
+      {label: 'بازیابی پیش‌نویس', cls: 'primary', fn: () => { const keep = matnZakhire; dade = morattabSazi(JSON.parse(d)); hameRaBesaz(); matnZakhire = keep; taghirKard(); payam('پیش‌نویس بازیابی شد'); }},
+      {label: 'نادیده گرفتن', fn: () => { try { localStorage.removeItem(KELID_PISHNEVIS); } catch(e){} }}
     ]);
   }
-  if(note) banner(note, 'info');
-  if(!window.showSaveFilePicker) banner('روی این مرورگر، «ذخیره» فایل <b>items.json</b> را دانلود می‌کند. فایل دانلودشده را جایگزین items.json کنار index.html کنید.', 'info');
+  if(note) payamBala(note, 'info');
+  if(!window.showSaveFilePicker) payamBala('روی این مرورگر، «ذخیره» فایل <b>items.json</b> را دانلود می‌کند. فایل دانلودشده را جایگزین items.json کنار index.html کنید.', 'info');
 }
 fetch('items.json', {cache: 'no-cache'})
   .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
-  .then(j => start(j))
-  .catch(() => start({categories: [], items: []}, 'فایل items.json خودکار بارگذاری نشد. با دکمه «باز کردن» فایل را انتخاب کنید.'));
+  .then(j => shoru(j))
+  .catch(() => shoru({categories: [], items: []}, 'فایل items.json خودکار بارگذاری نشد. با دکمه «باز کردن» فایل را انتخاب کنید.'));
 </script>
 </body>
 </html>
