@@ -1,15 +1,55 @@
 {
   "restaurant": "کافه آتزوری",
+  "latin": "Caffè Azzurri",
+  "tagline": "لیست غذاها و نوشیدنی‌ها با قیمت روز",
+  "address": "بلوار فردوس شرق",
+  "currency": "تومان",
   "categories": [
-    "گرم بر پایه اسپرسو",
-    "سرد بر پایه اسپرسو",
-    "گرم نوش",
-    "دمنوش و چای",
-    "ماکتیل",
-    "شیک و اسمودی",
-    "کیک و شیرینی",
-    "میان وعده",
-    "افزودنی ها"
+    {
+      "name": "گرم بر پایه اسپرسو",
+      "icon": "espresso",
+      "color": "#8a5a2b"
+    },
+    {
+      "name": "سرد بر پایه اسپرسو",
+      "icon": "iced",
+      "color": "#1f5fa8"
+    },
+    {
+      "name": "گرم نوش",
+      "icon": "mug",
+      "color": "#b5562f"
+    },
+    {
+      "name": "دمنوش و چای",
+      "icon": "tea",
+      "color": "#5f7d3a"
+    },
+    {
+      "name": "ماکتیل",
+      "icon": "cocktail",
+      "color": "#0f7c8a"
+    },
+    {
+      "name": "شیک و اسمودی",
+      "icon": "shake",
+      "color": "#c2406e"
+    },
+    {
+      "name": "کیک و شیرینی",
+      "icon": "cake",
+      "color": "#a86a1f"
+    },
+    {
+      "name": "میان وعده",
+      "icon": "toast",
+      "color": "#9a7a14"
+    },
+    {
+      "name": "افزودنی ها",
+      "icon": "drop",
+      "color": "#6a4a8a"
+    }
   ],
   "items": [
     {
@@ -19,7 +59,8 @@
       "description": "",
       "price": 249000,
       "image": "assets/MainImage_3f05ccc1.jpg",
-      "available": true
+      "available": true,
+      "art": "espresso"
     },
     {
       "id": 441512,
@@ -28,7 +69,8 @@
       "description": "",
       "price": 179000,
       "image": "assets/MainImage_2edffe4e.jpg",
-      "available": true
+      "available": true,
+      "art": "espresso-side"
     },
     {
       "id": 441560,
@@ -37,7 +79,8 @@
       "description": "",
       "price": 269000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "americano"
     },
     {
       "id": 441558,
@@ -46,7 +89,8 @@
       "description": "",
       "price": 199000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "americano"
     },
     {
       "id": 441517,
@@ -55,7 +99,8 @@
       "description": "",
       "price": 359000,
       "image": "assets/MainImage_fd592463.jpg",
-      "available": true
+      "available": true,
+      "art": "latte-rosetta"
     },
     {
       "id": 441516,
@@ -64,7 +109,8 @@
       "description": "",
       "price": 279000,
       "image": "assets/MainImage_31558cee.jpg",
-      "available": true
+      "available": true,
+      "art": "latte-tulip"
     },
     {
       "id": 441533,
@@ -73,7 +119,8 @@
       "description": "",
       "price": 359000,
       "image": "assets/MainImage_9e2a36f5.jpg",
-      "available": true
+      "available": true,
+      "art": "flatwhite"
     },
     {
       "id": 441531,
@@ -82,7 +129,8 @@
       "description": "",
       "price": 279000,
       "image": "assets/MainImage_0a06d44a.jpg",
-      "available": true
+      "available": true,
+      "art": "latte-heart"
     },
     {
       "id": 441511,
@@ -91,7 +139,8 @@
       "description": "",
       "price": 339000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "cappuccino"
     },
     {
       "id": 441537,
@@ -100,7 +149,8 @@
       "description": "",
       "price": 259000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "cappuccino"
     },
     {
       "id": 441519,
@@ -109,7 +159,8 @@
       "description": "",
       "price": 339000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "cortado"
     },
     {
       "id": 441556,
@@ -118,7 +169,8 @@
       "description": "",
       "price": 259000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "cortado"
     },
     {
       "id": 441550,
@@ -127,7 +179,8 @@
       "description": "",
       "price": 399000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "caramel"
     },
     {
       "id": 441543,
@@ -136,7 +189,8 @@
       "description": "",
       "price": 319000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "caramel"
     },
     {
       "id": 441551,
@@ -145,7 +199,8 @@
       "description": "",
       "price": 399000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "mocha"
     },
     {
       "id": 441524,
@@ -154,7 +209,8 @@
       "description": "",
       "price": 319000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "mocha"
     },
     {
       "id": 441527,
@@ -163,7 +219,8 @@
       "description": "",
       "price": 339000,
       "image": "assets/MainImage_a33af7ea.jpg",
-      "available": true
+      "available": true,
+      "art": "affogato"
     },
     {
       "id": 441530,
@@ -172,7 +229,8 @@
       "description": "",
       "price": 279000,
       "image": "assets/MainImage_6c73eccb.jpg",
-      "available": true
+      "available": true,
+      "art": "affogato"
     },
     {
       "id": 441526,
@@ -181,7 +239,8 @@
       "description": "",
       "price": 269000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "iced-americano"
     },
     {
       "id": 441555,
@@ -190,7 +249,8 @@
       "description": "",
       "price": 199000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "iced-americano"
     },
     {
       "id": 441554,
@@ -199,7 +259,8 @@
       "description": "",
       "price": 359000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "iced-latte"
     },
     {
       "id": 441528,
@@ -208,7 +269,8 @@
       "description": "",
       "price": 279000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "iced-latte"
     },
     {
       "id": 441563,
@@ -217,7 +279,8 @@
       "description": "",
       "price": 399000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "iced-caramel"
     },
     {
       "id": 441548,
@@ -226,7 +289,8 @@
       "description": "",
       "price": 319000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "iced-caramel"
     },
     {
       "id": 441561,
@@ -235,7 +299,8 @@
       "description": "",
       "price": 399000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "iced-mocha"
     },
     {
       "id": 441559,
@@ -244,7 +309,8 @@
       "description": "",
       "price": 319000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "iced-mocha"
     },
     {
       "id": 441535,
@@ -253,7 +319,8 @@
       "description": "",
       "price": 269000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "hot-chocolate"
     },
     {
       "id": 441532,
@@ -262,7 +329,8 @@
       "description": "",
       "price": 259000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "sesame-date"
     },
     {
       "id": 441553,
@@ -271,7 +339,8 @@
       "description": "",
       "price": 249000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "masala"
     },
     {
       "id": 441510,
@@ -280,7 +349,8 @@
       "description": "",
       "price": 269000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "hazelnut-milk"
     },
     {
       "id": 441557,
@@ -289,7 +359,8 @@
       "description": "",
       "price": 359000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "matcha"
     },
     {
       "id": 441547,
@@ -298,7 +369,8 @@
       "description": "",
       "price": 269000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "honey-milk"
     },
     {
       "id": 441545,
@@ -307,7 +379,8 @@
       "description": "",
       "price": 409000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "filter"
     },
     {
       "id": 454824,
@@ -316,7 +389,8 @@
       "description": "",
       "price": 199000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "pink-chocolate"
     },
     {
       "id": 441525,
@@ -325,7 +399,8 @@
       "description": "",
       "price": 129000,
       "image": "assets/MainImage_4cfce3bc.jpg",
-      "available": true
+      "available": true,
+      "art": "tea-glass"
     },
     {
       "id": 441534,
@@ -334,7 +409,8 @@
       "description": "",
       "price": 169000,
       "image": "assets/MainImage_e3d6c2f7.jpg",
-      "available": true
+      "available": true,
+      "art": "tea-cardamom"
     },
     {
       "id": 441522,
@@ -343,7 +419,8 @@
       "description": "",
       "price": 259000,
       "image": "assets/MainImage_0b9c2e83.jpg",
-      "available": true
+      "available": true,
+      "art": "tea-latte"
     },
     {
       "id": 441518,
@@ -352,7 +429,8 @@
       "description": "",
       "price": 169000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "herbal-borage"
     },
     {
       "id": 441546,
@@ -361,7 +439,8 @@
       "description": "",
       "price": 169000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "herbal-citrus"
     },
     {
       "id": 441542,
@@ -370,7 +449,8 @@
       "description": "",
       "price": 179000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "herbal-rose"
     },
     {
       "id": 441552,
@@ -379,7 +459,8 @@
       "description": "",
       "price": 179000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "herbal-chamomile"
     },
     {
       "id": 441520,
@@ -388,7 +469,8 @@
       "description": "",
       "price": 169000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "herbal-quince"
     },
     {
       "id": 441513,
@@ -397,7 +479,9 @@
       "description": "",
       "price": 220000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "mocktail-hurricane",
+      "artColor": "#ff5a2a"
     },
     {
       "id": 441523,
@@ -406,7 +490,9 @@
       "description": "",
       "price": 349000,
       "image": "assets/MainImage_c4ac81c8.jpg",
-      "available": true
+      "available": true,
+      "art": "mocktail-highball",
+      "artColor": "#2a8ad6"
     },
     {
       "id": 441536,
@@ -415,7 +501,9 @@
       "description": "",
       "price": 359000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "mocktail-coupe",
+      "artColor": "#d61f4a"
     },
     {
       "id": 441562,
@@ -424,7 +512,8 @@
       "description": "",
       "price": 369000,
       "image": "assets/MainImage_86381f0e.jpg",
-      "available": true
+      "available": true,
+      "art": "mocktail-jar"
     },
     {
       "id": 441565,
@@ -433,7 +522,9 @@
       "description": "",
       "price": 359000,
       "image": "assets/MainImage_a6b383af.jpg",
-      "available": true
+      "available": true,
+      "art": "mocktail-martini",
+      "artColor": "#12a05a"
     },
     {
       "id": 441514,
@@ -442,7 +533,8 @@
       "description": "",
       "price": 409000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "shake-strawberry"
     },
     {
       "id": 441515,
@@ -451,7 +543,8 @@
       "description": "",
       "price": 236000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "shake-oreo"
     },
     {
       "id": 441521,
@@ -460,7 +553,8 @@
       "description": "",
       "price": 439000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "shake-biscuit"
     },
     {
       "id": 441538,
@@ -469,7 +563,8 @@
       "description": "",
       "price": 419000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "shake-peanut"
     },
     {
       "id": 441539,
@@ -478,7 +573,8 @@
       "description": "",
       "price": 439000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "shake-mint"
     },
     {
       "id": 441564,
@@ -487,7 +583,8 @@
       "description": "",
       "price": 409000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "shake-hazelnut"
     },
     {
       "id": 558666,
@@ -496,7 +593,8 @@
       "description": "",
       "price": 489000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "shake-coffee"
     },
     {
       "id": 441529,
@@ -505,7 +603,8 @@
       "description": "",
       "price": 205000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "croissant-chocolate"
     },
     {
       "id": 441540,
@@ -514,7 +613,8 @@
       "description": "",
       "price": 310000,
       "image": "assets/MainImage_d98ee6a0.jpg",
-      "available": false
+      "available": false,
+      "art": "croissant-almond"
     },
     {
       "id": 441541,
@@ -523,7 +623,8 @@
       "description": "",
       "price": 130000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "croissant"
     },
     {
       "id": 441544,
@@ -532,7 +633,8 @@
       "description": "",
       "price": 139000,
       "image": "assets/MainImage_a3a01fc6.jpg",
-      "available": false
+      "available": false,
+      "art": "kouign-amann"
     },
     {
       "id": 441549,
@@ -541,7 +643,8 @@
       "description": "",
       "price": 209000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "choco-twist"
     },
     {
       "id": 447980,
@@ -550,7 +653,8 @@
       "description": "",
       "price": 139000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "cookie-double"
     },
     {
       "id": 451774,
@@ -559,7 +663,8 @@
       "description": "",
       "price": 330000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "cinnamon-roll"
     },
     {
       "id": 452156,
@@ -568,7 +673,8 @@
       "description": "",
       "price": 169000,
       "image": "assets/MainImage_338e2527.jpg",
-      "available": false
+      "available": false,
+      "art": "pastel-nata"
     },
     {
       "id": 452157,
@@ -577,7 +683,8 @@
       "description": "",
       "price": 279000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "cheesecake"
     },
     {
       "id": 455169,
@@ -586,7 +693,8 @@
       "description": "",
       "price": 149000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "cookie-ny"
     },
     {
       "id": 651034,
@@ -595,7 +703,8 @@
       "description": "",
       "price": 189000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "cake-mocha"
     },
     {
       "id": 653668,
@@ -604,7 +713,8 @@
       "description": "",
       "price": 199000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "dessert-cup"
     },
     {
       "id": 653671,
@@ -613,7 +723,8 @@
       "description": "",
       "price": 139000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "cookie-lemon"
     },
     {
       "id": 795162,
@@ -622,7 +733,8 @@
       "description": "",
       "price": 189000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "brownie"
     },
     {
       "id": 896305,
@@ -631,7 +743,8 @@
       "description": "",
       "price": 129000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "cake-walnut"
     },
     {
       "id": 1044589,
@@ -640,7 +753,8 @@
       "description": "",
       "price": 169000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "cake-tresleches"
     },
     {
       "id": 1044590,
@@ -649,7 +763,8 @@
       "description": "",
       "price": 149000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "cake-redvelvet"
     },
     {
       "id": 1044591,
@@ -658,7 +773,8 @@
       "description": "",
       "price": 149000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "cake-apple"
     },
     {
       "id": 474437,
@@ -667,7 +783,8 @@
       "description": "",
       "price": 238000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "toast"
     },
     {
       "id": 483544,
@@ -676,7 +793,8 @@
       "description": "",
       "price": 214000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "egg-skillet"
     },
     {
       "id": 980768,
@@ -685,7 +803,8 @@
       "description": "",
       "price": 359000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "focaccia"
     },
     {
       "id": 443732,
@@ -694,7 +813,8 @@
       "description": "",
       "price": 49000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "syrup"
     },
     {
       "id": 443733,
@@ -703,7 +823,8 @@
       "description": "",
       "price": 69000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "honey"
     },
     {
       "id": 443734,
@@ -712,7 +833,8 @@
       "description": "",
       "price": 49000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "sauce-chocolate"
     },
     {
       "id": 443735,
@@ -721,7 +843,8 @@
       "description": "",
       "price": 49000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "sauce-caramel"
     },
     {
       "id": 443863,
@@ -730,7 +853,8 @@
       "description": "",
       "price": 15000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "water"
     },
     {
       "id": 447981,
@@ -739,7 +863,8 @@
       "description": "",
       "price": 229000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "shot"
     },
     {
       "id": 447982,
@@ -748,7 +873,8 @@
       "description": "",
       "price": 139000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "shot"
     },
     {
       "id": 448243,
@@ -757,7 +883,8 @@
       "description": "",
       "price": 129000,
       "image": "assets/place-holder.jpg",
-      "available": true
+      "available": true,
+      "art": "icecream"
     },
     {
       "id": 1072432,
@@ -766,7 +893,8 @@
       "description": "",
       "price": 39000,
       "image": "assets/place-holder.jpg",
-      "available": false
+      "available": false,
+      "art": "nabat"
     }
   ]
 }

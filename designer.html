@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f2ea">
+<title>طراح منو · کافه آتزوری</title>
+<style>
+  @font-face{font-family:'Vazirmatn';src:url(fonts/vazirmatn-arabic.woff2) format('woff2');font-weight:300 800;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC;}
+  @font-face{font-family:'Vazirmatn';src:url(fonts/vazirmatn-latin.woff2) format('woff2');font-weight:300 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:'Nastaliq';src:url(fonts/nastaliq-arabic.woff2) format('woff2');font-weight:400 700;font-display:swap;}
+  :root{
+    --marble:#f6f2ea;--paper:#fffdf9;--ink:#13254a;--ink-2:#34466b;--muted:#7a8398;
+    --azzurro:#1f5fa8;--azzurro-deep:#0c2d5e;--azzurro-soft:#dde8f5;--terra:#b5562f;--ok:#2e7d4f;
+    --line:rgba(31,95,168,.16);--shadow:0 10px 30px -14px rgba(19,37,74,.35);
+    --ease:cubic-bezier(.22,1,.36,1);
+    --mosaic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='8'%3E%3Cpath d='M0 8L4 0 8 8Z' fill='%231f5fa8'/%3E%3Cpath d='M8 0L12 8 16 0Z' fill='%23b5562f'/%3E%3Cpath d='M16 8L20 0 24 8Z' fill='%23b08a3e'/%3E%3C/svg%3E");
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--marble);color:var(--ink);font-family:'Vazirmatn',Tahoma,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased;}
+  body.locked{overflow:hidden;}
+  button,input,select,textarea{font:inherit;color:inherit;}
+  button{cursor:pointer;}
+  [hidden]{display:none !important;}
+
+  header.top{
+    position:sticky;top:0;z-index:20;
+    background:rgba(250,247,241,.92);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    padding:10px 14px calc(10px);padding-top:calc(10px + env(safe-area-inset-top));
+  }
+  header.top::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:4px;background:var(--mosaic) repeat-x;background-size:12px 4px;opacity:.5;}
+  .toprow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;max-width:1100px;margin:0 auto;}
+  .brand{display:flex;align-items:baseline;gap:10px;margin-inline-end:auto;}
+  .brand h1{margin:0;font-family:'Nastaliq',serif;font-size:1.5rem;line-height:1.9;color:var(--azzurro-deep);}
+  .brand small{color:var(--muted);font-size:.75rem;}
+  .dirty{display:inline-flex;align-items:center;gap:6px;font-size:.74rem;color:var(--muted);}
+  .dirty i{width:8px;height:8px;border-radius:50%;background:var(--ok);}
+  .dirty.on{color:var(--terra);}
+  .dirty.on i{background:var(--terra);}
+  .actions{display:flex;gap:6px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:6px;
+    height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);
+    background:var(--paper);color:var(--azzurro);font-weight:600;font-size:.85rem;white-space:nowrap;
+    transition:transform .15s ease, background .2s ease;
+  }
+  .btn:active{transform:scale(.96);}
+  .btn svg{width:17px;height:17px;}
+  .btn.primary{background:linear-gradient(135deg,#2f78c8,var(--azzurro) 55%,var(--azzurro-deep));color:#fff;border:0;box-shadow:0 8px 18px -8px rgba(31,95,168,.7);}
+  .btn.danger{color:var(--terra);}
+  .btn.ghost{border-color:transparent;background:transparent;}
+  .btn.sm{height:34px;padding:0 10px;font-size:.78rem;}
+  .icon{width:36px;height:36px;padding:0;justify-content:center;border-radius:50%;}
+  .tabs{display:flex;gap:4px;max-width:1100px;margin:10px auto 0;overflow-x:auto;scrollbar-width:none;}
+  .tabs button{border:0;background:transparent;padding:8px 16px;border-radius:999px;color:var(--ink-2);font-weight:600;font-size:.86rem;white-space:nowrap;}
+  .tabs button.on{background:var(--azzurro);color:#fff;}
+
+  main{max-width:1100px;margin:0 auto;padding:18px 14px 120px;}
+  .banner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 16px;border-radius:16px;background:#fff4e6;border:1px solid #f0d2b0;margin-bottom:14px;font-size:.86rem;}
+  .banner.info{background:#eef4fb;border-color:var(--azzurro-soft);}
+  .banner .grow{flex:1;min-width:200px;}
+
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field > span{font-size:.78rem;color:var(--ink-2);font-weight:600;}
+  .field small{color:var(--muted);font-size:.72rem;line-height:1.7;}
+  input[type=text],input[type=search],input[type=number],select,textarea{
+    height:42px;border-radius:12px;border:1.5px solid var(--azzurro-soft);background:#fff;padding:0 12px;outline:none;min-width:0;
+    transition:border-color .2s ease;
+  }
+  textarea{height:auto;min-height:80px;padding:10px 12px;resize:vertical;line-height:1.8;}
+  input:focus,select:focus,textarea:focus{border-color:var(--azzurro);}
+  input.ltr{direction:ltr;text-align:left;}
+  .toolbar input[type=search]{flex:1;min-width:160px;}
+
+  .group{margin-top:22px;}
+  .group h3{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:.95rem;color:var(--ink);}
+  .group h3 .az-icon{width:22px;height:22px;color:var(--c,var(--azzurro));}
+  .group h3 .n{font-weight:400;color:var(--muted);font-size:.78rem;}
+  .rows{display:grid;gap:8px;}
+  .row{
+    display:grid;grid-template-columns:54px 1fr auto;align-items:center;gap:12px;
+    padding:8px 10px 8px 8px;border-radius:16px;background:var(--paper);border:1px solid var(--line);
+    box-shadow:0 4px 12px -10px rgba(19,37,74,.4);
+  }
+  .row.off{opacity:.7;}
+  .thumb{width:54px;aspect-ratio:4/5;border-radius:50% 50% 8px 8px / 40% 40% 8px 8px;overflow:hidden;background:var(--azzurro-soft);cursor:pointer;}
+  .thumb svg{width:100%;height:100%;display:block;}
+  .meta{min-width:0;cursor:pointer;}
+  .meta b{display:block;font-size:.92rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .meta span{font-size:.78rem;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .meta .p{color:var(--azzurro);font-weight:700;}
+  .meta .tag{padding:1px 8px;border-radius:999px;background:var(--azzurro-soft);color:var(--azzurro-deep);font-size:.68rem;}
+  .meta .tag.photo{background:#e7f3ea;color:var(--ok);}
+  .ops{display:flex;align-items:center;gap:4px;}
+  .switch{position:relative;width:46px;height:26px;border-radius:999px;background:#d6dbe5;border:0;padding:0;transition:background .2s ease;flex:0 0 auto;}
+  .switch::after{content:"";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .25s var(--ease);}
+  .switch.on{background:var(--ok);}
+  .switch.on::after{transform:translateX(-20px);}
+  .more{position:relative;}
+  .menu{position:absolute;left:0;top:calc(100% + 4px);z-index:5;min-width:170px;background:#fff;border-radius:14px;box-shadow:var(--shadow), 0 0 0 1px var(--line);padding:6px;display:none;}
+  .menu.open{display:block;}
+  .menu button{display:flex;width:100%;align-items:center;gap:8px;border:0;background:none;padding:9px 10px;border-radius:10px;text-align:start;font-size:.84rem;}
+  .menu button:hover{background:var(--azzurro-soft);}
+  .menu button.danger{color:var(--terra);}
+  @media (max-width:560px){
+    .row{grid-template-columns:48px 1fr;}
+    .ops{grid-column:1 / -1;justify-content:space-between;border-top:1px dashed var(--line);padding-top:8px;}
+  }
+
+  .cards{display:grid;gap:10px;}
+  .catrow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px;border-radius:16px;background:var(--paper);border:1px solid var(--line);}
+  .catrow .ic{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);color:var(--c);}
+  .catrow .ic .az-icon{width:30px;height:30px;}
+  .catrow .fields{display:grid;grid-template-columns:1fr 150px 70px;gap:8px;min-width:0;}
+  .catrow input[type=color]{width:100%;height:42px;border-radius:12px;border:1.5px solid var(--azzurro-soft);padding:3px;background:#fff;}
+  @media (max-width:640px){.catrow{grid-template-columns:auto 1fr;}.catrow .fields{grid-template-columns:1fr 1fr 60px;grid-column:1 / -1;}.catrow .ops{grid-column:1 / -1;}}
+  .info{display:grid;gap:14px;max-width:560px;}
+
+  .drawer{position:fixed;inset:0;z-index:50;}
+  .drawer .scrim{position:absolute;inset:0;background:rgba(12,29,60,.4);opacity:0;transition:opacity .3s ease;}
+  .drawer.open .scrim{opacity:1;}
+  .drawer .pane{
+    position:absolute;top:0;bottom:0;left:0;width:min(100%, 620px);
+    background:var(--marble);box-shadow:20px 0 50px -20px rgba(12,29,60,.5);
+    display:flex;flex-direction:column;
+    transform:translateX(-102%);transition:transform .45s var(--ease);
+  }
+  .drawer.open .pane{transform:none;}
+  .pane-head{display:flex;align-items:center;gap:8px;padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top));border-bottom:1px solid var(--line);background:var(--paper);}
+  .pane-head h2{margin:0;flex:1;font-size:1rem;}
+  .pane-body{flex:1;overflow-y:auto;padding:16px 16px 30px;display:grid;gap:16px;align-content:start;}
+  .pane-foot{display:flex;gap:8px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--paper);}
+  .pane-foot .btn{flex:1;justify-content:center;height:46px;}
+  .preview{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center;}
+  @media (max-width:460px){.preview{grid-template-columns:120px 1fr;}}
+  .big{position:relative;aspect-ratio:4/5;border-radius:50% 50% 12px 12px / 40% 40% 12px 12px;overflow:hidden;background:var(--azzurro-soft);box-shadow:0 0 0 1px #fff, 0 0 0 5px var(--paper), 0 0 0 6px var(--line), var(--shadow);}
+  .big svg,.big img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+  .big .az-spin{animation-play-state:running;}
+  .preview .side{display:grid;gap:8px;}
+  .preview .stylename{font-weight:700;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:460px){.two{grid-template-columns:1fr;}}
+  .inline{display:flex;gap:8px;align-items:center;}
+  .inline > input{flex:1;}
+  .imgprev{display:flex;align-items:center;gap:10px;font-size:.76rem;color:var(--muted);}
+  .imgprev img{width:44px;height:44px;border-radius:10px;object-fit:cover;border:1px solid var(--line);}
+  .colorrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .colorrow input[type=color]{width:52px;height:40px;border-radius:12px;border:1.5px solid var(--azzurro-soft);padding:3px;background:#fff;}
+  .swatch{width:30px;height:30px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);padding:0;}
+  .picker h4{margin:14px 0 8px;font-size:.8rem;color:var(--ink-2);}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(84px, 1fr));gap:10px;}
+  .opt{border:0;background:none;padding:0;text-align:center;font-size:.68rem;color:var(--ink-2);line-height:1.5;}
+  .opt .t{aspect-ratio:4/5;border-radius:50% 50% 8px 8px / 40% 40% 8px 8px;overflow:hidden;background:var(--azzurro-soft);box-shadow:0 0 0 1px var(--line);margin-bottom:4px;transition:box-shadow .2s ease, transform .2s ease;}
+  .opt .t svg{width:100%;height:100%;display:block;}
+  .opt.on .t{box-shadow:0 0 0 3px var(--azzurro);transform:translateY(-2px);}
+  .opt.on{color:var(--azzurro);font-weight:700;}
+  .opt.auto .t{display:grid;place-items:center;font-size:1.4rem;color:var(--azzurro);background:#fff;}
+
+  .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));z-index:80;transform:translate(-50%, 30px);opacity:0;background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:.84rem;transition:opacity .3s ease, transform .4s var(--ease);pointer-events:none;box-shadow:var(--shadow);}
+  .toast.show{opacity:1;transform:translate(-50%, 0);}
+  .empty{padding:40px 10px;text-align:center;color:var(--muted);}
+  .fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:15;height:54px;padding:0 20px;border-radius:999px;box-shadow:0 14px 30px -10px rgba(31,95,168,.7);}
+  dialog{border:0;border-radius:20px;padding:20px;max-width:min(92vw, 420px);box-shadow:var(--shadow);background:var(--paper);color:var(--ink);}
+  dialog::backdrop{background:rgba(12,29,60,.4);}
+  dialog h3{margin:0 0 8px;font-size:1rem;}
+  dialog p{margin:0 0 14px;color:var(--ink-2);font-size:.88rem;line-height:1.9;}
+  dialog .actions{justify-content:flex-start;margin-top:14px;}
+</style>
+<script src="art.js"></script>
+</head>
+<body>
+
+<header class="top">
+  <div class="toprow">
+    <div class="brand"><h1>طراح منو</h1><span class="dirty" id="dirty"><i></i><span>ذخیره شده</span></span></div>
+    <div class="actions">
+      <button class="btn" id="openBtn" type="button" title="باز کردن یک فایل items.json">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>باز کردن
+      </button>
+      <button class="btn" id="downloadBtn" type="button" title="دانلود items.json">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>دانلود
+      </button>
+      <button class="btn primary" id="saveBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></svg>ذخیره
+      </button>
+      <a class="btn icon" href="index.html" target="_blank" rel="noopener" title="مشاهده منو" aria-label="مشاهده منو">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+      </a>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button type="button" data-tab="items" class="on">آیتم‌ها</button>
+    <button type="button" data-tab="cats">دسته‌بندی‌ها</button>
+    <button type="button" data-tab="info">اطلاعات کافه</button>
+  </nav>
+</header>
+
+<main>
+  <div id="banners"></div>
+
+  <section id="tab-items">
+    <div class="toolbar">
+      <input type="search" id="search" placeholder="جستجوی آیتم…">
+      <select id="catFilter" aria-label="فیلتر دسته‌بندی"></select>
+    </div>
+    <div id="itemList"></div>
+  </section>
+
+  <section id="tab-cats" hidden>
+    <div class="toolbar"><button class="btn primary" id="addCat" type="button">+ دسته‌بندی جدید</button></div>
+    <div class="cards" id="catList"></div>
+  </section>
+
+  <section id="tab-info" hidden>
+    <div class="info">
+      <label class="field"><span>نام کافه</span><input type="text" data-info="restaurant"></label>
+      <label class="field"><span>نام لاتین</span><input type="text" class="ltr" data-info="latin" placeholder="Caffè Azzurri"></label>
+      <label class="field"><span>شعار / توضیح زیر نام</span><input type="text" data-info="tagline"></label>
+      <label class="field"><span>آدرس</span><input type="text" data-info="address"></label>
+      <label class="field"><span>واحد پول</span><input type="text" data-info="currency" placeholder="تومان"></label>
+    </div>
+  </section>
+</main>
+
+<button class="btn primary fab" id="addItem" type="button">+ آیتم جدید</button>
+
+<div class="drawer" id="drawer" hidden>
+  <div class="scrim" id="dscrim"></div>
+  <div class="pane" role="dialog" aria-modal="true" aria-labelledby="dtitle">
+    <div class="pane-head">
+      <button class="btn icon ghost" id="dclose" type="button" aria-label="بستن"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <h2 id="dtitle">ویرایش آیتم</h2>
+      <span class="dirty" id="dId"></span>
+    </div>
+    <div class="pane-body">
+      <div class="preview">
+        <div class="big" id="bigPrev"></div>
+        <div class="side">
+          <div class="stylename" id="styleName"></div>
+          <small style="color:var(--muted);line-height:1.8">این طرح در منو نمایش داده می‌شود. اگر عکس واقعی داشته باشید، با لمس آیتم در منو نمایش داده می‌شود.</small>
+          <div class="inline">
+            <button class="btn sm" id="reroll" type="button">🎲 طرح دیگر</button>
+            <button class="btn sm ghost" id="resetSeed" type="button">اولیه</button>
+          </div>
+        </div>
+      </div>
+      <label class="field"><span>نام آیتم</span><input type="text" id="fTitle" required></label>
+      <div class="two">
+        <label class="field"><span>دسته‌بندی</span><select id="fCat"></select></label>
+        <label class="field"><span>قیمت</span><input type="text" id="fPrice" inputmode="numeric" class="ltr"><small id="fPriceFa"></small></label>
+      </div>
+      <label class="field"><span>توضیحات (اختیاری)</span><textarea id="fDesc" rows="2"></textarea></label>
+      <label class="field"><span>مسیر عکس (اختیاری)</span>
+        <input type="text" id="fImage" class="ltr" placeholder="assets/photo.jpg">
+        <div class="imgprev" id="imgPrev"></div>
+      </label>
+      <div class="field"><span>وضعیت</span>
+        <div class="inline"><button type="button" class="switch" id="fAvail" aria-label="موجود"></button><span id="fAvailTxt"></span></div>
+      </div>
+      <div class="field"><span>رنگ اصلی طرح (اختیاری، برای نوشیدنی‌ها)</span>
+        <div class="colorrow" id="colorRow">
+          <input type="color" id="fColor" value="#2a8ad6">
+          <button type="button" class="btn sm ghost" id="clearColor">پیش‌فرض</button>
+        </div>
+      </div>
+      <div class="picker">
+        <div class="field"><span>انتخاب طرح</span><small>روی هر طرح بزنید تا انتخاب شود. «خودکار» بر اساس دسته‌بندی یک طرح مناسب انتخاب می‌کند.</small></div>
+        <div id="picker"></div>
+      </div>
+    </div>
+    <div class="pane-foot">
+      <button class="btn" id="dcancel" type="button">انصراف</button>
+      <button class="btn primary" id="dsave" type="button">ثبت تغییرات</button>
+    </div>
+  </div>
+</div>
+
+<dialog id="dlg"><h3 id="dlgTitle"></h3><p id="dlgText"></p><div id="dlgExtra"></div><div class="actions" id="dlgActions"></div></dialog>
+<input type="file" id="fileInput" accept=".json,application/json" hidden>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const FA = '۰۱۲۳۴۵۶۷۸۹';
+const faNum = s => String(s).replace(/\d/g, d => FA[d]);
+const toEn = s => String(s).replace(/[۰-۹]/g, d => FA.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+const price = n => Number(n || 0).toLocaleString('fa-IR');
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const PLACEHOLDER = 'assets/place-holder.jpg';
+const DRAFT_KEY = 'az-designer-draft';
+const ICON_KEYS = ['espresso', 'iced', 'mug', 'tea', 'cocktail', 'shake', 'cake', 'toast', 'drop', 'star', 'leaf'];
+const SWATCHES = ['#2a8ad6', '#d61f4a', '#12a05a', '#ff5a2a', '#f6be45', '#8a5ad0', '#0f8f8a', '#f7a9c0', '#e8dcc4'];
+
+let data = null, fileHandle = null, dirty = false, savedText = '';
+
+function toast(msg){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toast.t);
+  toast.t = setTimeout(() => t.classList.remove('show'), 2200);
+}
+function ask(title, text, buttons, extra){
+  return new Promise(res => {
+    const d = $('#dlg');
+    $('#dlgTitle').textContent = title;
+    $('#dlgText').textContent = text;
+    $('#dlgExtra').innerHTML = '';
+    if(extra) $('#dlgExtra').appendChild(extra);
+    const box = $('#dlgActions');
+    box.innerHTML = '';
+    buttons.forEach(b => {
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'btn ' + (b.cls || '');
+      el.textContent = b.label;
+      el.onclick = () => { d.close(); res(b.value); };
+      box.appendChild(el);
+    });
+    d.onclose = () => res(d.returnValue === '' ? null : undefined);
+    d.showModal();
+  });
+}
+
+function normalize(raw){
+  const d = raw && typeof raw === 'object' ? raw : {};
+  const out = {
+    restaurant: d.restaurant || 'کافه',
+    latin: d.latin || '',
+    tagline: d.tagline || '',
+    address: d.address || '',
+    currency: d.currency || 'تومان',
+    categories: [],
+    items: []
+  };
+  const seen = new Set();
+  (d.categories || []).forEach((c, i) => {
+    const o = typeof c === 'string' ? {name: c} : Object.assign({}, c);
+    if(!o.name || seen.has(o.name)) return;
+    seen.add(o.name);
+    out.categories.push({name: o.name, icon: o.icon || ICON_KEYS[i % 9], color: o.color || '#1f5fa8'});
+  });
+  (d.items || []).forEach(it => {
+    if(it.category && !seen.has(it.category)){ seen.add(it.category); out.categories.push({name: it.category, icon: 'star', color: '#1f5fa8'}); }
+    out.items.push({
+      id: it.id != null ? it.id : null,
+      category: it.category || (out.categories[0] && out.categories[0].name) || '',
+      title: it.title || '',
+      description: it.description || '',
+      price: Number(it.price) || 0,
+      image: it.image || '',
+      available: it.available !== false,
+      art: it.art || '',
+      artSeed: Number(it.artSeed) || 0,
+      artColor: it.artColor || ''
+    });
+  });
+  let max = out.items.reduce((m, it) => Math.max(m, Number(it.id) || 0), 0);
+  const ids = new Set();
+  out.items.forEach(it => { if(it.id == null || ids.has(it.id)) it.id = ++max; ids.add(it.id); });
+  return out;
+}
+function serialize(){
+  const o = {
+    restaurant: data.restaurant, latin: data.latin, tagline: data.tagline, address: data.address, currency: data.currency,
+    categories: data.categories.map(c => ({name: c.name, icon: c.icon, color: c.color})),
+    items: data.items.map(it => {
+      const x = {id: it.id, category: it.category, title: it.title, description: it.description, price: it.price, image: it.image || PLACEHOLDER, available: it.available, art: it.art || ''};
+      if(it.artSeed) x.artSeed = it.artSeed;
+      if(it.artColor) x.artColor = it.artColor;
+      return x;
+    })
+  };
+  return JSON.stringify(o, null, 2) + '\n';
+}
+function setDirty(v){
+  dirty = v;
+  const el = $('#dirty');
+  el.classList.toggle('on', v);
+  el.querySelector('span').textContent = v ? 'تغییرات ذخیره نشده' : 'ذخیره شده';
+}
+function changed(){
+  const text = serialize();
+  setDirty(text !== savedText);
+  try { if(dirty) localStorage.setItem(DRAFT_KEY, text); else localStorage.removeItem(DRAFT_KEY); } catch(e){}
+}
+function load(raw, from){
+  data = normalize(raw);
+  savedText = serialize();
+  setDirty(false);
+  renderAll();
+  if(from) toast(from);
+}
+
+function catOf(name){ return data.categories.find(c => c.name === name) || {name, icon: 'star', color: '#1f5fa8'}; }
+function art(it, style){ return AzArt.render(it, {icon: catOf(it.category).icon, style: style || undefined}); }
+function hasPhoto(it){ return it.image && it.image !== PLACEHOLDER; }
+
+function renderAll(){
+  renderFilter();
+  renderItems();
+  renderCats();
+  document.querySelectorAll('[data-info]').forEach(i => i.value = data[i.dataset.info] || '');
+}
+
+function renderFilter(){
+  const sel = $('#catFilter'), v = sel.value;
+  sel.innerHTML = '<option value="">همه دسته‌ها</option>' + data.categories.map(c => `<option>${esc(c.name)}</option>`).join('');
+  sel.value = data.categories.some(c => c.name === v) ? v : '';
+}
+
+function renderItems(){
+  const q = toEn($('#search').value.trim()).toLowerCase();
+  const cf = $('#catFilter').value;
+  const box = $('#itemList');
+  box.innerHTML = '';
+  let total = 0;
+  data.categories.forEach(cat => {
+    if(cf && cat.name !== cf) return;
+    const list = data.items.filter(it => it.category === cat.name && (!q || toEn(it.title).toLowerCase().includes(q)));
+    if(!list.length && q) return;
+    total += list.length;
+    const g = document.createElement('div');
+    g.className = 'group';
+    g.style.setProperty('--c', cat.color);
+    g.innerHTML = `<h3>${AzArt.icon(cat.icon)}${esc(cat.name)} <span class="n">${faNum(list.length)} آیتم</span></h3>`;
+    const rows = document.createElement('div');
+    rows.className = 'rows';
+    if(!list.length) rows.innerHTML = '<div class="empty">هنوز آیتمی در این دسته نیست.</div>';
+    list.forEach(it => rows.appendChild(itemRow(it)));
+    g.appendChild(rows);
+    box.appendChild(g);
+  });
+  if(!total && q) box.innerHTML = '<div class="empty">چیزی پیدا نشد.</div>';
+}
+
+function itemRow(it){
+  const r = document.createElement('div');
+  r.className = 'row' + (it.available ? '' : ' off');
+  const styleKey = AzArt.resolveStyle(it, catOf(it.category).icon);
+  r.innerHTML = `<div class="thumb">${art(it)}</div>
+    <div class="meta"><b>${esc(faNum(it.title) || 'بدون نام')}</b>
+      <span><span class="p">${price(it.price)} ${esc(data.currency)}</span><span class="tag">${esc(AzArt.label(styleKey))}${it.art ? '' : ' · خودکار'}</span>${hasPhoto(it) ? '<span class="tag photo">عکس دارد</span>' : ''}</span></div>
+    <div class="ops">
+      <button type="button" class="switch ${it.available ? 'on' : ''}" title="موجود / ناموجود" aria-label="موجود"></button>
+      <button type="button" class="btn sm" data-a="edit">ویرایش</button>
+      <div class="more"><button type="button" class="btn icon ghost" data-a="more" aria-label="بیشتر">⋯</button>
+        <div class="menu">
+          <button type="button" data-a="up">⬆ بالا</button>
+          <button type="button" data-a="down">⬇ پایین</button>
+          <button type="button" data-a="dup">⧉ کپی از این آیتم</button>
+          <button type="button" data-a="del" class="danger">🗑 حذف</button>
+        </div>
+      </div>
+    </div>`;
+  r.querySelector('.thumb').onclick = r.querySelector('.meta').onclick = () => openEditor(it);
+  r.querySelector('.switch').onclick = e => { it.available = !it.available; e.currentTarget.classList.toggle('on', it.available); r.classList.toggle('off', !it.available); changed(); };
+  r.querySelector('[data-a=edit]').onclick = () => openEditor(it);
+  const menu = r.querySelector('.menu');
+  r.querySelector('[data-a=more]').onclick = e => { e.stopPropagation(); document.querySelectorAll('.menu.open').forEach(m => m !== menu && m.classList.remove('open')); menu.classList.toggle('open'); };
+  menu.onclick = async e => {
+    const a = e.target.closest('button') && e.target.closest('button').dataset.a;
+    menu.classList.remove('open');
+    if(a === 'up' || a === 'down') move(it, a === 'up' ? -1 : 1);
+    if(a === 'dup'){
+      const c = Object.assign({}, it, {id: nextId(), title: it.title + ' (کپی)', artSeed: (it.artSeed || 0) + 1});
+      data.items.splice(data.items.indexOf(it) + 1, 0, c);
+      changed(); renderItems(); toast('کپی ساخته شد');
+    }
+    if(a === 'del'){
+      const ok = await ask('حذف آیتم', `«${it.title}» حذف شود؟`, [{label:'حذف', value:true, cls:'danger'}, {label:'انصراف', value:false}]);
+      if(ok){ data.items.splice(data.items.indexOf(it), 1); changed(); renderItems(); toast('حذف شد'); }
+    }
+  };
+  return r;
+}
+document.addEventListener('click', () => document.querySelectorAll('.menu.open').forEach(m => m.classList.remove('open')));
+
+function move(it, d){
+  const same = data.items.filter(x => x.category === it.category);
+  const k = same.indexOf(it), other = same[k + d];
+  if(!other) return;
+  const a = data.items.indexOf(it), b = data.items.indexOf(other);
+  data.items[a] = other; data.items[b] = it;
+  changed(); renderItems();
+}
+function nextId(){ return data.items.reduce((m, it) => Math.max(m, Number(it.id) || 0), 0) + 1; }
+
+function renderCats(){
+  const box = $('#catList');
+  box.innerHTML = '';
+  data.categories.forEach((cat, i) => {
+    const count = data.items.filter(it => it.category === cat.name).length;
+    const r = document.createElement('div');
+    r.className = 'catrow';
+    r.style.setProperty('--c', cat.color);
+    r.innerHTML = `<div class="ic">${AzArt.icon(cat.icon)}</div>
+      <div class="fields">
+        <input type="text" value="${esc(cat.name)}" aria-label="نام دسته">
+        <select aria-label="آیکون">${ICON_KEYS.map(k => `<option value="${k}" ${k === cat.icon ? 'selected' : ''}>${esc(AzArt.icons[k][0])}</option>`).join('')}</select>
+        <input type="color" value="${esc(cat.color)}" aria-label="رنگ">
+      </div>
+      <div class="ops">
+        <span class="dirty">${faNum(count)} آیتم</span>
+        <button type="button" class="btn icon ghost" data-a="up" aria-label="بالا">⬆</button>
+        <button type="button" class="btn icon ghost" data-a="down" aria-label="پایین">⬇</button>
+        <button type="button" class="btn icon ghost danger" data-a="del" aria-label="حذف">🗑</button>
+      </div>`;
+    const [nameI, iconS, colorI] = r.querySelectorAll('input[type=text], select, input[type=color]');
+    nameI.onchange = () => {
+      const v = nameI.value.trim();
+      if(!v || (v !== cat.name && data.categories.some(c => c.name === v))){ nameI.value = cat.name; toast('نام تکراری یا خالی است'); return; }
+      data.items.forEach(it => { if(it.category === cat.name) it.category = v; });
+      cat.name = v;
+      changed(); renderFilter(); renderItems();
+    };
+    iconS.onchange = () => { cat.icon = iconS.value; r.querySelector('.ic').innerHTML = AzArt.icon(cat.icon); changed(); renderItems(); };
+    colorI.oninput = () => { cat.color = colorI.value; r.style.setProperty('--c', cat.color); changed(); };
+    colorI.onchange = () => renderItems();
+    r.querySelector('[data-a=up]').onclick = () => { if(i > 0){ [data.categories[i - 1], data.categories[i]] = [data.categories[i], data.categories[i - 1]]; changed(); renderAll(); } };
+    r.querySelector('[data-a=down]').onclick = () => { if(i < data.categories.length - 1){ [data.categories[i + 1], data.categories[i]] = [data.categories[i], data.categories[i + 1]]; changed(); renderAll(); } };
+    r.querySelector('[data-a=del]').onclick = async () => {
+      if(!count){
+        if(await ask('حذف دسته‌بندی', `دسته «${cat.name}» حذف شود؟`, [{label:'حذف', value:true, cls:'danger'}, {label:'انصراف', value:false}])){ data.categories.splice(i, 1); changed(); renderAll(); }
+        return;
+      }
+      const others = data.categories.filter(c => c !== cat);
+      const sel = document.createElement('select');
+      sel.style.width = '100%';
+      sel.innerHTML = others.map(c => `<option>${esc(c.name)}</option>`).join('');
+      const act = await ask('حذف دسته‌بندی', `این دسته ${faNum(count)} آیتم دارد. آیتم‌ها به کدام دسته منتقل شوند؟`, [
+        ...(others.length ? [{label:'انتقال و حذف دسته', value:'move', cls:'primary'}] : []),
+        {label:'حذف همراه آیتم‌ها', value:'all', cls:'danger'},
+        {label:'انصراف', value:null}
+      ], others.length ? sel : null);
+      if(act === 'move'){ data.items.forEach(it => { if(it.category === cat.name) it.category = sel.value; }); }
+      if(act === 'all'){ data.items = data.items.filter(it => it.category !== cat.name); }
+      if(act === 'move' || act === 'all'){ data.categories.splice(data.categories.indexOf(cat), 1); changed(); renderAll(); }
+    };
+    box.appendChild(r);
+  });
+}
+$('#addCat').onclick = () => {
+  let n = 'دسته جدید', k = 2;
+  while(data.categories.some(c => c.name === n)) n = 'دسته جدید ' + faNum(k++);
+  data.categories.push({name: n, icon: 'star', color: '#1f5fa8'});
+  changed(); renderAll();
+  const inputs = document.querySelectorAll('#catList input[type=text]');
+  const last = inputs[inputs.length - 1];
+  last.focus(); last.select();
+};
+document.querySelectorAll('[data-info]').forEach(inp => inp.addEventListener('input', () => { data[inp.dataset.info] = inp.value; changed(); }));
+
+let editing = null, draft = null, isNew = false;
+function openEditor(it, fresh){
+  editing = it; isNew = !!fresh;
+  draft = Object.assign({}, it);
+  $('#dtitle').textContent = isNew ? 'آیتم جدید' : 'ویرایش آیتم';
+  $('#dId').textContent = 'شناسه ' + faNum(draft.id);
+  $('#fTitle').value = draft.title;
+  $('#fCat').innerHTML = data.categories.map(c => `<option>${esc(c.name)}</option>`).join('');
+  $('#fCat').value = draft.category;
+  $('#fPrice').value = draft.price ? String(draft.price) : '';
+  $('#fDesc').value = draft.description;
+  $('#fImage').value = hasPhoto(draft) ? draft.image : '';
+  setAvail();
+  $('#fColor').value = draft.artColor || '#2a8ad6';
+  paintPrice(); paintImg(); paintPreview(); paintPicker();
+  const dr = $('#drawer');
+  dr.hidden = false;
+  document.body.classList.add('locked');
+  requestAnimationFrame(() => dr.classList.add('open'));
+  setTimeout(() => { if(isNew) $('#fTitle').focus(); }, 300);
+}
+function closeEditor(){
+  const dr = $('#drawer');
+  dr.classList.remove('open');
+  document.body.classList.remove('locked');
+  setTimeout(() => dr.hidden = true, 400);
+  editing = null; draft = null;
+}
+function setAvail(){
+  $('#fAvail').classList.toggle('on', draft.available);
+  $('#fAvailTxt').textContent = draft.available ? 'موجود' : 'ناموجود';
+}
+function paintPrice(){
+  const n = Number(toEn($('#fPrice').value).replace(/[^\d]/g, '')) || 0;
+  $('#fPriceFa').textContent = n ? price(n) + ' ' + data.currency : 'قیمت را به عدد وارد کنید';
+}
+function paintImg(){
+  const v = $('#fImage').value.trim();
+  const box = $('#imgPrev');
+  if(!v){ box.innerHTML = '<span>بدون عکس — فقط طرح نمایش داده می‌شود.</span>'; return; }
+  box.innerHTML = '<span>در حال بررسی…</span>';
+  const img = new Image();
+  img.onload = () => { box.innerHTML = ''; box.appendChild(img); box.insertAdjacentHTML('beforeend', '<span>عکس پیدا شد ✓</span>'); };
+  img.onerror = () => { box.innerHTML = '<span style="color:var(--terra)">عکس در این مسیر پیدا نشد. نام و مسیر فایل را بررسی کنید.</span>'; };
+  img.src = v;
+}
+function paintPreview(){
+  const key = AzArt.resolveStyle(draft, catOf(draft.category).icon);
+  $('#bigPrev').innerHTML = art(draft);
+  $('#styleName').textContent = AzArt.label(key) + (draft.art ? '' : ' (خودکار)');
+}
+function paintPicker(){
+  const box = $('#picker');
+  box.innerHTML = '';
+  const autoWrap = document.createElement('div');
+  autoWrap.className = 'grid';
+  autoWrap.innerHTML = `<button type="button" class="opt auto ${draft.art ? '' : 'on'}" data-k=""><div class="t">✦</div>خودکار</button>`;
+  box.appendChild(autoWrap);
+  const icon = catOf(draft.category).icon;
+  const prefer = AzArt.categoryDefaults[icon] || [];
+  const groups = Object.keys(AzArt.groups).sort((a, b) => {
+    const pa = AzArt.groups[a].some(k => prefer.includes(k)) ? 0 : 1, pb = AzArt.groups[b].some(k => prefer.includes(k)) ? 0 : 1;
+    return pa - pb;
+  });
+  groups.forEach(g => {
+    const h = document.createElement('h4');
+    h.textContent = g;
+    box.appendChild(h);
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    AzArt.groups[g].forEach(k => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'opt' + (draft.art === k ? ' on' : '');
+      b.dataset.k = k;
+      b.innerHTML = `<div class="t" data-lazy="${k}"></div>${esc(AzArt.label(k))}`;
+      grid.appendChild(b);
+    });
+    box.appendChild(grid);
+  });
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if(e.isIntersecting){ const k = e.target.dataset.lazy; e.target.innerHTML = AzArt.render(draft, {style: k, icon}); io.unobserve(e.target); }
+  }), {root: document.querySelector('.pane-body'), rootMargin: '200px'});
+  box.querySelectorAll('[data-lazy]').forEach(t => io.observe(t));
+}
+$('#picker').addEventListener('click', e => {
+  const b = e.target.closest('.opt');
+  if(!b) return;
+  draft.art = b.dataset.k;
+  $('#picker').querySelectorAll('.opt').forEach(o => o.classList.toggle('on', o === b));
+  paintPreview();
+});
+$('#fTitle').addEventListener('input', () => draft.title = $('#fTitle').value);
+$('#fCat').addEventListener('change', () => { draft.category = $('#fCat').value; paintPreview(); paintPicker(); });
+$('#fPrice').addEventListener('input', () => { const el = $('#fPrice'); el.value = toEn(el.value).replace(/[^\d]/g, ''); paintPrice(); });
+$('#fDesc').addEventListener('input', () => draft.description = $('#fDesc').value);
+let imgT;
+$('#fImage').addEventListener('input', () => { clearTimeout(imgT); imgT = setTimeout(paintImg, 350); });
+$('#fAvail').addEventListener('click', () => { draft.available = !draft.available; setAvail(); });
+$('#fColor').addEventListener('input', () => { draft.artColor = $('#fColor').value; paintPreview(); });
+$('#fColor').addEventListener('change', paintPicker);
+$('#clearColor').addEventListener('click', () => { draft.artColor = ''; paintPreview(); paintPicker(); });
+SWATCHES.forEach(c => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'swatch'; b.style.background = c; b.title = c;
+  b.onclick = () => { draft.artColor = c; $('#fColor').value = c; paintPreview(); paintPicker(); };
+  $('#colorRow').insertBefore(b, $('#clearColor'));
+});
+$('#reroll').addEventListener('click', () => { draft.artSeed = (draft.artSeed || 0) + 1; paintPreview(); paintPicker(); });
+$('#resetSeed').addEventListener('click', () => { draft.artSeed = 0; paintPreview(); paintPicker(); });
+$('#dclose').onclick = $('#dcancel').onclick = $('#dscrim').onclick = closeEditor;
+$('#dsave').onclick = () => {
+  const title = $('#fTitle').value.trim();
+  if(!title){ $('#fTitle').focus(); toast('نام آیتم را وارد کنید'); return; }
+  draft.title = title;
+  draft.price = Number($('#fPrice').value) || 0;
+  draft.description = $('#fDesc').value.trim();
+  draft.image = $('#fImage').value.trim() || PLACEHOLDER;
+  if(isNew) data.items.push(draft);
+  else Object.assign(editing, draft);
+  changed();
+  closeEditor();
+  renderItems();
+  toast(isNew ? 'آیتم اضافه شد' : 'تغییرات ثبت شد');
+};
+addEventListener('keydown', e => { if(e.key === 'Escape' && editing) closeEditor(); });
+$('#addItem').onclick = () => {
+  if(!data.categories.length){ toast('اول یک دسته‌بندی بسازید'); showTab('cats'); return; }
+  const cat = $('#catFilter').value || data.categories[0].name;
+  openEditor({id: nextId(), category: cat, title: '', description: '', price: 0, image: PLACEHOLDER, available: true, art: '', artSeed: 0, artColor: ''}, true);
+};
+
+$('#search').addEventListener('input', renderItems);
+$('#catFilter').addEventListener('change', renderItems);
+function showTab(t){
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
+  ['items', 'cats', 'info'].forEach(k => $('#tab-' + k).hidden = k !== t);
+  $('#addItem').hidden = t !== 'items';
+}
+$('#tabs').addEventListener('click', e => { const b = e.target.closest('button'); if(b) showTab(b.dataset.tab); });
+
+function download(){
+  const blob = new Blob([serialize()], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'items.json';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+async function writeHandle(h){
+  const w = await h.createWritable();
+  await w.write(serialize());
+  await w.close();
+}
+function markSaved(){
+  savedText = serialize();
+  setDirty(false);
+  try { localStorage.removeItem(DRAFT_KEY); } catch(e){}
+}
+$('#saveBtn').onclick = async () => {
+  try {
+    if(fileHandle){ await writeHandle(fileHandle); markSaved(); toast('در فایل ذخیره شد ✓'); return; }
+    if(window.showSaveFilePicker){
+      fileHandle = await showSaveFilePicker({suggestedName: 'items.json', types: [{description: 'JSON', accept: {'application/json': ['.json']}}]});
+      await writeHandle(fileHandle); markSaved(); toast('در فایل ذخیره شد ✓'); return;
+    }
+  } catch(e){
+    if(e && e.name === 'AbortError') return;
+  }
+  download(); markSaved(); toast('فایل items.json دانلود شد — آن را کنار index.html قرار دهید');
+};
+$('#downloadBtn').onclick = () => { download(); toast('فایل items.json دانلود شد'); };
+$('#openBtn').onclick = async () => {
+  if(dirty && !(await ask('تغییرات ذخیره نشده', 'تغییرات فعلی از بین می‌رود. ادامه می‌دهید؟', [{label:'ادامه', value:true, cls:'danger'}, {label:'انصراف', value:false}]))) return;
+  if(window.showOpenFilePicker){
+    try {
+      const [h] = await showOpenFilePicker({types: [{description: 'JSON', accept: {'application/json': ['.json']}}]});
+      const f = await h.getFile();
+      load(JSON.parse(await f.text()), 'فایل باز شد: ' + f.name);
+      fileHandle = h;
+      clearBanners();
+    } catch(e){ if(e && e.name !== 'AbortError') toast('فایل معتبر نیست'); }
+    return;
+  }
+  $('#fileInput').click();
+};
+$('#fileInput').onchange = async () => {
+  const f = $('#fileInput').files[0];
+  if(!f) return;
+  try { load(JSON.parse(await f.text()), 'فایل باز شد: ' + f.name); fileHandle = null; clearBanners(); }
+  catch(e){ toast('فایل معتبر نیست'); }
+  $('#fileInput').value = '';
+};
+addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.returnValue = ''; } });
+
+function clearBanners(){ $('#banners').innerHTML = ''; }
+function banner(html, cls, actions){
+  const b = document.createElement('div');
+  b.className = 'banner ' + (cls || '');
+  b.innerHTML = `<div class="grow">${html}</div>`;
+  (actions || []).forEach(a => {
+    const el = document.createElement('button');
+    el.type = 'button'; el.className = 'btn sm ' + (a.cls || ''); el.textContent = a.label;
+    el.onclick = () => { a.fn(); b.remove(); };
+    b.appendChild(el);
+  });
+  $('#banners').appendChild(b);
+}
+
+function start(raw, note){
+  load(raw);
+  let d = null;
+  try { d = localStorage.getItem(DRAFT_KEY); } catch(e){}
+  if(d && d !== savedText){
+    banner('یک پیش‌نویس ذخیره‌نشده از دفعه قبل پیدا شد.', '', [
+      {label: 'بازیابی پیش‌نویس', cls: 'primary', fn: () => { const keep = savedText; data = normalize(JSON.parse(d)); renderAll(); savedText = keep; changed(); toast('پیش‌نویس بازیابی شد'); }},
+      {label: 'نادیده گرفتن', fn: () => { try { localStorage.removeItem(DRAFT_KEY); } catch(e){} }}
+    ]);
+  }
+  if(note) banner(note, 'info');
+  if(!window.showSaveFilePicker) banner('روی این مرورگر، «ذخیره» فایل <b>items.json</b> را دانلود می‌کند. فایل دانلودشده را جایگزین items.json کنار index.html کنید.', 'info');
+}
+fetch('items.json', {cache: 'no-cache'})
+  .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(j => start(j))
+  .catch(() => start({categories: [], items: []}, 'فایل items.json خودکار بارگذاری نشد. با دکمه «باز کردن» فایل را انتخاب کنید.'));
+</script>
+</body>
+</html>
