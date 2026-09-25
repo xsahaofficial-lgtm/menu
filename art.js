@@ -502,7 +502,7 @@ const S = {};
 const G = {};
 function sabt(key, group, label, fn){ S[key] = { group, label, fn }; (G[group] = G[group] || []).push(key); }
 
-sabt('espresso', 'قهوه گرم', 'اسپرسو (فنجان کوچک از بالا)', c => {
+sabt('espresso', 'قهوه', 'اسپرسو', c => {
   let s = pasZamine(c);
   const cup = c.yeki(CHINI);
   const inner = (() => {
@@ -526,7 +526,7 @@ sabt('espresso', 'قهوه گرم', 'اسپرسو (فنجان کوچک از با
   return s;
 });
 
-sabt('espresso-side', 'قهوه گرم', 'فنجان اسپرسو از کنار', c => {
+sabt('espresso-side', 'قهوه', 'فنجان', c => {
   let s = pasZamine(c) + rooyeMiz(c);
   const col = c.yeki(CHINI), sc = c.shans(.6) ? col : c.yeki(CHINI);
   const w = c.bein(36, 44), top = c.bein(118, 128), bot = 188;
@@ -545,7 +545,7 @@ sabt('espresso-side', 'قهوه گرم', 'فنجان اسپرسو از کنار'
   return s;
 });
 
-sabt('americano', 'قهوه گرم', 'آمریکانو (ماگ بزرگ)', c => {
+sabt('americano', 'قهوه', 'آمریکانو', c => {
   let s = pasZamine(c);
   let inner = `<circle r="44" fill="none" stroke="#b77a41" stroke-opacity=".55" stroke-width="4"/>`;
   for(let i = 0; i < 8; i++){ const a = c.bein(0, 6.28), d = c.bein(20, 40); inner += `<ellipse cx="${gerd(Math.cos(a) * d)}" cy="${gerd(Math.sin(a) * d)}" rx="${gerd(c.bein(3, 9))}" ry="${gerd(c.bein(1.5, 4))}" fill="#b98050" fill-opacity=".3"/>`; }
@@ -560,8 +560,8 @@ sabt('americano', 'قهوه گرم', 'آمریکانو (ماگ بزرگ)', c => 
   return s;
 });
 
-sabt('latte-rosetta', 'قهوه گرم', 'لاته آرت روزتا', sabkeLatte('rosetta', 'coffee'));
-sabt('latte-tulip', 'قهوه گرم', 'لاته در لیوان شیشه‌ای', c => {
+sabt('latte-rosetta', 'قهوه', 'روزتا', sabkeLatte('rosetta', 'coffee'));
+sabt('latte-tulip', 'قهوه', 'ستاره', c => {
   let s = pasZamine(c);
   const t = TONHA.coffee2;
   s += livanAzBala(c, { R: 58, liquid: rangeMayee(c, t), inner: `<circle r="50" fill="none" stroke="#f7ecd9" stroke-opacity=".35" stroke-width="6"/>` + naghsheLatte(c, 'star', 44, t[1], t[0][1]) });
@@ -569,18 +569,18 @@ sabt('latte-tulip', 'قهوه گرم', 'لاته در لیوان شیشه‌ای
   s += ghashogh(c, CX + side * 70, CY + 88, side > 0 ? 200 : -20, .75) + ghandHabbe(c, CX - side * 72, CY - 84, c.bein(0, 40), .8);
   return s;
 });
-sabt('latte-heart', 'قهوه گرم', 'لاته قلب', c => {
+sabt('latte-heart', 'قهوه', 'قلب', c => {
   let s = pasZamine(c);
   const t = TONHA[c.yeki(['coffee', 'coffee2'])];
   const ha = c.bein(-40, 40);
   s += fenjanAzBala(c, { R: 56, sR: 84, ha, liquid: rangeMayee(c, t), inner: naghsheLatte(c, c.yeki(['heart', 'nested']), 45, t[1], t[0][1]) });
   return s;
 });
-sabt('latte-swan', 'قهوه گرم', 'لاته آرت قو', sabkeLatte('swan', 'coffee2'));
-sabt('latte-web', 'قهوه گرم', 'لاته آرت حلقه‌ای', sabkeLatte('web', 'coffee'));
-sabt('latte-wing', 'قهوه گرم', 'لاته آرت پَر', sabkeLatte('wing', 'coffee2'));
+sabt('latte-swan', 'قهوه', 'قو', sabkeLatte('swan', 'coffee2'));
+sabt('latte-web', 'قهوه', 'حلقه', sabkeLatte('web', 'coffee'));
+sabt('latte-wing', 'قهوه', 'پر', sabkeLatte('wing', 'coffee2'));
 
-sabt('flatwhite', 'قهوه گرم', 'فلت وایت (فنجان کوچک، بشقاب مربعی)', c => {
+sabt('flatwhite', 'قهوه', 'فلت‌وایت', c => {
   let s = pasZamine(c);
   const t = TONHA.dark;
   const ha = c.yeki([-35, 35, 145, 215]) + c.bein(-8, 8);
@@ -589,7 +589,7 @@ sabt('flatwhite', 'قهوه گرم', 'فلت وایت (فنجان کوچک، ب�
   s += fenjanAzBala(c, { R: 46, sR: 82, square: true, ha, fill: .78, liquid: rangeMayee(c, t), inner: naghsheLatte(c, 'heart', 36, t[1], t[0][1]), onSaucer: onS });
   return s;
 });
-sabt('cappuccino', 'قهوه گرم', 'کاپوچینو با پودر کاکائو', c => {
+sabt('cappuccino', 'قهوه', 'کاپوچینو', c => {
   let s = pasZamine(c);
   const cocoa = c.yeki(['#6b3a1f', '#4e2a15', '#7a4a2a']);
   const stencil = c.yeki(['star', 'heart', 'paisley', 'crescent', 'leaf', 'flower']);
@@ -645,7 +645,7 @@ function yakh(c, n, x0, x1, y0, y1){
   return s;
 }
 
-sabt('cortado', 'قهوه گرم', 'کورتادو (لیوان کوتاه)', c => {
+sabt('cortado', 'قهوه', 'کورتادو', c => {
   let s = pasZamine(c) + rooyeMiz(c);
   const r = keshidanLivan(c, 'gibraltar', (g, lt) => {
     return `<rect x="0" y="${lt}" width="200" height="120" fill="${c.khatti([[0, '#f7ecd9'], [.18, '#e7caa0'], [.5, '#b77d4a'], [.8, '#7a4520'], [1, '#4a260f']])}"/><ellipse cx="${CX}" cy="${lt}" rx="${g.tw}" ry="4" fill="#fbf3e4"/>`;
@@ -656,7 +656,7 @@ sabt('cortado', 'قهوه گرم', 'کورتادو (لیوان کوتاه)', c =
   return s;
 });
 
-sabt('caramel', 'قهوه گرم', 'کارامل ماکیاتو', c => {
+sabt('caramel', 'قهوه', 'کارامل', c => {
   let s = pasZamine(c);
   const cc = c.yeki(['#c97a2b', '#b8661f', '#d88c32']);
   let inner = naghsheLatte(c, 'heart', 46, '#fffaf0', '#d9a86a');
@@ -675,7 +675,7 @@ sabt('caramel', 'قهوه گرم', 'کارامل ماکیاتو', c => {
   s += fenjanAzBala(c, { R: 58, ha, liquid: c.shoaei([[0, '#fdf7ec'], [.7, '#f1e2c8'], [1, '#c9955c']], .45, .42, .6), inner, onSaucer: onS });
   return s;
 });
-sabt('mocha', 'قهوه گرم', 'موکا (ماگ شیشه‌ای)', c => {
+sabt('mocha', 'قهوه', 'موکا', c => {
   let s = pasZamine(c) + rooyeMiz(c);
   const shape = c.yeki(['mug', 'tumbler']);
   const r = keshidanLivan(c, shape, (g, lt) => {
@@ -693,7 +693,7 @@ sabt('mocha', 'قهوه گرم', 'موکا (ماگ شیشه‌ای)', c => {
   return s;
 });
 
-sabt('affogato', 'قهوه گرم', 'آفوگاتو (بستنی و اسپرسو)', c => {
+sabt('affogato', 'قهوه', 'آفوگاتو', c => {
   let s = pasZamine(c) + rooyeMiz(c);
   const bowl = `M${CX - 52} 128C${CX - 52} 164 ${CX - 30} 178 ${CX} 178S${CX + 52} 164 ${CX + 52} 128Z`;
   s += saye(c, CX + 4, 204, 58, 9, .6);
@@ -723,7 +723,7 @@ sabt('affogato', 'قهوه گرم', 'آفوگاتو (بستنی و اسپرسو)
   s += daneHayeAtraf(c, c.sahih(1, 3), 64, 86, CX, 216);
   return s;
 });
-sabt('filter', 'قهوه گرم', 'قهوه دمی دستگاهی (قهوه‌ساز)', c => {
+sabt('filter', 'قهوه', 'قهوه‌ساز', c => {
   let s = pasZamine(c) + rooyeMiz(c);
   const body = c.yeki(['#1f2a3a', '#2d5f9a', '#e9e4dc', '#8a2d2d', '#2b2b2b', '#1f6f78']);
   const steel = '#c9ced6';
@@ -746,14 +746,14 @@ sabt('filter', 'قهوه گرم', 'قهوه دمی دستگاهی (قهوه‌س
   s += daneHayeAtraf(c, c.sahih(2, 4), 62, 84, CX, 216);
   return s;
 });
-sabt('hot-chocolate', 'نوشیدنی گرم', 'هات چاکلت', c => {
+sabt('hot-chocolate', 'گرم', 'هات‌چاکلت', c => {
   let s = pasZamine(c);
   const inner = naghsheLatte(c, c.yeki(['rosetta', 'tulip']), 48, '#f6e8d6', '#5c3120') + pudr(c, 40, 0, 0, 46, '#2a110a', .55);
   const ha = c.bein(-40, 40);
   s += fenjanAzBala(c, { R: 60, ha, liquid: c.shoaei([[0, '#8a5234'], [.6, '#5a2e1a'], [1, '#2a110a']], .45, .42, .6), inner });
   return s;
 });
-sabt('pink-chocolate', 'نوشیدنی گرم', 'پینک چاکلت', c => {
+sabt('pink-chocolate', 'گرم', 'پینک', c => {
   let s = pasZamine(c, c.yeki(['#4b1628', '#3a1d2e', '#1c3a5e', '#1f4e8c']));
   const t = TONHA.pink;
   const ha = c.bein(-40, 40);
@@ -762,7 +762,7 @@ sabt('pink-chocolate', 'نوشیدنی گرم', 'پینک چاکلت', c => {
   s += fenjanAzBala(c, { R: 56, ha, color: c.yeki(['#f3ece1', '#f7d7de', '#fbf6ef', '#2d5f9a']), liquid: rangeMayee(c, t), inner: naghsheLatte(c, c.yeki(['heart', 'nested']), 45, t[1], t[0][1]) + pashidani(c, 26, -40, 40, -40, 40), onSaucer: onS });
   return s;
 });
-sabt('matcha', 'نوشیدنی گرم', 'ماچا لاته در کاسه', c => {
+sabt('matcha', 'گرم', 'ماچا', c => {
   let s = pasZamine(c, c.yeki(['#243b2f', '#27361c', '#0e3b3b', '#1b4470', '#5a6b3a']));
   const t = TONHA.matcha;
   let mat = '';
@@ -777,7 +777,7 @@ sabt('matcha', 'نوشیدنی گرم', 'ماچا لاته در کاسه', c => 
   s += `<g transform="translate(${CX - Math.cos(wa * Math.PI / 180) * 64} ${CY - Math.sin(wa * Math.PI / 180) * 78})"><ellipse rx="14" ry="10" fill="${c.shoaei([[0, '#b7d67a'], [1, '#6e9a3f']])}"/></g>`;
   return s;
 });
-sabt('masala', 'نوشیدنی گرم', 'ماسالا (چای ادویه‌ای)', c => {
+sabt('masala', 'گرم', 'ماسالا', c => {
   let s = pasZamine(c, c.yeki(['#5a3a12', '#3e1f15', '#402b1e', '#a4552f', '#1f4e8c']));
   const t = TONHA.chai;
   const inner = naghsheLatte(c, c.yeki(['heart', 'web']), 46, t[1], t[0][1]) + pudr(c, 50, 0, 0, 44, '#7a3c14', .7) + badiyan(c, c.bein(-14, 14), c.bein(-14, 14), c.bein(0, 90), 1.1);
@@ -785,7 +785,7 @@ sabt('masala', 'نوشیدنی گرم', 'ماسالا (چای ادویه‌ای)
   s += adviyeDorTaDor(c, 6, 92, 106);
   return s;
 });
-sabt('sesame-date', 'نوشیدنی گرم', 'کنجد و خرما', c => {
+sabt('sesame-date', 'گرم', 'خرما', c => {
   let s = pasZamine(c, c.yeki(['#3e1f15', '#5a3a12', '#402b1e']));
   const t = TONHA.chai;
   let inner = naghsheLatte(c, c.yeki(['tulip', 'heart', 'swan']), 49, t[1], t[0][1]);
@@ -799,7 +799,7 @@ sabt('sesame-date', 'نوشیدنی گرم', 'کنجد و خرما', c => {
   return s;
 });
 
-sabt('hazelnut-milk', 'نوشیدنی گرم', 'شیر شکلات فندق', c => {
+sabt('hazelnut-milk', 'گرم', 'شیرشکلات', c => {
   let s = pasZamine(c);
   const t = TONHA.choco;
   const inner = naghsheLatte(c, c.yeki(['rosetta', 'tulip', 'heart']), 46, t[1], t[0][1]) + pudr(c, 18, 0, 0, 36, '#c79a66', .9, 1.8);
@@ -811,7 +811,7 @@ sabt('hazelnut-milk', 'نوشیدنی گرم', 'شیر شکلات فندق', c =
   }
   return s;
 });
-sabt('honey-milk', 'نوشیدنی گرم', 'شیر عسل دارچین', c => {
+sabt('honey-milk', 'گرم', 'شیرعسل', c => {
   let s = pasZamine(c, c.yeki(['#5a3a12', '#402b1e', '#1c3a5e']));
   let inner = `<path d="${marpich(c.bein(2.5, 3.5), 2, 42)}" stroke="#e0a42a" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"/>` + pudr(c, 40, 0, 0, 44, '#8a4520', .55);
   const ha = c.bein(-30, 30);
@@ -843,7 +843,7 @@ function badaneIstekan(c, o = {}){
   if(o.steam !== false) s += bokhar(c, CX, top - 8, 3, 11);
   return s;
 }
-sabt('tea-glass', 'چای و دمنوش', 'چای در استکان کمرباریک', c => {
+sabt('tea-glass', 'چای', 'استکان', c => {
   let s = pasZamine(c) + rooyeMiz(c);
   let onS = '';
   const g = c.sahih(0, 2);
@@ -856,7 +856,7 @@ sabt('tea-glass', 'چای و دمنوش', 'چای در استکان کمربار
   return s;
 });
 
-sabt('tea-cardamom', 'چای و دمنوش', 'چای هل و دارچین (فنجان شیشه‌ای)', c => {
+sabt('tea-cardamom', 'چای', 'هل', c => {
   let s = pasZamine(c) + rooyeMiz(c);
   const tea = c.yeki([['#e0672a', '#8b1f08'], ['#d9581e', '#6e1606'], ['#c9421c', '#5a1004']]);
   const r = keshidanLivan(c, 'mug', (g, lt) => {
@@ -871,7 +871,7 @@ sabt('tea-cardamom', 'چای و دمنوش', 'چای هل و دارچین (فن�
   return s;
 });
 
-sabt('teapot', 'چای و دمنوش', 'قوری و دمنوش', c => {
+sabt('teapot', 'چای', 'قوری', c => {
   let s = pasZamine(c) + rooyeMiz(c);
   const pot = c.yeki(['#2d5f9a', '#f3ece1', '#1f6f78', '#b8613b', '#efe0c2', '#7a2e3a', '#3b4a7a']);
   const px = c.yeki([78, 86]), py = 150;
@@ -946,15 +946,15 @@ function damnushAzBala(kind){
     return s;
   };
 }
-sabt('herbal-rose', 'چای و دمنوش', 'دمنوش گل محمدی', damnushAzBala('rose'));
-sabt('herbal-borage', 'چای و دمنوش', 'دمنوش گل گاوزبان', damnushAzBala('borage'));
-sabt('herbal-citrus', 'چای و دمنوش', 'دمنوش مرکبات', damnushAzBala('citrus'));
-sabt('herbal-chamomile', 'چای و دمنوش', 'دمنوش بابونه', damnushAzBala('chamomile'));
-sabt('herbal-berry', 'چای و دمنوش', 'دمنوش میوه‌های قرمز', damnushAzBala('berry'));
-sabt('herbal-mint', 'چای و دمنوش', 'دمنوش نعناع و لیمو', damnushAzBala('mint'));
-sabt('herbal-quince', 'چای و دمنوش', 'دمنوش به و دارچین', damnushAzBala('quince'));
+sabt('herbal-rose', 'چای', 'گل‌محمدی', damnushAzBala('rose'));
+sabt('herbal-borage', 'چای', 'گاوزبان', damnushAzBala('borage'));
+sabt('herbal-citrus', 'چای', 'مرکبات', damnushAzBala('citrus'));
+sabt('herbal-chamomile', 'چای', 'بابونه', damnushAzBala('chamomile'));
+sabt('herbal-berry', 'چای', 'توت', damnushAzBala('berry'));
+sabt('herbal-mint', 'چای', 'نعناع', damnushAzBala('mint'));
+sabt('herbal-quince', 'چای', 'به', damnushAzBala('quince'));
 
-sabt('tea-latte', 'چای و دمنوش', 'چای لاته لایه‌ای', c => {
+sabt('tea-latte', 'چای', 'چای‌لاته', c => {
   let s = pasZamine(c) + rooyeMiz(c);
   const tea = c.rangAsli || c.yeki(['#c96a2a', '#b85a1a', '#d08a3a']);
   const r = keshidanLivan(c, c.yeki(['tumbler', 'mug']), (g, lt) => `<rect y="${lt}" width="200" height="200" fill="${c.khatti([[0, '#fffaf0'], [.28, '#f3e3c6'], [.36, roshanTar(tea, .2)], [.6, tea], [1, tireTar(tea, .4)]])}"/>` + pudr(c, 20, CX, lt + 2, 26, '#8a4520', .7), {});
@@ -993,10 +993,10 @@ function sabkeSard(kind){
     return s;
   };
 }
-sabt('iced-americano', 'نوشیدنی سرد', 'آیس آمریکانو', sabkeSard('americano'));
-sabt('iced-latte', 'نوشیدنی سرد', 'آیس لاته لایه‌ای', sabkeSard('latte'));
-sabt('iced-caramel', 'نوشیدنی سرد', 'آیس کارامل ماکیاتو', sabkeSard('caramel'));
-sabt('iced-mocha', 'نوشیدنی سرد', 'آیس موکا', sabkeSard('mocha'));
+sabt('iced-americano', 'سرد', 'آیس‌آمریکانو', sabkeSard('americano'));
+sabt('iced-latte', 'سرد', 'آیس‌لاته', sabkeSard('latte'));
+sabt('iced-caramel', 'سرد', 'آیس‌کارامل', sabkeSard('caramel'));
+sabt('iced-mocha', 'سرد', 'آیس‌موکا', sabkeSard('mocha'));
 
 const RANG_NUSHIDANI = {
   sky: ['#bfe8ff', '#2a7ad6'], ruby: ['#ff9fb0', '#b3123a'], emerald: ['#b9f3c6', '#0f8a4e'], sunset: ['#ffe07a', '#ff4e2e'],
@@ -1055,12 +1055,12 @@ function maktail(shape){
     return s;
   };
 }
-sabt('mocktail-coupe', 'ماکتیل', 'ماکتیل در جام کوپ', maktail('coupe'));
-sabt('mocktail-martini', 'ماکتیل', 'ماکتیل در جام مثلثی', maktail('martini'));
-sabt('mocktail-highball', 'ماکتیل', 'ماکتیل در لیوان بلند', maktail('highball'));
-sabt('mocktail-hurricane', 'ماکتیل', 'ماکتیل در جام هاریکن', maktail('hurricane'));
-sabt('mocktail-jar', 'ماکتیل', 'ماکتیل در شیشه دهانه‌گشاد', maktail('jar'));
-sabt('mocktail-rocks', 'ماکتیل', 'ماکتیل در لیوان کوتاه', maktail('rocks'));
+sabt('mocktail-coupe', 'ماکتیل', 'کوپ', maktail('coupe'));
+sabt('mocktail-martini', 'ماکتیل', 'مارتینی', maktail('martini'));
+sabt('mocktail-highball', 'ماکتیل', 'بلند', maktail('highball'));
+sabt('mocktail-hurricane', 'ماکتیل', 'هاریکن', maktail('hurricane'));
+sabt('mocktail-jar', 'ماکتیل', 'شیشه', maktail('jar'));
+sabt('mocktail-rocks', 'ماکتیل', 'کوتاه', maktail('rocks'));
 
 const SHIKHA = {
   strawberry: { col: '#f7a9c0', sauce: '#d61f35', top: 'strawberry' },
@@ -1120,15 +1120,15 @@ function shik(flavor){
     return s.slice(0, mark) + st + s.slice(mark);
   };
 }
-sabt('shake-strawberry', 'شیک و اسمودی', 'شیک توت‌فرنگی', shik('strawberry'));
-sabt('shake-oreo', 'شیک و اسمودی', 'شیک اورئو', shik('oreo'));
-sabt('shake-biscuit', 'شیک و اسمودی', 'شیک بیسکوییت', shik('biscuit'));
-sabt('shake-peanut', 'شیک و اسمودی', 'شیک بادام‌زمینی', shik('peanut'));
-sabt('shake-mint', 'شیک و اسمودی', 'شیک شکلات نعناع', shik('mint'));
-sabt('shake-hazelnut', 'شیک و اسمودی', 'شیک شکلات فندق', shik('hazelnut'));
-sabt('shake-coffee', 'شیک و اسمودی', 'شیک قهوه', shik('coffee'));
-sabt('shake-vanilla', 'شیک و اسمودی', 'شیک وانیل', shik('vanilla'));
-sabt('smoothie-mango', 'شیک و اسمودی', 'اسموتی انبه', shik('mango'));
+sabt('shake-strawberry', 'شیک', 'توت‌فرنگی', shik('strawberry'));
+sabt('shake-oreo', 'شیک', 'اورئو', shik('oreo'));
+sabt('shake-biscuit', 'شیک', 'بیسکوییت', shik('biscuit'));
+sabt('shake-peanut', 'شیک', 'بادام‌زمینی', shik('peanut'));
+sabt('shake-mint', 'شیک', 'شکلات‌نعناع', shik('mint'));
+sabt('shake-hazelnut', 'شیک', 'فندق', shik('hazelnut'));
+sabt('shake-coffee', 'شیک', 'قهوه', shik('coffee'));
+sabt('shake-vanilla', 'شیک', 'وانیل', shik('vanilla'));
+sabt('smoothie-mango', 'شیک', 'انبه', shik('mango'));
 
 function boshghab(c, x = CX, y = 186, rx = 76, ry = 20){
   const col = c.yeki(['#f3ece1', '#f6f1ea', '#2d5f9a', '#232120', '#efe0c2', '#1f6f78', '#b8613b', '#8ea888']);
@@ -1210,11 +1210,11 @@ function kruasan(variant){
     return s;
   };
 }
-sabt('croissant', 'کیک و شیرینی', 'کروسان کره‌ای', kruasan('plain'));
-sabt('croissant-chocolate', 'کیک و شیرینی', 'کروسان شکلاتی', kruasan('chocolate'));
-sabt('croissant-almond', 'کیک و شیرینی', 'کروسان بادام', kruasan('almond'));
+sabt('croissant', 'شیرینی', 'کروسان', kruasan('plain'));
+sabt('croissant-chocolate', 'شیرینی', 'کروسان‌شکلاتی', kruasan('chocolate'));
+sabt('croissant-almond', 'شیرینی', 'کروسان‌بادام', kruasan('almond'));
 
-sabt('kouign-amann', 'کیک و شیرینی', 'کویینگ امان', c => {
+sabt('kouign-amann', 'شیرینی', 'کویینگ‌امان', c => {
   let s = pasZamine(c);
   s += boshghabAzBala(c, CX, CY, 84);
   const base = c.yeki(['#c9782a', '#b8682a', '#d98a3a']);
@@ -1240,7 +1240,7 @@ function boshghabAzBala(c, x, y, r){
   return s;
 }
 
-sabt('choco-twist', 'کیک و شیرینی', 'چاکلت تویست', c => {
+sabt('choco-twist', 'شیرینی', 'تویست', c => {
   let s = pasZamine(c);
   s += boshghabAzBala(c, CX, CY + 4, 90);
   const base = c.yeki(['#e2a04a', '#d9923c', '#e8ac58']);
@@ -1292,11 +1292,11 @@ function kuki(kind){
     return s;
   };
 }
-sabt('cookie-double', 'کیک و شیرینی', 'کوکی دبل چاکلت', kuki('double'));
-sabt('cookie-ny', 'کیک و شیرینی', 'کوکی نیویورکی', kuki('ny'));
-sabt('cookie-lemon', 'کیک و شیرینی', 'کوکی لیمویی', kuki('lemon'));
+sabt('cookie-double', 'شیرینی', 'کوکی', kuki('double'));
+sabt('cookie-ny', 'شیرینی', 'نیویورکی', kuki('ny'));
+sabt('cookie-lemon', 'شیرینی', 'لیمویی', kuki('lemon'));
 
-sabt('cinnamon-roll', 'کیک و شیرینی', 'سینامون رول', c => {
+sabt('cinnamon-roll', 'شیرینی', 'سینامون', c => {
   let s = pasZamine(c) + boshghabAzBala(c, CX, CY, 88);
   const base = c.yeki(['#d9924a', '#c98040', '#e0a050']);
   s += saye(c, CX + 4, CY + 6, 60, 60, .5);
@@ -1309,7 +1309,7 @@ sabt('cinnamon-roll', 'کیک و شیرینی', 'سینامون رول', c => {
   return s;
 });
 
-sabt('pastel-nata', 'کیک و شیرینی', 'پاستل د ناتا', c => {
+sabt('pastel-nata', 'شیرینی', 'ناتا', c => {
   let s = pasZamine(c);
   const n = c.sahih(1, 3);
   const pos = n === 1 ? [[CX, CY, 58]] : n === 2 ? [[CX - 34, CY - 18, 42], [CX + 32, CY + 24, 42]] : [[CX - 36, CY - 28, 36], [CX + 36, CY - 16, 36], [CX, CY + 40, 36]];
@@ -1383,14 +1383,14 @@ function keyk(kind){
     return s;
   };
 }
-sabt('cake-mocha', 'کیک و شیرینی', 'کیک موکا', keyk('mocha'));
-sabt('cake-redvelvet', 'کیک و شیرینی', 'کیک ردولوت', keyk('redvelvet'));
-sabt('cake-tresleches', 'کیک و شیرینی', 'کیک سه شیر', keyk('tresleches'));
-sabt('cake-walnut', 'کیک و شیرینی', 'کیک گردویی', keyk('walnut'));
-sabt('cake-apple', 'کیک و شیرینی', 'کیک سیب و دارچین', keyk('apple'));
-sabt('cheesecake', 'کیک و شیرینی', 'چیزکیک سن‌سباستین', keyk('cheesecake'));
+sabt('cake-mocha', 'شیرینی', 'کیک‌موکا', keyk('mocha'));
+sabt('cake-redvelvet', 'شیرینی', 'ردولوت', keyk('redvelvet'));
+sabt('cake-tresleches', 'شیرینی', 'سه‌شیر', keyk('tresleches'));
+sabt('cake-walnut', 'شیرینی', 'گردویی', keyk('walnut'));
+sabt('cake-apple', 'شیرینی', 'سیب', keyk('apple'));
+sabt('cheesecake', 'شیرینی', 'چیزکیک', keyk('cheesecake'));
 
-sabt('brownie', 'کیک و شیرینی', 'براونی', c => {
+sabt('brownie', 'شیرینی', 'براونی', c => {
   let s = pasZamine(c) + boshghabAzBala(c, CX, CY, 88);
   const n = c.sahih(2, 4);
   const pos = [[-24, -20], [24, -14], [-10, 28], [30, 32]];
@@ -1409,7 +1409,7 @@ sabt('brownie', 'کیک و شیرینی', 'براونی', c => {
   return s;
 });
 
-sabt('dessert-cup', 'کیک و شیرینی', 'دسر لیوانی کاراملی', c => {
+sabt('dessert-cup', 'شیرینی', 'دسر', c => {
   let s = pasZamine(c) + rooyeMiz(c);
   const car = c.yeki(['#c97a2b', '#b5651d', '#d88c32']);
   const r = keshidanLivan(c, c.yeki(['tumbler', 'rocks', 'jar']), (g, lt) => {
@@ -1427,7 +1427,7 @@ sabt('dessert-cup', 'کیک و شیرینی', 'دسر لیوانی کارامل�
   return s;
 });
 
-sabt('toast', 'میان وعده', 'تست ساندویچ', c => {
+sabt('toast', 'میان‌وعده', 'تست', c => {
   let s = pasZamine(c);
   if(c.shans(.55)){
     const wood = c.yeki(['#b07a44', '#9a6a3a', '#c28e55']);
@@ -1465,7 +1465,7 @@ sabt('toast', 'میان وعده', 'تست ساندویچ', c => {
   else for(let k = 0; k < 3; k++) s += `<g transform="translate(${gerd(px + k * 9 - 9)} ${gerd(py + (k % 2) * 5)})"><ellipse rx="8" ry="5" fill="#6f9a3a" stroke="#4a6a20"/><circle r="1" cx="-2" fill="#e8f0c0"/><circle r="1" cx="2" fill="#e8f0c0"/></g>`;
   return s;
 });
-sabt('egg-skillet', 'میان وعده', 'تابه تخم‌مرغ و پپرونی', c => {
+sabt('egg-skillet', 'میان‌وعده', 'تخم‌مرغ', c => {
   let s = pasZamine(c);
   const hx = c.bein(-40, 40) * Math.PI / 180 - Math.PI / 4;
   s += saye(c, CX + 8, CY + 10, 90, 90, .6);
@@ -1482,7 +1482,7 @@ sabt('egg-skillet', 'میان وعده', 'تابه تخم‌مرغ و پپرون
   return s;
 });
 
-sabt('focaccia', 'میان وعده', 'فوکاچیا پنیری', c => {
+sabt('focaccia', 'میان‌وعده', 'فوکاچیا', c => {
   let s = pasZamine(c);
   s += `<g transform="translate(${CX} ${CY}) rotate(${c.sahih(-12, 12)})">`;
   s += saye(c, 6, 8, 80, 66, .6);
@@ -1496,7 +1496,7 @@ sabt('focaccia', 'میان وعده', 'فوکاچیا پنیری', c => {
   return s;
 });
 
-sabt('syrup', 'افزودنی', 'بطری سیروپ', c => {
+sabt('syrup', 'افزودنی', 'سیروپ', c => {
   let s = pasZamine(c, c.yeki(['#1f4e8c', '#163a6b', '#2c3e66', '#3a1d2e', '#12325e'])) + rooyeMiz(c);
   const liq = c.rangAsli || c.yeki(['#e8578a', '#f06a9a', '#d94878', '#ec5f95']);
   const x = CX - 18;
@@ -1518,7 +1518,7 @@ sabt('syrup', 'افزودنی', 'بطری سیروپ', c => {
   s += tameshk(c, gx - 30, 204, 7) + tameshk(c, gx + 26, 206, 6) + tameshk(c, x - 40, 206, 6.5);
   return s;
 });
-sabt('honey', 'افزودنی', 'ظرف عسل و موم عسل', c => {
+sabt('honey', 'افزودنی', 'عسل', c => {
   let s = pasZamine(c, c.yeki(['#5a3a12', '#402b1e', '#1f4e8c', '#1c3a5e', '#5a6b3a'])) + rooyeMiz(c);
   const jx = CX - 14;
   s += saye(c, jx + 4, 204, 44, 8, .6);
@@ -1557,10 +1557,10 @@ function sos(col, name){
     return s;
   };
 }
-sabt('sauce-chocolate', 'افزودنی', 'سس شکلات', sos('#4a2210'));
-sabt('sauce-caramel', 'افزودنی', 'سس کارامل', sos('#c97a2b'));
+sabt('sauce-chocolate', 'افزودنی', 'سس‌شکلات', sos('#4a2210'));
+sabt('sauce-caramel', 'افزودنی', 'سس‌کارامل', sos('#c97a2b'));
 
-sabt('water', 'افزودنی', 'آب معدنی', c => {
+sabt('water', 'افزودنی', 'آب', c => {
   let s = pasZamine(c, c.yeki(['#1c3a5e', '#13294a', '#0e3b3b', '#173840'])) + rooyeMiz(c);
   const x = CX - 20;
   s += saye(c, x + 4, 202, 30, 7, .6);
@@ -1610,8 +1610,8 @@ function shotRizi(joft){
     return s;
   };
 }
-sabt('shot', 'افزودنی', 'شات اسپرسو با یک جریان', shotRizi(false));
-sabt('shot-double', 'افزودنی', 'شات اسپرسو با دو جریان', shotRizi(true));
+sabt('shot', 'افزودنی', 'شات', shotRizi(false));
+sabt('shot-double', 'افزودنی', 'شات‌دبل', shotRizi(true));
 sabt('icecream', 'افزودنی', 'بستنی', c => {
   let s = pasZamine(c) + rooyeMiz(c);
   const bowl = c.yeki(['#f3ece1', '#2d5f9a', '#232120', '#1f6f78', '#e7b6ae', '#efe0c2']);
@@ -1641,7 +1641,7 @@ sabt('icecream', 'افزودنی', 'بستنی', c => {
   return s;
 });
 
-sabt('nabat', 'افزودنی', 'نبات زعفرانی', c => {
+sabt('nabat', 'افزودنی', 'نبات', c => {
   let s = pasZamine(c, c.yeki(['#1f4e8c', '#12325e', '#5a3a12', '#402b1e', '#1c3a5e']));
   s += boshghabAzBala(c, CX, CY, 90);
   const bolur = (x, y, r, rot) => {
@@ -1678,7 +1678,7 @@ sabt('nabat', 'افزودنی', 'نبات زعفرانی', c => {
   }
   return s;
 });
-sabt('medallion', 'نقش کلی', 'نقش کاشی ایرانی', c => {
+sabt('medallion', 'دیگر', 'کاشی', c => {
   const pal = c.yeki([['#1f5680', '#0a1f33', '#48b5c4'], ['#135a5a', '#062424', '#e0b25e'], ['#6a1f33', '#240910', '#48b5c4'], ['#233d78', '#0b1430', '#e39a6d']]);
   const G2 = '#d9b36e', k = c.yeki([6, 8, 8, 10, 12, 16]);
   let s = `<rect width="${W}" height="${H}" fill="${c.shoaei([[0, pal[0]], [1, pal[1]]], .5, .5, .7)}"/>`;

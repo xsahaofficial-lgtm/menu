@@ -176,10 +176,10 @@
   <div class="toprow">
     <div class="brand"><h1>طراح منو</h1><span class="dirty" id="dirty"><i></i><span>ذخیره شده</span></span></div>
     <div class="actions">
-      <button class="btn" id="openBtn" type="button" title="باز کردن یک فایل items.json">
+      <button class="btn" id="openBtn" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>باز کردن
       </button>
-      <button class="btn" id="downloadBtn" type="button" title="دانلود items.json">
+      <button class="btn" id="downloadBtn" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>دانلود
       </button>
       <button class="btn primary" id="saveBtn" type="button">
@@ -215,10 +215,10 @@
 
   <section id="tab-info" hidden>
     <div class="info">
-      <label class="field"><span>نام کافه</span><input type="text" data-info="restaurant"></label>
+      <label class="field"><span>نام</span><input type="text" data-info="restaurant"></label>
       <label class="field"><span>نام لاتین</span><input type="text" class="ltr" data-info="latin" placeholder="Caffè Azzurri"></label>
-      <label class="field"><span>شعار / توضیح زیر نام</span><input type="text" data-info="tagline"></label>
-      <label class="field"><span>آدرس (پایین صفحه منو)</span><input type="text" data-info="address"></label>
+      <label class="field"><span>شعار</span><input type="text" data-info="tagline"></label>
+      <label class="field"><span>آدرس</span><input type="text" data-info="address"></label>
       <label class="field"><span>واحد پول</span><input type="text" data-info="currency" placeholder="تومان"></label>
     </div>
   </section>
@@ -231,48 +231,46 @@
   <div class="pane" role="dialog" aria-modal="true" aria-labelledby="dtitle">
     <div class="pane-head">
       <button class="btn icon ghost" id="dclose" type="button" aria-label="بستن"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-      <h2 id="dtitle">ویرایش آیتم</h2>
-      <span class="dirty" id="dId"></span>
-    </div>
+      <h2 id="dtitle">ویرایش</h2>
+          </div>
     <div class="pane-body">
       <div class="preview">
         <div class="big" id="bigPrev"></div>
         <div class="side">
           <div class="stylename" id="styleName"></div>
-          <small style="color:var(--muted);line-height:1.8">این طرح در منو نمایش داده می‌شود. اگر عکس واقعی داشته باشید، با لمس آیتم در منو نمایش داده می‌شود.</small>
           <div class="inline">
-            <button class="btn sm" id="reroll" type="button">🎲 طرح دیگر</button>
+            <button class="btn sm" id="reroll" type="button">🎲</button>
             <button class="btn sm ghost" id="resetSeed" type="button">اولیه</button>
           </div>
         </div>
       </div>
-      <label class="field"><span>نام آیتم</span><input type="text" id="fTitle" required></label>
+      <label class="field"><span>نام</span><input type="text" id="fTitle" required></label>
       <div class="two">
-        <label class="field"><span>دسته‌بندی</span><select id="fCat"></select></label>
+        <label class="field"><span>دسته</span><select id="fCat"></select></label>
         <label class="field"><span>قیمت</span><input type="text" id="fPrice" inputmode="numeric" class="ltr"><small id="fPriceFa"></small></label>
       </div>
-      <label class="field"><span>توضیحات (اختیاری)</span><textarea id="fDesc" rows="2"></textarea><small>فقط وقتی مشتری روی آیتم می‌زند نمایش داده می‌شود.</small></label>
-      <label class="field"><span>مسیر عکس (اختیاری)</span>
+      <label class="field"><span>توضیحات</span><textarea id="fDesc" rows="2"></textarea></label>
+      <label class="field"><span>عکس</span>
         <input type="text" id="fImage" class="ltr" placeholder="assets/photo.jpg">
         <div class="imgprev" id="imgPrev"></div>
       </label>
       <div class="field"><span>وضعیت</span>
         <div class="inline"><button type="button" class="switch" id="fAvail" aria-label="موجود"></button><span id="fAvailTxt"></span></div>
       </div>
-      <div class="field"><span>رنگ اصلی طرح (اختیاری، برای نوشیدنی‌ها)</span>
+      <div class="field"><span>رنگ</span>
         <div class="colorrow" id="colorRow">
           <input type="color" id="fColor" value="#2a8ad6">
           <button type="button" class="btn sm ghost" id="clearColor">پیش‌فرض</button>
         </div>
       </div>
       <div class="picker">
-        <div class="field"><span>انتخاب طرح</span><small>روی هر طرح بزنید تا انتخاب شود. «خودکار» بر اساس دسته‌بندی یک طرح مناسب انتخاب می‌کند.</small></div>
+        <div class="field"><span>طرح</span></div>
         <div id="picker"></div>
       </div>
     </div>
     <div class="pane-foot">
       <button class="btn" id="dcancel" type="button">انصراف</button>
-      <button class="btn primary" id="dsave" type="button">ثبت تغییرات</button>
+      <button class="btn primary" id="dsave" type="button">ثبت</button>
     </div>
   </div>
 </div>
@@ -428,12 +426,12 @@ function sakhtAitemha(){
     g.innerHTML = `<h3>${Naghsh.ikon(cat.icon)}${amnKardan(cat.name)} <span class="n">${adadFarsi(list.length)} آیتم</span></h3>`;
     const rows = document.createElement('div');
     rows.className = 'rows';
-    if(!list.length) rows.innerHTML = '<div class="empty">هنوز آیتمی در این دسته نیست.</div>';
+    if(!list.length) rows.innerHTML = '<div class="empty">خالی</div>';
     list.forEach(it => rows.appendChild(radifAitem(it)));
     g.appendChild(rows);
     box.appendChild(g);
   });
-  if(!total && q) box.innerHTML = '<div class="empty">چیزی پیدا نشد.</div>';
+  if(!total && q) box.innerHTML = '<div class="empty">پیدا نشد</div>';
 }
 
 function radifAitem(it){
@@ -442,15 +440,15 @@ function radifAitem(it){
   const styleKey = Naghsh.sabkeMonaseb(it, dasteYe(it.category).icon);
   r.innerHTML = `<div class="thumb"><img src="${Naghsh.adresTasvir(it, {icon: dasteYe(it.category).icon})}" alt="" loading="lazy" decoding="async"></div>
     <div class="meta"><b>${amnKardan(adadFarsi(it.title) || 'بدون نام')}</b>
-      <span><span class="p">${gheymat(it.price)} ${amnKardan(dade.currency)}</span><span class="tag">${amnKardan(Naghsh.onvan(styleKey))}${it.art ? '' : ' · خودکار'}</span>${aksDarad(it) ? '<span class="tag photo">عکس دارد</span>' : ''}</span></div>
+      <span><span class="p">${gheymat(it.price)} ${amnKardan(dade.currency)}</span><span class="tag">${amnKardan(Naghsh.onvan(styleKey))}</span>${aksDarad(it) ? '<span class="tag photo">عکس</span>' : ''}</span></div>
     <div class="ops">
-      <button type="button" class="switch ${it.available ? 'on' : ''}" title="موجود / ناموجود" aria-label="موجود"></button>
+      <button type="button" class="switch ${it.available ? 'on' : ''}" aria-label="موجود"></button>
       <button type="button" class="btn sm" data-a="edit">ویرایش</button>
       <div class="more"><button type="button" class="btn icon ghost" data-a="more" aria-label="بیشتر">⋯</button>
         <div class="menu">
           <button type="button" data-a="up">⬆ بالا</button>
           <button type="button" data-a="down">⬇ پایین</button>
-          <button type="button" data-a="dup">⧉ کپی از این آیتم</button>
+          <button type="button" data-a="dup">⧉ کپی</button>
           <button type="button" data-a="del" class="danger">🗑 حذف</button>
         </div>
       </div>
@@ -467,7 +465,7 @@ function radifAitem(it){
     if(a === 'dup'){
       const c = Object.assign({}, it, {id: shenaseBadi(), title: it.title + ' (کپی)', artSeed: (it.artSeed || 0) + 1});
       dade.items.splice(dade.items.indexOf(it) + 1, 0, c);
-      taghirKard(); sakhtAitemha(); payam('کپی ساخته شد');
+      taghirKard(); sakhtAitemha(); payam('کپی شد');
     }
     if(a === 'del'){
       const ok = await porsidan('حذف آیتم', `«${it.title}» حذف شود؟`, [{label:'حذف', value:true, cls:'danger'}, {label:'انصراف', value:false}]);
@@ -511,7 +509,7 @@ function sakhtDasteha(){
     const [nameI, iconS, colorI] = r.querySelectorAll('input[type=text], select, input[type=color]');
     nameI.onchange = () => {
       const v = nameI.value.trim();
-      if(!v || (v !== cat.name && dade.categories.some(c => c.name === v))){ nameI.value = cat.name; payam('نام تکراری یا خالی است'); return; }
+      if(!v || (v !== cat.name && dade.categories.some(c => c.name === v))){ nameI.value = cat.name; payam('نام تکراری'); return; }
       dade.items.forEach(it => { if(it.category === cat.name) it.category = v; });
       cat.name = v;
       taghirKard(); sakhtPalayesh(); sakhtAitemha();
@@ -530,9 +528,9 @@ function sakhtDasteha(){
       const sel = document.createElement('select');
       sel.style.width = '100%';
       sel.innerHTML = others.map(c => `<option>${amnKardan(c.name)}</option>`).join('');
-      const act = await porsidan('حذف دسته‌بندی', `این دسته ${adadFarsi(count)} آیتم دارد. آیتم‌ها به کدام دسته منتقل شوند؟`, [
-        ...(others.length ? [{label:'انتقال و حذف دسته', value:'move', cls:'primary'}] : []),
-        {label:'حذف همراه آیتم‌ها', value:'all', cls:'danger'},
+      const act = await porsidan('حذف دسته‌بندی', `آیتم‌ها به کدام دسته بروند؟`, [
+        ...(others.length ? [{label:'انتقال', value:'move', cls:'primary'}] : []),
+        {label:'حذف همه', value:'all', cls:'danger'},
         {label:'انصراف', value:null}
       ], others.length ? sel : null);
       if(act === 'move'){ dade.items.forEach(it => { if(it.category === cat.name) it.category = sel.value; }); }
@@ -557,8 +555,7 @@ let darVirayesh = null, pishnevis = null, jadidAst = false;
 function bazKardanVirayeshgar(it, fresh){
   darVirayesh = it; jadidAst = !!fresh;
   pishnevis = Object.assign({}, it);
-  $('#dtitle').textContent = jadidAst ? 'آیتم جدید' : 'ویرایش آیتم';
-  $('#dId').textContent = 'شناسه ' + adadFarsi(pishnevis.id);
+  $('#dtitle').textContent = jadidAst ? 'آیتم جدید' : 'ویرایش';
   $('#fTitle').value = pishnevis.title;
   $('#fCat').innerHTML = dade.categories.map(c => `<option>${amnKardan(c.name)}</option>`).join('');
   $('#fCat').value = pishnevis.category;
@@ -587,22 +584,22 @@ function vaziatMojudi(){
 }
 function namayeshGheymat(){
   const n = Number(adadLatin($('#fPrice').value).replace(/[^\d]/g, '')) || 0;
-  $('#fPriceFa').textContent = n ? gheymat(n) + ' ' + dade.currency : 'قیمت را به عدد وارد کنید';
+  $('#fPriceFa').textContent = n ? gheymat(n) + ' ' + dade.currency : '';
 }
 function namayeshAks(){
   const v = $('#fImage').value.trim();
   const box = $('#imgPrev');
-  if(!v){ box.innerHTML = '<span>بدون عکس؛ فقط طرح نمایش داده می‌شود.</span>'; return; }
-  box.innerHTML = '<span>در حال بررسی…</span>';
+  if(!v){ box.innerHTML = ''; return; }
+  box.innerHTML = '<span>…</span>';
   const img = new Image();
-  img.onload = () => { box.innerHTML = ''; box.appendChild(img); box.insertAdjacentHTML('beforeend', '<span>عکس پیدا شد ✓</span>'); };
-  img.onerror = () => { box.innerHTML = '<span style="color:var(--terra)">عکس در این مسیر پیدا نشد. نام و مسیر فایل را بررسی کنید.</span>'; };
+  img.onload = () => { box.innerHTML = ''; box.appendChild(img); box.insertAdjacentHTML('beforeend', '<span>✓</span>'); };
+  img.onerror = () => { box.innerHTML = '<span style="color:var(--terra)">پیدا نشد</span>'; };
   img.src = v;
 }
 function namayeshPishnamayesh(){
   const key = Naghsh.sabkeMonaseb(pishnevis, dasteYe(pishnevis.category).icon);
   $('#bigPrev').innerHTML = naghsh(pishnevis);
-  $('#styleName').textContent = Naghsh.onvan(key) + (pishnevis.art ? '' : ' (خودکار)');
+  $('#styleName').textContent = Naghsh.onvan(key);
 }
 function namayeshEntekhab(){
   const box = $('#picker');
@@ -666,7 +663,7 @@ $('#resetSeed').addEventListener('click', () => { pishnevis.artSeed = 0; namayes
 $('#dclose').onclick = $('#dcancel').onclick = $('#dscrim').onclick = bastanVirayeshgar;
 $('#dsave').onclick = () => {
   const title = $('#fTitle').value.trim();
-  if(!title){ $('#fTitle').focus(); payam('نام آیتم را وارد کنید'); return; }
+  if(!title){ $('#fTitle').focus(); payam('نام؟'); return; }
   pishnevis.title = title;
   pishnevis.price = Number($('#fPrice').value) || 0;
   pishnevis.description = $('#fDesc').value.trim();
@@ -680,7 +677,7 @@ $('#dsave').onclick = () => {
 };
 addEventListener('keydown', e => { if(e.key === 'Escape' && darVirayesh) bastanVirayeshgar(); });
 $('#addItem').onclick = () => {
-  if(!dade.categories.length){ payam('اول یک دسته‌بندی بسازید'); namayeshZabane('cats'); return; }
+  if(!dade.categories.length){ payam('اول دسته بسازید'); namayeshZabane('cats'); return; }
   const cat = $('#catFilter').value || dade.categories[0].name;
   bazKardanVirayeshgar({id: shenaseBadi(), category: cat, title: '', description: '', price: 0, image: AKS_KHALI, available: true, art: '', artSeed: 0, artColor: ''}, true);
 };
@@ -715,24 +712,24 @@ function zakhireShod(){
 }
 $('#saveBtn').onclick = async () => {
   try {
-    if(dasteFile){ await neveshtanFile(dasteFile); zakhireShod(); payam('در فایل ذخیره شد ✓'); return; }
+    if(dasteFile){ await neveshtanFile(dasteFile); zakhireShod(); payam('ذخیره شد'); return; }
     if(window.showSaveFilePicker){
       dasteFile = await showSaveFilePicker({suggestedName: 'items.json', types: [{description: 'JSON', accept: {'application/json': ['.json']}}]});
-      await neveshtanFile(dasteFile); zakhireShod(); payam('در فایل ذخیره شد ✓'); return;
+      await neveshtanFile(dasteFile); zakhireShod(); payam('ذخیره شد'); return;
     }
   } catch(e){
     if(e && e.name === 'AbortError') return;
   }
-  daryaft(); zakhireShod(); payam('فایل items.json دانلود شد. آن را کنار index.html قرار دهید');
+  daryaft(); zakhireShod(); payam('دانلود شد');
 };
-$('#downloadBtn').onclick = () => { daryaft(); payam('فایل items.json دانلود شد'); };
+$('#downloadBtn').onclick = () => { daryaft(); payam('دانلود شد'); };
 $('#openBtn').onclick = async () => {
-  if(taghirDarad && !(await porsidan('تغییرات ذخیره نشده', 'تغییرات فعلی از بین می‌رود. ادامه می‌دهید؟', [{label:'ادامه', value:true, cls:'danger'}, {label:'انصراف', value:false}]))) return;
+  if(taghirDarad && !(await porsidan('تغییرات ذخیره نشده', 'تغییرات ذخیره‌نشده از بین می‌رود.', [{label:'ادامه', value:true, cls:'danger'}, {label:'انصراف', value:false}]))) return;
   if(window.showOpenFilePicker){
     try {
       const [h] = await showOpenFilePicker({types: [{description: 'JSON', accept: {'application/json': ['.json']}}]});
       const f = await h.getFile();
-      bargozari(JSON.parse(await f.text()), 'فایل باز شد: ' + f.name);
+      bargozari(JSON.parse(await f.text()), 'باز شد');
       dasteFile = h;
       pakKardanPayamha();
     } catch(e){ if(e && e.name !== 'AbortError') payam('فایل معتبر نیست'); }
@@ -743,7 +740,7 @@ $('#openBtn').onclick = async () => {
 $('#fileInput').onchange = async () => {
   const f = $('#fileInput').files[0];
   if(!f) return;
-  try { bargozari(JSON.parse(await f.text()), 'فایل باز شد: ' + f.name); dasteFile = null; pakKardanPayamha(); }
+  try { bargozari(JSON.parse(await f.text()), 'باز شد'); dasteFile = null; pakKardanPayamha(); }
   catch(e){ payam('فایل معتبر نیست'); }
   $('#fileInput').value = '';
 };
@@ -768,18 +765,17 @@ function shoru(raw, note){
   let d = null;
   try { d = localStorage.getItem(KELID_PISHNEVIS); } catch(e){}
   if(d && d !== matnZakhire){
-    payamBala('یک پیش‌نویس ذخیره‌نشده از دفعه قبل پیدا شد.', '', [
-      {label: 'بازیابی پیش‌نویس', cls: 'primary', fn: () => { const keep = matnZakhire; dade = morattabSazi(JSON.parse(d)); hameRaBesaz(); matnZakhire = keep; taghirKard(); payam('پیش‌نویس بازیابی شد'); }},
-      {label: 'نادیده گرفتن', fn: () => { try { localStorage.removeItem(KELID_PISHNEVIS); } catch(e){} }}
+    payamBala('پیش‌نویس قبلی', '', [
+      {label: 'بازیابی', cls: 'primary', fn: () => { const keep = matnZakhire; dade = morattabSazi(JSON.parse(d)); hameRaBesaz(); matnZakhire = keep; taghirKard(); payam('بازیابی شد'); }},
+      {label: 'حذف', fn: () => { try { localStorage.removeItem(KELID_PISHNEVIS); } catch(e){} }}
     ]);
   }
   if(note) payamBala(note, 'info');
-  if(!window.showSaveFilePicker) payamBala('روی این مرورگر، «ذخیره» فایل <b>items.json</b> را دانلود می‌کند. فایل دانلودشده را جایگزین items.json کنار index.html کنید.', 'info');
 }
 fetch('items.json', {cache: 'no-cache'})
   .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
   .then(j => shoru(j))
-  .catch(() => shoru({categories: [], items: []}, 'فایل items.json خودکار بارگذاری نشد. با دکمه «باز کردن» فایل را انتخاب کنید.'));
+  .catch(() => shoru({categories: [], items: []}, 'items.json باز نشد'));
 </script>
 </body>
 </html>
