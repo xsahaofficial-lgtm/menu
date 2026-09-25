@@ -367,6 +367,11 @@ function naghsheLatte(c, kind, Rl, foam, cut){
       const qx = Math.cos(a) * 28 + Math.cos(a + Math.PI / 2) * bend * .4, qy = Math.sin(a) * 28 + Math.sin(a + Math.PI / 2) * bend * .4;
       g += `<path d="M0 0Q${gerd(qx)} ${gerd(qy)} ${gerd(x)} ${gerd(y)}" fill="none" stroke="${cut}" stroke-width="1.6"/>`;
     }
+  } else if(kind === 'star'){
+    g += `<path d="${masirSetare(5, 40, 17)}" fill="${foam}" stroke="${foam}" stroke-width="7" stroke-linejoin="round"/>`;
+    g += `<path d="${masirSetare(5, 21, 9)}" fill="${cut}" fill-opacity=".45" stroke="${cut}" stroke-opacity=".45" stroke-width="3" stroke-linejoin="round"/>`;
+    for(let i = 0; i < 5; i++){ const a = (i * 72 - 90) * Math.PI / 180; g += `<path d="M0 0L${gerd(Math.cos(a) * 38)} ${gerd(Math.sin(a) * 38)}" stroke="${cut}" stroke-width="1.2" stroke-linecap="round"/>`; }
+    g += `<circle r="5" fill="${foam}"/>`;
   } else if(kind === 'wing'){
     g += `<path d="M0-50C34-30 34 30 0 50-34 30-34-30 0-50Z" fill="${foam}"/>`;
     const n = c.sahih(7, 11);
@@ -476,7 +481,7 @@ function adviyeDorTaDor(c, n, r0, r1){
 function changal(c, x, y){
   const col = c.yeki(['#d4d0c8', '#cfcac2', TALAEI]);
   const g = c.khatti([[0, roshanTar(col, .45)], [1, tireTar(col, .25)]]);
-  return `<g transform="translate(${x} ${y}) scale(1 .62)">${saye(c, 12, 7, 40, 6, .3)}<rect x="0" y="-2.6" width="48" height="5.2" rx="2.6" fill="${g}"/><path d="M1-6H-7Q-11-6-11-2V2Q-11 6-7 6H1Z" fill="${g}"/><path d="M-11-4.6H-27M-11-1.5H-27M-11 1.5H-27M-11 4.6H-27" stroke="${col}" stroke-width="1.8" stroke-linecap="round"/><path d="M4-1H44" stroke="#fff" stroke-opacity=".5" stroke-width="1"/></g>`;
+  return `<g transform="translate(${x} ${y}) scale(1.2 .74)">${saye(c, 12, 7, 40, 6, .3)}<rect x="0" y="-2.6" width="48" height="5.2" rx="2.6" fill="${g}"/><path d="M1-6H-5Q-12-9-12-4V4Q-12 9-5 6H1Z" fill="${g}"/><path d="M-11-7.2H-29M-11-2.4H-29M-11 2.4H-29M-11 7.2H-29" stroke="${col}" stroke-width="2.6" stroke-linecap="round"/><path d="M-12-8.4V8.4" stroke="${col}" stroke-width="2.6" stroke-linecap="round"/><path d="M4-1H44" stroke="#fff" stroke-opacity=".5" stroke-width="1"/></g>`;
 }
 function tameshk(c, x, y, r){
   let g = '';
@@ -564,7 +569,7 @@ sabt('latte-rosetta', 'قهوه گرم', 'لاته آرت روزتا', sabkeLatt
 sabt('latte-tulip', 'قهوه گرم', 'لاته در لیوان شیشه‌ای', c => {
   let s = pasZamine(c);
   const t = TONHA.coffee2;
-  s += livanAzBala(c, { R: 58, liquid: rangeMayee(c, t), inner: `<circle r="50" fill="none" stroke="#f7ecd9" stroke-opacity=".35" stroke-width="6"/>` + naghsheLatte(c, c.yeki(['tulip', 'rosetta']), 44, t[1], t[0][1]) });
+  s += livanAzBala(c, { R: 58, liquid: rangeMayee(c, t), inner: `<circle r="50" fill="none" stroke="#f7ecd9" stroke-opacity=".35" stroke-width="6"/>` + naghsheLatte(c, 'star', 44, t[1], t[0][1]) });
   const side = c.yeki([-1, 1]);
   s += ghashogh(c, CX + side * 70, CY + 88, side > 0 ? 200 : -20, .75) + ghandHabbe(c, CX - side * 72, CY - 84, c.bein(0, 40), .8);
   return s;
@@ -588,7 +593,7 @@ sabt('flatwhite', 'قهوه گرم', 'فلت وایت (فنجان کوچک، ب�
   const ha = c.yeki([-35, 35, 145, 215]) + c.bein(-8, 8);
   const sa = (ha + 180) * Math.PI / 180;
   const onS = ghandHabbe(c, CX + Math.cos(sa + .5) * 58, CY + Math.sin(sa + .5) * 58, c.bein(0, 40), .65) + ghashogh(c, CX + Math.cos(sa - .5) * 62, CY + Math.sin(sa - .5) * 62, (sa - .5) * 180 / Math.PI + 90, .6);
-  s += fenjanAzBala(c, { R: 46, sR: 82, square: true, ha, fill: .78, liquid: rangeMayee(c, t), inner: naghsheLatte(c, c.yeki(['rosetta', 'tulip', 'wing']), 36, t[1], t[0][1]), onSaucer: onS });
+  s += fenjanAzBala(c, { R: 46, sR: 82, square: true, ha, fill: .78, liquid: rangeMayee(c, t), inner: naghsheLatte(c, 'heart', 36, t[1], t[0][1]), onSaucer: onS });
   return s;
 });
 sabt('cappuccino', 'قهوه گرم', 'کاپوچینو با پودر کاکائو', c => {
@@ -661,14 +666,15 @@ sabt('cortado', 'قهوه گرم', 'کورتادو (لیوان کوتاه)', c =
 sabt('caramel', 'قهوه گرم', 'کارامل ماکیاتو', c => {
   let s = pasZamine(c);
   const cc = c.yeki(['#c97a2b', '#b8661f', '#d88c32']);
-  let inner = naghsheLatte(c, c.yeki(['rosetta', 'tulip', 'heart']), 46, '#fffaf0', '#d9a86a');
-  const rot = c.sahih(0, 180), n = c.sahih(3, 4);
-  let dr = '';
-  for(let k = 0; k < n; k++){
-    const y = -36 + k * (72 / (n - 1)) + c.bein(-4, 4), a = c.bein(6, 11);
-    const d = `M-62 ${gerd(y)}C-40 ${gerd(y - a)} -20 ${gerd(y + a)} 0 ${gerd(y)}S40 ${gerd(y - a)} 62 ${gerd(y)}`;
-    dr += `<path d="${d}" stroke="${tireTar(cc, .2)}" stroke-width="3.6" fill="none" stroke-linecap="round" opacity=".35" transform="translate(1 1.5)"/><path d="${d}" stroke="${cc}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="${d}" stroke="#ffd9a0" stroke-width=".9" fill="none" stroke-linecap="round" opacity=".8" transform="translate(-.6 -.8)"/>`;
+  let inner = naghsheLatte(c, 'heart', 46, '#fffaf0', '#d9a86a');
+  const rot = c.sahih(0, 180), mowj = c.sahih(12, 16), dam = c.bein(2.5, 4);
+  let d = '';
+  for(let k = 0; k <= 120; k++){
+    const a = k / 120 * Math.PI * 2, rr = 43 + Math.sin(a * mowj) * dam;
+    d += (k ? 'L' : 'M') + gerd(Math.cos(a) * rr) + ' ' + gerd(Math.sin(a) * rr);
   }
+  let dr = `<path d="${d}Z" stroke="${tireTar(cc, .2)}" stroke-width="3.6" fill="none" opacity=".35" transform="translate(1 1.5)"/><path d="${d}Z" stroke="${cc}" stroke-width="3" fill="none"/><path d="${d}Z" stroke="#ffd9a0" stroke-width=".9" fill="none" opacity=".8" transform="translate(-.6 -.8)"/>`;
+  for(let k = 0; k < 6; k++){ const a = k / 6 * Math.PI * 2 + .3; dr += `<circle cx="${gerd(Math.cos(a) * 33)}" cy="${gerd(Math.sin(a) * 33)}" r="1.8" fill="${cc}"/>`; }
   inner += `<g transform="rotate(${rot})">${dr}</g>`;
   const ha = c.bein(-40, 40);
   const sa = (ha + 180 + c.bein(-30, 30)) * Math.PI / 180;
@@ -1188,7 +1194,6 @@ function kruasan(variant){
     s += `<g transform="translate(${CX} ${CY + 4}) rotate(${rot}) scale(1.14)">${g}</g>`;
     const side = c.yeki([-1, 1]);
     if(variant === 'plain'){
-      s += `<g transform="translate(${CX + side * 58} ${CY + 60})">${saye(c, 2, 3, 16, 12, .4)}<circle r="13" fill="#fbf6ef"/><circle r="10" fill="${c.yeki(['#b8233a', '#e0752a', '#6a1f5a'])}"/><circle cx="-3" cy="-3" r="2.5" fill="#fff" opacity=".5"/></g>`;
       s += `<g transform="translate(${CX - side * 56} ${CY + 64}) rotate(${c.sahih(-20, 20)})"><rect x="-11" y="-8" width="22" height="16" rx="3" fill="#f7e7a8"/><rect x="-11" y="-8" width="22" height="5" rx="2" fill="#fff6d0"/></g>`;
     }
     return s;
@@ -1573,12 +1578,12 @@ function shotRizi(joft){
     s += `<path d="M0 196H200" stroke="#fff" stroke-opacity=".25"/>`;
     s += `<rect x="20" y="-10" width="160" height="32" rx="6" fill="${c.ostovane(steel)}"/><rect x="66" y="22" width="68" height="14" rx="3" fill="${c.ostovane('#9aa0a8')}"/>`;
     s += `<path d="M62 36H138L134 58Q132 66 122 66H78Q68 66 66 58Z" fill="${c.ostovane('#8a9098')}"/><path d="M138 44H176Q186 44 186 52Q186 60 176 60H136Z" fill="${c.ostovane('#1a1a1a')}"/><circle cx="174" cy="52" r="3" fill="#555"/>`;
-    const spX = [-12, 12];
+    const spX = joft ? [-12, 12] : [0];
     spX.forEach(dx => { s += `<path d="M${CX + dx - 6} 66H${CX + dx + 6}L${CX + dx + 3} 76H${CX + dx - 3}Z" fill="${c.ostovane(steel)}"/>`; });
-    const livanha = joft ? [CX - 26, CX + 26] : [CX];
+    const livanha = [CX];
     const sathe = [];
     livanha.forEach((gx, k) => {
-      const top = 142, bot = 196, w = joft ? 18 : 22;
+      const top = 142, bot = 196, w = 24;
       const lvl = top + c.sahih(16, 24);
       const p = `M${gx - w} ${top}H${gx + w}L${gx + w - 3} ${bot}H${gx - w + 3}Z`;
       const cl = c.boresh(`<path d="${p}"/>`);
@@ -1589,17 +1594,16 @@ function shotRizi(joft){
       s += `<path d="${p}" fill="${c.shishe()}" stroke="rgba(255,255,255,.6)" stroke-width="1.6"/><path d="M${gx - w + 5} ${bot - 4}H${gx + w - 5}" stroke="rgba(255,255,255,.4)" stroke-width="7"/><path d="M${gx - w + 5} ${top + 6}L${gx - w + 7} ${bot - 12}" stroke="#fff" stroke-opacity=".4" stroke-width="2.4" stroke-linecap="round"/>`;
       sathe.push([gx, lvl]);
     });
-    const jaryan = c.khatti([[0, '#4a220a'], [.5, '#8a4a1c'], [1, '#c98a4a']]);
     spX.forEach((dx, k) => {
-      const [gx, lvl] = joft ? sathe[k] : [CX + dx * .3, sathe[0][1]];
-      s += `<path d="M${CX + dx} 76Q${CX + dx} ${gerd((76 + lvl) / 2)} ${gerd(gx)} ${lvl}" stroke="${jaryan}" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M${CX + dx} 78Q${CX + dx} ${gerd((76 + lvl) / 2)} ${gerd(gx)} ${lvl}" stroke="#e8b070" stroke-width="1" fill="none" opacity=".6"/>`;
+      const [gx, lvl] = [CX + dx * .4, sathe[0][1]];
+      s += `<path d="M${CX + dx} 76Q${CX + dx} ${gerd((76 + lvl) / 2)} ${gerd(gx)} ${lvl}" stroke="#7a3e16" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M${CX + dx} 78Q${CX + dx} ${gerd((76 + lvl) / 2)} ${gerd(gx)} ${lvl}" stroke="#e8b070" stroke-width="1" fill="none" opacity=".6"/>`;
     });
-    s += bokhar(c, CX, 138, joft ? 3 : 2, joft ? 26 : 14, .6);
+    s += bokhar(c, CX, 138, 2, 16, .6);
     return s;
   };
 }
-sabt('shot', 'افزودنی', 'شات اسپرسو (ریزش از پرتافیلتر)', shotRizi(false));
-sabt('shot-double', 'افزودنی', 'شات اسپرسو دوتایی (دو لیوان)', shotRizi(true));
+sabt('shot', 'افزودنی', 'شات اسپرسو با یک جریان', shotRizi(false));
+sabt('shot-double', 'افزودنی', 'شات اسپرسو با دو جریان', shotRizi(true));
 sabt('icecream', 'افزودنی', 'بستنی', c => {
   let s = pasZamine(c) + rooyeMiz(c);
   const bowl = c.yeki(['#f3ece1', '#2d5f9a', '#232120', '#1f6f78', '#e7b6ae', '#efe0c2']);
