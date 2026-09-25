@@ -454,11 +454,6 @@ function livanAzBala(c, o){
 
 
 
-function biskoti(c, x, y, rot){
-  let g = saye(c, 3, 5, 22, 10, .4) + `<path d="M-20-7Q-20-10-14-10H16Q21-10 21-4V5Q21 9 16 9H-14Q-20 9-20 5Z" fill="${c.shoaei([[0, '#f0c47e'], [1, '#c98a3e']], .4, .35, .8)}"/>`;
-  for(let i = 0; i < 4; i++) g += `<ellipse cx="${gerd(c.bein(-14, 14))}" cy="${gerd(c.bein(-5, 4))}" rx="3" ry="2" fill="#f6e2b8" stroke="#b8823e" stroke-width=".6"/>`;
-  return `<g transform="translate(${gerd(x)} ${gerd(y)}) rotate(${gerd(rot)})">${g}</g>`;
-}
 function hamzanAzBala(c, x, y, rot){
   let g = `<rect x="0" y="-5" width="54" height="10" rx="5" fill="${c.khatti([[0, '#e9d8a6'], [1, '#b89a5a']])}"/>`;
   g += `<circle r="20" fill="#e9d8a6" opacity=".35"/>`;
@@ -574,13 +569,11 @@ sabt('latte-tulip', 'قهوه گرم', 'لاته در لیوان شیشه‌ای
   s += ghashogh(c, CX + side * 70, CY + 88, side > 0 ? 200 : -20, .75) + ghandHabbe(c, CX - side * 72, CY - 84, c.bein(0, 40), .8);
   return s;
 });
-sabt('latte-heart', 'قهوه گرم', 'لاته قلب با بیسکوتی', c => {
+sabt('latte-heart', 'قهوه گرم', 'لاته قلب', c => {
   let s = pasZamine(c);
   const t = TONHA[c.yeki(['coffee', 'coffee2'])];
   const ha = c.bein(-40, 40);
-  const sa = (ha + 180 + c.bein(-35, 35)) * Math.PI / 180;
-  const onS = biskoti(c, CX + Math.cos(sa) * 66, CY + Math.sin(sa) * 66, sa * 180 / Math.PI + 90);
-  s += fenjanAzBala(c, { R: 56, sR: 84, ha, liquid: rangeMayee(c, t), inner: naghsheLatte(c, c.yeki(['heart', 'nested']), 45, t[1], t[0][1]), onSaucer: onS });
+  s += fenjanAzBala(c, { R: 56, sR: 84, ha, liquid: rangeMayee(c, t), inner: naghsheLatte(c, c.yeki(['heart', 'nested']), 45, t[1], t[0][1]) });
   return s;
 });
 sabt('latte-swan', 'قهوه گرم', 'لاته آرت قو', sabkeLatte('swan', 'coffee2'));
@@ -757,12 +750,7 @@ sabt('hot-chocolate', 'نوشیدنی گرم', 'هات چاکلت', c => {
   let s = pasZamine(c);
   const inner = naghsheLatte(c, c.yeki(['rosetta', 'tulip']), 48, '#f6e8d6', '#5c3120') + pudr(c, 40, 0, 0, 46, '#2a110a', .55);
   const ha = c.bein(-40, 40);
-  let tarash = '';
-  for(let i = 0; i < 5; i++){
-    const a = (ha + 180 + c.bein(-40, 40)) * Math.PI / 180, d = c.bein(60, 70);
-    tarash += `<path transform="translate(${gerd(CX + Math.cos(a) * d)} ${gerd(CY + Math.sin(a) * d)}) rotate(${c.sahih(0, 180)})" d="M-5 0C-5-4 3-4 3 0S-3 4-3 0" stroke="#4a2412" stroke-width="2" fill="none" stroke-linecap="round"/>`;
-  }
-  s += fenjanAzBala(c, { R: 60, ha, liquid: c.shoaei([[0, '#8a5234'], [.6, '#5a2e1a'], [1, '#2a110a']], .45, .42, .6), inner, onSaucer: tarash });
+  s += fenjanAzBala(c, { R: 60, ha, liquid: c.shoaei([[0, '#8a5234'], [.6, '#5a2e1a'], [1, '#2a110a']], .45, .42, .6), inner });
   return s;
 });
 sabt('pink-chocolate', 'نوشیدنی گرم', 'پینک چاکلت', c => {
@@ -1274,7 +1262,6 @@ sabt('choco-twist', 'کیک و شیرینی', 'چاکلت تویست', c => {
   };
   const r0 = c.bein(-35, -20);
   s += pichide(CX - 4, CY - 18, r0, 124) + pichide(CX + 6, CY + 24, r0 + c.bein(-6, 6), 118);
-  if(c.shans(.6)) s += `<g transform="translate(${CX + c.yeki([-58, 58])} ${CY + 64}) rotate(${c.sahih(-30, 30)})"><rect x="-14" y="-10" width="28" height="20" rx="2" fill="#3a1a0a"/><path d="M-4-10V10M6-10V10M-14 0H14" stroke="#1e0a04" stroke-width="1.2"/></g>`;
   return s;
 });
 function kuki(kind){
