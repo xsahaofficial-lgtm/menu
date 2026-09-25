@@ -1189,7 +1189,30 @@ function kruasan(variant){
     const base = c.yeki(['#e7a64f', '#dc9442', '#eab262', '#d98c3a']);
     const rot = c.sahih(-18, 18);
     let g = saye(c, 3, 14, 66, 34, .22) + shekleKruasan(c, base);
-    if(variant === 'chocolate'){ let z = 'M-52 -8'; for(let i = 0; i < 10; i++) z += `L${-46 + i * 10} ${i % 2 ? -34 : 4}`; g += `<path d="${z}" stroke="#3a1a0a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".92"/>`; }
+    if(variant === 'chocolate'){
+      const cy0 = 22, Rm = 46, A0 = 188, A1 = 352;
+      const zekhamat = u => 6 + 36 * Math.pow(Math.sin(u * Math.PI), .85);
+      [[11, 0, 1.7], [7, .045, 1.1]].forEach(([n, faz, w], pass) => {
+        const pts = [];
+        for(let i = 0; i <= n; i++){
+          const u = .12 + faz + (.76 - faz) * i / n + c.bein(-.008, .008);
+          const a = (A0 + u * (A1 - A0)) * Math.PI / 180, side = (i + pass) % 2 ? 1 : -1;
+          const r = Rm + side * (zekhamat(u) / 2 + (side > 0 ? c.bein(1.5, 3.5) : c.bein(0, 1.5)));
+          pts.push([Math.cos(a), Math.sin(a), r]);
+        }
+        let d = `M${gerd(pts[0][0] * pts[0][2])} ${gerd(cy0 + pts[0][1] * pts[0][2])}`;
+        for(let i = 1; i < pts.length; i++){
+          const [ca, sa, r] = pts[i], [pca, psa, pr] = pts[i - 1];
+          const k1 = pr + (r - pr) * .38, k2 = r - (r - pr) * .38;
+          d += `C${gerd(pca * k1)} ${gerd(cy0 + psa * k1)} ${gerd(ca * k2)} ${gerd(cy0 + sa * k2)} ${gerd(ca * r)} ${gerd(cy0 + sa * r)}`;
+        }
+        g += `<path d="${d}" stroke="#000" stroke-opacity=".16" stroke-width="${w + 1}" fill="none" stroke-linecap="round" transform="translate(.8 1.4)"/>`;
+        g += `<path d="${d}" stroke="${pass ? '#4a2210' : '#2e1406'}" stroke-width="${w}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+        g += `<path d="${d}" stroke="#b07e56" stroke-opacity=".5" stroke-width=".5" fill="none" stroke-linecap="round" transform="translate(-.4 -.5)"/>`;
+      });
+      for(let i = 0; i < 2; i++){ const u = c.bein(.25, .75), a = (A0 + u * (A1 - A0)) * Math.PI / 180, r = Rm + zekhamat(u) / 2 + 3; g += `<ellipse cx="${gerd(Math.cos(a) * r)}" cy="${gerd(cy0 + Math.sin(a) * r)}" rx="1.1" ry="1.7" fill="#2e1406"/>`; }
+      g += pudr(c, 16, 0, -10, 40, '#3a1a0a', .7, .9);
+    }
     if(variant === 'almond'){ for(let i = 0; i < 18; i++){ const a = c.bein(200, 340) * Math.PI / 180, d = c.bein(34, 62); const x = Math.cos(a) * d, y = 22 + Math.sin(a) * d; g += `<ellipse cx="${gerd(x)}" cy="${gerd(y)}" rx="4" ry="2" fill="#f6e2b8" stroke="#c9a060" stroke-width=".6" transform="rotate(${c.sahih(0, 180)} ${gerd(x)} ${gerd(y)})"/>`; } g += pudr(c, 70, 0, -6, 50, '#fff', .95, 1.1); }
     s += `<g transform="translate(${CX} ${CY + 4}) rotate(${rot}) scale(1.14)">${g}</g>`;
     const side = c.yeki([-1, 1]);
@@ -1544,8 +1567,6 @@ function sos(col, name){
     s += `<circle cx="${CX}" cy="${CY + 10}" r="48" fill="${c.gooy(bowl)}"/><circle cx="${CX}" cy="${CY + 10}" r="40" fill="${c.shoaei([[0, roshanTar(col, .25)], [.7, col], [1, tireTar(col, .35)]], .45, .4, .6)}"/>`;
     s += `<g transform="translate(${CX} ${CY + 10})"><path d="${marpich(2, 3, 30)}" stroke="${roshanTar(col, .35)}" stroke-width="3" fill="none" opacity=".6"/></g>`;
     s += `<path d="${kaman(CX, CY + 10, 34, 200, 250)}" stroke="#fff" stroke-opacity=".45" stroke-width="3" fill="none" stroke-linecap="round"/>`;
-    s += ghashogh(c, CX + 50, CY - 40, 130, .9);
-    s += `<path d="M${CX + 22} ${CY - 16}q-4 12 -2 22" stroke="${col}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
     return s;
   };
 }
