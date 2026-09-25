@@ -774,7 +774,6 @@ sabt('matcha', 'گرم', 'ماچا', c => {
   s += fenjanAzBala(c, { R: 62, saucer: false, handle: false, color: c.yeki(['#5a4a3a', '#2b2b2b', '#d9cdb4', '#6b7a5a', '#3a4a6a']), gold: false, fill: .84, liquid: rangeMayee(c, t), inner: naghsheLatte(c, c.yeki(['rosetta', 'heart', 'swan', 'tulip']), 50, t[1], t[0][1]) });
   const wa = c.yeki([35, 145]);
   s += hamzanAzBala(c, CX + Math.cos(wa * Math.PI / 180) * 70, CY + Math.sin(wa * Math.PI / 180) * 80, wa + 20);
-  s += `<g transform="translate(${CX - Math.cos(wa * Math.PI / 180) * 64} ${CY - Math.sin(wa * Math.PI / 180) * 78})"><ellipse rx="14" ry="10" fill="${c.shoaei([[0, '#b7d67a'], [1, '#6e9a3f']])}"/></g>`;
   return s;
 });
 sabt('masala', 'گرم', 'ماسالا', c => {
